@@ -1,30 +1,28 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/showcase">Show Case</router-link>
-  </nav>
-  <router-view />
+  <div class="font-kanit">
+    <router-view />
+    <BottomNavbar v-if="showPage" />
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import BottomNavbar from "@/components/bottom-navbar/bottom-navbar.vue";
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default {
+  components: { BottomNavbar },
+  data() {
+    return {
+      page: ["buyer_homepage", "buyer_profile"],
+    };
+  },
+  computed: {
+    showPage() {
+      if (this.page.includes(this.$route.name)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+};
+</script>
