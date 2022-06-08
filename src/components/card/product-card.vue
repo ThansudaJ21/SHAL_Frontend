@@ -12,7 +12,7 @@
     @click="click"
   >
     <img
-      src="@/assets/nezuko-figure.webp"
+      :src="src"
       :alt="name"
       class="h-[148px] w-full rounded-t-[20px] object-cover"
     />
@@ -39,10 +39,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    /*     src: {
+    src: {
       type: Object,
       required: false,
-    }, */
+    },
     click: {
       type: Function,
       required: false,

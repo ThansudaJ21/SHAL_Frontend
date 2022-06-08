@@ -5,7 +5,7 @@
       flex
       h-[42px]
       w-full
-      min-w-[164px]
+      min-h-[30px] min-w-[97px]
       items-center
       justify-center
       rounded-full
@@ -13,6 +13,7 @@
       px-4
       text-sm
       font-semibold
+      leading-[17px]
       hover:cursor-pointer
       disabled:cursor-not-allowed disabled:bg-neutral-100
     "

@@ -11,6 +11,7 @@
         'border-primary-900  text-primary-900 hover:bg-primary-100 active:bg-primary-300',
       variant === 'error' &&
         'border-error-500 text-error-500 hover:bg-error-100 active:bg-error-300',
+      variant === 'logout' && 'border-neutral-500  border-neutral-500',
     ]"
     :click="click"
     :type="type"

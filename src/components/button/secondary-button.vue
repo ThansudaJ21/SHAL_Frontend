@@ -4,13 +4,13 @@
       bg-primary-100
       text-primary-900
       hover:bg-primary-300
-      active:bg-primary-500
-      active:text-white
+      active:bg-primary-500 active:text-white
       disabled:bg-neutral-100 disabled:text-neutral-500
     "
+    :click="click"
     :type="type"
   >
-  <template v-slot:icon />
+    <template v-slot:icon />
     <slot />
   </BaseButton>
 </template>
