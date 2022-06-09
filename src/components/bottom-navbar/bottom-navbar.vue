@@ -15,22 +15,22 @@
   >
     <!-- <div v-if="isBuyer"> -->
     <div class="flex justify-center gap-x-16 w-full text-center">
-      <BottomNavbarItems routeName="buyer_homepage">
-        <HomeInactiveIcon v-if="$route.name != 'buyer_homepage'" />
+      <BottomNavbarItems routeName="BuyerHomePage">
+        <HomeInactiveIcon v-if="$route.name != 'BuyerHomePage'" />
         <div v-else>
           <HomeActiveIcon class="inline-block" />
           <span class="block">Home</span>
         </div>
       </BottomNavbarItems>
-      <BottomNavbarItems routeName="showcase">
-        <CartInactiveIcon v-if="$route.name != 'showcase'" />
+      <BottomNavbarItems routeName="Showcase">
+        <CartInactiveIcon v-if="$route.name != 'Showcase'" />
         <div v-else>
           <CartActiveIcon class="inline-block" />
           <span class="block">My Cart</span>
         </div>
       </BottomNavbarItems>
-      <BottomNavbarItems routeName="buyer_profile">
-        <UserInactiveIcon v-if="$route.name != 'buyer_profile'" />
+      <BottomNavbarItems routeName="BuyerProfilePage">
+        <UserInactiveIcon v-if="$route.name != 'BuyerProfilePage'" />
         <div v-else>
           <UserActiveIcon class="inline-block" />
           <span class="block">Profile</span>

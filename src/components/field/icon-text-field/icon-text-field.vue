@@ -12,7 +12,9 @@
         :required="required"
         :value="valueField"
         :readOnly="readOnly"
+        :minLength="minLength"
         :maxLength="maxLength"
+        :regex="regex"
         :mask="mask"
         @change="$emit('change')"
       />
@@ -90,8 +92,16 @@ export default {
       required: false,
       default: false,
     },
+    minLength: {
+      type: Number,
+      required: false,
+    },
     maxLength: {
       type: Number,
+      required: false,
+    },
+    regex: {
+      type: String,
       required: false,
     },
     mask: {

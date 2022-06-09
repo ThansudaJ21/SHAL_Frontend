@@ -11,8 +11,10 @@
         :disabled="disabled"
         :required="required"
         :value="valueField"
+        :minLength="minLength"
         :maxLength="maxLength"
         :mask="mask"
+        :regex="regex"
         @change="$emit('change')"
         @blur="$emit('blur')"
         @focus="$emit('focus')"
@@ -80,11 +82,19 @@ export default {
       type: String,
       required: false,
     },
+    minLength: {
+      type: Number,
+      required: false,
+    },
     maxLength: {
       type: Number,
       required: false,
     },
     mask: {
+      type: String,
+      required: false,
+    },
+    regex: {
       type: String,
       required: false,
     },
