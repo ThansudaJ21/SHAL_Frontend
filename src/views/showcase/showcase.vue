@@ -111,7 +111,7 @@ import TrashSolidIcon from "@/assets/icons/trash-solid.svg?inline";
 import UserOutlinedIcon from "@/assets/icons/user-outlined-blue.svg?inline";
 
 export default {
-  name: "ShowCase",
+  name: "Showcase",
   components: {
     Category,
     ProductCard,
