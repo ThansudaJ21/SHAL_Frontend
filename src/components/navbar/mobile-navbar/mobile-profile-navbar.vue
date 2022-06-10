@@ -2,15 +2,11 @@
   <nav class="bg-primary-900 rounded-b-[28px]">
     <div class="md:hidden h-fit justify-between p-4 items-center">
       <div class="w-full flex justify-between">
-        <div class="flex items-center">
-          <div class="w-6"></div>
-        </div>
-        <div class="flex items-center">
+        <div class="flex items-center w-6"></div>
+        <div class="flex items-center h-[32px]">
           <p class="text-base font-semibold text-white">SHAL</p>
         </div>
-        <div class="flex items-center relative">
-          <div class="w-10"></div>
-        </div>
+        <div class="flex items-center w-8"></div>
       </div>
       <div class="w-full flex justify-between mt-4">
         <div class="flex items-center relative gap-x-2">
@@ -46,8 +42,8 @@ export default {
   props: {
     click: {
       type: Function,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

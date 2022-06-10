@@ -90,7 +90,7 @@
             aria-labelledby="user-menu"
           >
             <router-link
-              :to="{ name: 'home' }"
+              :to="{ name: '' }"
               class="w-full justify-center text-sm font-bold text-shade-black"
             >
               <div class="py-2">Logout</div>

@@ -2,14 +2,14 @@
   <nav class="bg-primary-900 rounded-b-[28px]">
     <div class="md:hidden h-fit justify-between p-4 items-center space-y-4">
       <div class="w-full flex justify-between">
-        <div class="flex items-center" v-if="!exceptPage">
+        <div class="flex items-center" v-if="exceptPage">
           <a @click="$router.go(-1)">
             <BackIcon />
           </a>
         </div>
         <div
           class="flex items-center w-6"
-          v-if="exceptPage"
+          v-if="!exceptPage"
         ></div>
         <div class="flex items-center">
           <p class="text-base font-semibold text-white">
@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      page: ["buyer_homepage"],
+      page: ["BuyerHomePage", "SellerHomePage"],
     };
   },
   computed: {
