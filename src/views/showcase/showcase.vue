@@ -20,7 +20,8 @@
       <Toggle />
 
       <p>Image Upload Field</p>
-      <UploadImage name="images" />
+      <UploadImage name="images" fullbox="true" />
+      <UploadImage name="images" fixbox="true" />
 
       <p>Textfield</p>
       <TextField

@@ -2,7 +2,8 @@
   <div
     class="
       h-fit
-      w-[363px]
+      lg:w-[363px]
+      md:w-full
       rounded-3xl
       bg-white
       outline outline-1 outline-[#dbeafe] outline-offset-0

@@ -105,11 +105,11 @@ export default {
 }
 
 .vs--disabled .vs__dropdown-toggle {
-  @apply !cursor-default !border-neutral-500 !bg-neutral-100;
+  @apply !rounded-full !cursor-default !border-neutral-500 !bg-neutral-100;
 }
 
 .vs--disabled .vs__dropdown-toggle .vs__open-indicator {
-  @apply !cursor-default !bg-neutral-100;
+  @apply !rounded-full !cursor-default !bg-neutral-100;
 }
 .vs__selected-options {
   @apply h-full !p-0;
@@ -124,7 +124,7 @@ export default {
 }
 
 .vs--disabled .vs__dropdown-toggle .vs__search {
-  @apply !cursor-default !bg-neutral-100 !placeholder-neutral-500;
+  @apply !rounded-full !cursor-default !bg-neutral-100 !placeholder-neutral-500;
 }
 
 .vs__actions {
