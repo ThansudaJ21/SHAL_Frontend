@@ -124,7 +124,6 @@ export default {
       fields,
       push,
       remove,
-      images: [],
     };
   },
   methods: {
