@@ -98,18 +98,18 @@ export default {
 
 <style>
 .vs__dropdown-toggle {
-  @apply h-[42px] !rounded-full !border-neutral-500 !p-0 !placeholder-neutral-500  hover:border-neutral-500;
+  @apply h-[42px] !rounded-[20px] !border-neutral-500 !p-0 !placeholder-neutral-500  hover:border-neutral-500;
 }
 .error .vs__dropdown-toggle {
   @apply !border-error-500 !text-error-500 placeholder-error-500 focus:!border-error-500 focus:!ring-2 focus:!ring-error-200;
 }
 
 .vs--disabled .vs__dropdown-toggle {
-  @apply !rounded-full !cursor-default !border-neutral-500 !bg-neutral-100;
+  @apply !rounded-[20px] !cursor-default !border-neutral-500 !bg-neutral-100;
 }
 
 .vs--disabled .vs__dropdown-toggle .vs__open-indicator {
-  @apply !rounded-full !cursor-default !bg-neutral-100;
+  @apply !rounded-[20px] !cursor-default !bg-neutral-100;
 }
 .vs__selected-options {
   @apply h-full !p-0;
@@ -124,7 +124,7 @@ export default {
 }
 
 .vs--disabled .vs__dropdown-toggle .vs__search {
-  @apply !rounded-full !cursor-default !bg-neutral-100 !placeholder-neutral-500;
+  @apply !rounded-[20px] !cursor-default !bg-neutral-100 !placeholder-neutral-500;
 }
 
 .vs__actions {
@@ -146,7 +146,7 @@ export default {
 .vs--open > ul {
   border: 1px solid #1f3a89;
   box-shadow: 0px 8px 15px 0px rgba(190, 219, 254, 0.2);
-  @apply z-10 mt-2 rounded-full py-0;
+  @apply z-10 mt-2 rounded-[20px] py-0;
 }
 
 .vs--open > ul > li {
