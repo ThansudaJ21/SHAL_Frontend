@@ -22,15 +22,16 @@
           <span class="block">Home</span>
         </div>
       </BottomNavbarItems>
-      <BottomNavbarItems routeName="Showcase">
-        <CartInactiveIcon v-if="$route.name != 'Showcase'" />
+      <BottomNavbarItems :click="maintain">
+        <CartInactiveIcon class="!opacity-60" />
+        <!--         <CartInactiveIcon v-if="$route.name != ''" />
         <div v-else>
           <CartActiveIcon class="inline-block" />
           <span class="block">My Cart</span>
-        </div>
+        </div> -->
       </BottomNavbarItems>
-      <BottomNavbarItems routeName="">
-        <UserInactiveIcon v-if="$route.name != ''" />
+      <BottomNavbarItems routeName="BuyerProfilePage">
+        <UserInactiveIcon v-if="$route.name != 'BuyerProfilePage'" />
         <div v-else>
           <UserActiveIcon class="inline-block" />
           <span class="block">Profile</span>
@@ -41,6 +42,7 @@
 </template>
 
 <script>
+import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import BottomNavbarItems from "@/components/bottom-navbar/bottom-navbar-items.vue";
 import HomeInactiveIcon from "@/assets/icons/home-outlined.svg?inline";
 import HomeActiveIcon from "@/assets/icons/home-solid.svg?inline";
@@ -64,17 +66,10 @@ export default {
     UserInactiveIcon,
     UserActiveIcon,
   },
-  /*   props: {
-    type: {
-      type: String,
-      default: "button",
-      validator: (prop) => ["button", "submit", "reset"].includes(prop),
-      required: false,
+  methods: {
+    maintain() {
+      showAlert("error", "Maintenance", "");
     },
-    click: {
-      type: Function,
-      required: false,
-    },
-  }, */
+  },
 };
 </script>
