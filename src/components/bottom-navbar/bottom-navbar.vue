@@ -29,42 +29,14 @@
           <span class="block">My Cart</span>
         </div>
       </BottomNavbarItems>
-      <BottomNavbarItems routeName="BuyerProfilePage">
-        <UserInactiveIcon v-if="$route.name != 'BuyerProfilePage'" />
+      <BottomNavbarItems routeName="">
+        <UserInactiveIcon v-if="$route.name != ''" />
         <div v-else>
           <UserActiveIcon class="inline-block" />
           <span class="block">Profile</span>
         </div>
       </BottomNavbarItems>
     </div>
-    <!--    </div>
- 
-    <div v-if="isSeller">
-      <div class="flex justify-center gap-x-16 w-full text-center">
-        <BottomNavbarItems routeName="home">
-          <HomeInactiveIcon v-if="$route.name != 'home'" />
-          <div v-else>
-            <HomeActiveIcon class="inline-block" />
-            <span class="block">Home</span>
-          </div>
-        </BottomNavbarItems>
-        <BottomNavbarItems routeName="showcase">
-          <TruckInactiveIcon v-if="$route.name != 'showcase'" />
-          <div v-else>
-            <TruckActiveIcon class="inline-block" />
-            <span class="block">Delivery</span>
-          </div>
-        </BottomNavbarItems>
-        <BottomNavbarItems routeName="home">
-          <UserInactiveIcon v-if="$route.name != 'home'" />
-          <div v-else>
-            <UserActiveIcon class="inline-block" />
-            <span class="block">Profile</span>
-          </div>
-        </BottomNavbarItems>
-      </div>
-    </div>
- -->
   </div>
 </template>
 

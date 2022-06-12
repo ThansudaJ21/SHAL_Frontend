@@ -15,7 +15,9 @@
       "
     >
       <span class="justify-center w-full text-center">
-        <component :is="category.icon" class="inline-block" />
+        <span class="inline-block">
+          <img :src="category.icon" />
+        </span>
         <span
           class="block text-[8px] text-white uppercase tracking-wider leading-3"
         >
@@ -28,27 +30,9 @@
 
 <script>
 import { categoryItems } from "@/components/category/category-items.js";
-import BeautyIcon from "@/assets/icons/category-beauty.svg?inline";
-import FashionIcon from "@/assets/icons/category-fashion.svg?inline";
-import ElectronicsIcon from "@/assets/icons/category-electronics.svg?inline";
-import ToysIcon from "@/assets/icons/category-toys.svg?inline";
-import HealthIcon from "@/assets/icons/category-health.svg?inline";
-import SportsIcon from "@/assets/icons/category-sports.svg?inline";
-import HomeIcon from "@/assets/icons/category-home.svg?inline";
-import PetsIcon from "@/assets/icons/category-pets.svg?inline";
 
 export default {
   name: "Category",
-  components: {
-    BeautyIcon,
-    FashionIcon,
-    ElectronicsIcon,
-    ToysIcon,
-    HealthIcon,
-    SportsIcon,
-    HomeIcon,
-    PetsIcon,
-  },
   data() {
     return {
       categoryItems,
