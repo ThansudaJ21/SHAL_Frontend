@@ -8,6 +8,10 @@ import ShopRegistrationLayout from "@/views/buyer/buyer-shop-registration/shop-r
 import ShopRegistrationPageOne from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-one.vue"
 import ShopRegistrationPageTwo from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-two.vue"
 
+import DashboardPage from "@/views/admin/admin-dashboard-page.vue"
+import ShopManagementPage from "@/views/admin/admin-shop-management/shop-management-page.vue"
+import ShopApprovalPage from "@/views/admin/admin-shop-management/shop-approval-page.vue"
+
 const routes = [
   {
     path: "/showcase",
@@ -47,6 +51,20 @@ const routes = [
       }
     ]
   },
+  {
+    path: "/dashboard",
+    name: "DashboardPage",
+    component: DashboardPage
+  },
+  {
+    path: "/shop-management",
+    name: "ShopManagementPage",
+    component: ShopManagementPage
+  },
+  {
+    path: "/shop-approval/:id",
+    name: "ShopApprovalPage",
+    component: ShopApprovalPage
   },
 ];
 
