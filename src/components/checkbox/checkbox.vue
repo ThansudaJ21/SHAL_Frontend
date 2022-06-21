@@ -1,5 +1,5 @@
 <template>
-  <label class="ml-5 flex items-center gap-x-4">
+  <label class="ml-5 flex items-center gap-x-4 my-6">
     <div class="p-[2px]">
       <Field :name="name" :type="type" :value="checkValue" v-slot="{ field }">
         <input

@@ -8,6 +8,7 @@ import ShopRegistrationLayout from "@/views/buyer/buyer-shop-registration/shop-r
 import ShopRegistrationPageOne from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-one.vue"
 import ShopRegistrationPageTwo from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-two.vue"
 
+import DashboardPage from "@/views/admin/admin-dashboard-page.vue"
 const routes = [
   {
     path: "/showcase",
@@ -46,6 +47,11 @@ const routes = [
         component: ShopRegistrationPageTwo
       }
     ]
+  },
+  {
+    path: "/dashboard",
+    name: "DashboardPage",
+    component: DashboardPage
   },
   },
 ];
