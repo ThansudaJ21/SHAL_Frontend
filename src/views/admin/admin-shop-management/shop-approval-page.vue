@@ -40,7 +40,9 @@
           />
         </div>
         <div class="mt-16 space-y-[18px] px-[18px]">
-          <p class="text-xl leading-6 text-center font-semibold">{{ shop.shopName }}</p>
+          <p class="text-xl leading-6 text-center font-semibold">
+            {{ shop.shopName }}
+          </p>
           <div class="flex flex-wrap">
             <div class="w-32 text-base leading-[19px] text-start font-semibold">
               Promptpay
@@ -63,7 +65,12 @@
           <div class="w-full h-32">
             <img
               v-if="shop.selfiePhotoWithIdCardPath"
-              class="object-contain w-full h-full border-[1px] border-primary-100"
+              class="
+                object-contain
+                w-full
+                h-full
+                border-[1px] border-primary-100
+              "
               :src="shop.selfiePhotoWithIdCardPath"
             />
             <img
@@ -128,25 +135,16 @@
             <p class="text-primary-900 font-semibold text-[28px] leading-10">
               Shop Approval
             </p>
-
-            <!-- <Dropdown
-            label="Status"
-            name="shopStatus"
-            :model="currentStatus"
-            :value="currentStatus"
-            :reduce="(option) => option.id"
-            :options="[
-              { label: 'ENABLE', id: 1 },
-              { label: 'DISABLE', id: 2 },
-            ]"
-            :change="getStatus('Enable')"
-            required
-          /> -->
-            <TextLabel label="Status" required />
-            <select v-model="currentStatus">
-              <option value="ENABLE">Enable</option>
-              <option value="DISABLE">Disable</option>
-            </select>
+            <div>
+              <TextLabel label="Status" required />
+              <select
+                v-model="currentStatus"
+                class="custom-select w-full h-[42px]"
+              >
+                <option value="ENABLE">Enable</option>
+                <option value="DISABLE">Disable</option>
+              </select>
+            </div>
             <div v-if="currentStatus == 'DISABLE'">
               <TextLabel label="Reasons for failure" required />
               <Checkbox
@@ -175,7 +173,19 @@
               </div>
             </div>
           </div>
-          <div class="w-full flex gap-x-2 relative fixed bottom-0 left-0 right-0 mt-6">
+          <div
+            class="
+              w-full
+              flex
+              gap-x-2
+              relative
+              fixed
+              bottom-0
+              left-0
+              right-0
+              mt-6
+            "
+          >
             <OutlinedButton
               class="w-1/2"
               :click="() => this.$router.push({ name: 'ShopManagementPage' })"
@@ -330,4 +340,67 @@ export default {
     });
   },
 };
-</script>,
+</script>
+
+<style>
+.custom-select {
+  border: 1px solid #a7a7ad;
+  border-radius: 20px;
+}
+
+.custom-select select {
+  display: none;
+}
+
+.select-selected {
+  background-color: white;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #1f3a89 transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #1f3a89 transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+  color: #1f3a89;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent #0000001a transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: white;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: #bfdbfe;
+}
+</style>
