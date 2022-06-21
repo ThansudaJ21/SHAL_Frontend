@@ -14,7 +14,10 @@
     "
   >
     <!-- <div v-if="isBuyer"> -->
-    <div class="flex justify-center gap-x-16 w-full text-center">
+    <div
+      class="flex justify-center gap-x-16 w-full text-center"
+      v-if="$route.name == 'BuyerHomePage' || $route.name == 'BuyerProfilePage'"
+    >
       <BottomNavbarItems routeName="BuyerHomePage">
         <HomeInactiveIcon v-if="$route.name != 'BuyerHomePage'" />
         <div v-else>

@@ -15,21 +15,13 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.message === 'Network Error') {
-      showAlert('error', 'พบปัญหาในการเชื่อมต่อ', 'โปรดลองใหม่อีกครั้ง').then(
+      showAlert('error', 'Network Error', 'Please try again').then(
         () => {
           router.go(0)
         }
       )
-    } else if (error.code === 'ECONNABORTED') {
-      showAlert(
-        'error',
-        'พบปัญหาในการเชื่อมต่อล่าช้า',
-        'โปรดลองใหม่อีกครั้ง'
-      ).then(() => {
-        router.go(0)
-      })
     } else {
-      showAlert('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลได้').then(
+      showAlert('error', 'Cannot connect database', 'Sorry, the server is currently unavailable.').then(
         () => {
           router.go(-1)
         }

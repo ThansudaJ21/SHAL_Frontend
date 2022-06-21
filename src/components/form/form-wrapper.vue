@@ -9,8 +9,14 @@
       ]"
     >
       {{ label }}
+      <span class="text-error-500" v-if="required">&nbsp;*</span>
     </p>
-    <div class="space-y-1">
+    <div
+      :class="[
+        variant === 'form' && 'space-y-1',
+        variant === 'details' && 'space-y-4',
+      ]"
+    >
       <slot name="body" />
     </div>
     <div>
@@ -35,6 +41,17 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    required: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    variant: {
+      type: String,
+      default: "form",
+      validator: (prop) => ["form", "details"].includes(prop),
+      required: false,
     },
   },
 };

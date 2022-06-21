@@ -18,12 +18,12 @@
             />
           </div>
           <div>
-            <p class="text-base font-semibold text-white">username</p>
+            <p class="text-base font-semibold text-white">displayName</p>
           </div>
         </div>
         <div class="flex items-center relative">
           <SecondaryButton :click="click">
-            <div class="flex gap-1"><slot /></div>
+            <div class="flex gap-1 flex items-center"><slot /></div>
           </SecondaryButton>
         </div>
       </div>

@@ -4,12 +4,7 @@ export const showAlert = (alertType, title, content) => {
   return Swal.fire({
     title: title,
     text: content,
-    icon:
-      alertType === 'confirm'
-        ? "question"
-        : alertType === 'success'
-          ? "success"
-          : "error",
+    padding: '32px 16px',
     showDenyButton: alertType === 'confirm',
     confirmButtonText: 'Confirm',
     confirmButtonColor: '#1f3a89',
@@ -20,6 +15,5 @@ export const showAlert = (alertType, title, content) => {
     allowEscapeKey: false,
     allowEnterKey: false,
     reverseButtons: true,
-    timer: alertType === 'success' && 2000
   })
 }
