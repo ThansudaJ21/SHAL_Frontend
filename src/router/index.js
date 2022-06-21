@@ -9,6 +9,7 @@ import ShopRegistrationPageOne from "@/views/buyer/buyer-shop-registration/child
 import ShopRegistrationPageTwo from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-two.vue"
 
 import DashboardPage from "@/views/admin/admin-dashboard-page.vue"
+import ShopManagementPage from "@/views/admin/admin-shop-management/shop-management-page.vue"
 const routes = [
   {
     path: "/showcase",
@@ -53,6 +54,10 @@ const routes = [
     name: "DashboardPage",
     component: DashboardPage
   },
+  {
+    path: "/shop-management",
+    name: "ShopManagementPage",
+    component: ShopManagementPage
   },
 ];
 
