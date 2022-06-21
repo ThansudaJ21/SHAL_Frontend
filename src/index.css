@@ -8,3 +8,28 @@
     color: #1d1d1f !important;
   }
 }
+
+/* Sweet Alert CSS */
+.swal2-popup {
+  border-radius: 20px;
+}
+
+.swal2-title {
+  color: black;
+}
+
+.swal2-actions {
+  width: 100% !important;
+  flex-wrap: nowrap !important;
+}
+
+.swal2-styled.swal2-confirm {
+  border-radius: 50px;
+  width: 50% !important;
+}
+
+.swal2-styled.swal2-deny {
+  color: #1f3a89;
+  border-radius: 50px;
+  width: 50% !important;
+}

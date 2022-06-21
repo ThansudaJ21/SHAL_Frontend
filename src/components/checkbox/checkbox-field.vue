@@ -6,17 +6,21 @@
       :label="label"
       :checkValue="checkValue"
       :disabled="disabled"
-      v-model="checked"
     />
-
+    <!--  <div v-if="value"> -->
+    <TextLabel :label="labelField" :required="required" />
     <TextField
-      class="mt-[10px] ml-[64px] flex w-[208px]"
+      class="flex w-full"
       type="text"
       :name="otherName"
       :placeholder="placeholder"
-      :disabled="disableField()"
+      :disabled="
+       click == false
+          ? checkValue
+          : checkValue !== value
+      "
     />
-    <span>{{ checked || "null" }}</span>
+    <!--  </div> -->
   </div>
 </template>
 <script>
@@ -24,15 +28,17 @@ import TextField from "../field/text-field/text-field.vue";
 import Checkbox from "../checkbox/checkbox.vue";
 import { useField } from "vee-validate";
 import { ref } from "vue";
+import TextLabel from "../field/text-label.vue";
 
 export default {
   name: "CheckboxField",
   components: {
     TextField,
     Checkbox,
+    TextLabel,
   },
   data() {
-    const { value, meta } = useField(this.otherName);
+    const { value, meta } = useField(this.name);
     return {
       value,
       meta,
@@ -43,12 +49,15 @@ export default {
       type: String,
       required: true,
     },
-
     type: {
       type: String,
       required: true,
     },
     label: {
+      type: String,
+      required: true,
+    },
+    labelField: {
       type: String,
       required: true,
     },
@@ -68,11 +77,15 @@ export default {
       type: Boolean,
       required: false,
     },
-  },
-  setup() {
-    const checked = ref(false);
-    function disableField() {}
-    return { disableField, checked };
+    click: {
+      type: Boolean,
+      required: false,
+    },
+    required: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 };
 </script>

@@ -112,6 +112,8 @@ export default {
         this.isLetterOnly(event);
       } else if (regex == "numberOnly") {
         this.isNumberOnly(event);
+      } else if (regex == "houseNumber") {
+        this.isHouseNumber(event);
       }
     },
     isLetterOrNumber(e) {
@@ -127,6 +129,11 @@ export default {
     isNumberOnly(e) {
       let char = String.fromCharCode(e.keyCode);
       if (/^[0-9]+$/.test(char)) return true;
+      else e.preventDefault();
+    },
+    isHouseNumber(e) {
+      let char = String.fromCharCode(e.keyCode);
+      if (/^[0-9_/]+$/.test(char)) return true;
       else e.preventDefault();
     },
   },

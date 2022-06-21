@@ -8,7 +8,16 @@
       v-else-if="$route.name == 'BuyerProfilePage'"
       :click="() => this.$router.push({ name: 'ShopRegistrationPageOne' })"
     >
-      <ShopIcon /> Start Selling
+      <template v-slot:icon />
+      <slot name="button" />
+    </MobileProfileNavbar>
+
+    <MobileProfileNavbar
+      v-else-if="$route.name == 'SellerProfilePage'"
+      :click="() => this.$router.push({ name: 'BuyerHomePage' })"
+    >
+      <template v-slot:icon />
+      <slot name="button" />
     </MobileProfileNavbar>
 
     <!-- Navbar with search bar -->
@@ -22,7 +31,7 @@
     <!-- Navbar without search bar -->
     <MobileDefaultNavbar :title="title" v-else />
 
-    <div class="space-y-4 px-2 py-4">
+    <div class="space-y-4 px-2 py-4 md:hidden">
       <slot />
     </div>
   </div>
@@ -32,7 +41,6 @@
 import MobileDefaultNavbar from "@/components/navbar/mobile-navbar/mobile-navbar.vue";
 import MobileProfileNavbar from "@/components/navbar/mobile-navbar/mobile-profile-navbar.vue";
 import MobileRegisterNavbar from "@/components/navbar/mobile-navbar/mobile-register-navbar.vue";
-import ShopIcon from "@/assets/icons/shop-outlined.svg?inline";
 
 export default {
   name: "MobileLayout",
@@ -40,7 +48,6 @@ export default {
     MobileDefaultNavbar,
     MobileProfileNavbar,
     MobileRegisterNavbar,
-    ShopIcon,
   },
   props: {
     title: {

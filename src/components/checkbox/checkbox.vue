@@ -38,7 +38,12 @@
         `text-start inline-block text-sm font-normal leading-[17px] text-neutral-500 `,
       ]"
     >
-      {{ label }}
+      <div>
+        {{ label }}
+      </div>
+      <div>
+        {{ label_option }}
+      </div>
     </div>
   </label>
 </template>
@@ -72,6 +77,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    label_option: {
+      type: String,
+      required: false,
     },
     checkValue: {
       type: String,

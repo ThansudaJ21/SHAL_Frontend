@@ -1,24 +1,17 @@
 <template>
   <UploadImageGridLayout v-if="fields.length">
     <div
-      class="relative shrink flex gap-x-4"
-      :class="[
-        fullbox
-          ? 'w-full h-[128px] object-contain'
-          : fixbox
-          ? 'h-[72px] object-cover'
-          : '',
-      ]"
+      class="relative shrink flex gap-x-4 w-full h-[128px] object-contain"
+      v-if="fullbox"
     >
       <img
-        class="rounded-2xl border-[1px] border-solid border-primary-900"
-        :class="[
-          fullbox
-            ? 'w-full h-[128px] object-contain'
-            : fixbox
-            ? 'w-[72px] h-[72px] object-cover'
-            : '',
-        ]"
+        class="
+          rounded-2xl
+          border-[1px] border-solid border-primary-900
+          w-full
+          h-[128px]
+          object-contain
+        "
         v-for="(image, idx) in fields"
         :key="idx"
         :src="image.value.preview"
@@ -29,6 +22,21 @@
         </button>
       </div>
     </div>
+
+    <img
+      class="
+        rounded-2xl
+        border-[1px] border-solid border-primary-900
+        w-[72px]
+        h-[72px]
+        object-cover
+      "
+      v-else
+      v-for="(image, idx) in fields"
+      :key="idx"
+      :src="image.value.preview"
+      @click="remove(idx)"
+    />
 
     <div
       class="
@@ -84,6 +92,9 @@
       @change="onChange"
     />
   </div>
+  <div class="h-[17px]" v-if="showError">
+    <TextMessage :name="name" />
+  </div>
 </template>
 
 <script>
@@ -92,10 +103,17 @@ import { showAlert } from "@/hooks/sweet-alert/sweet-alert";
 import UploadImageGridLayout from "./upload-image-grid-layout.vue";
 import ImageUploadIcon from "@/assets/icons/image-uploader.svg?inline";
 import TrashIcon from "@/assets/icons/trash-solid.svg?inline";
+import TextMessage from "../field/text-message.vue";
 
 export default {
   name: "UploadImage",
-  components: { ImageUploadIcon, TrashIcon, FieldArray, UploadImageGridLayout },
+  components: {
+    ImageUploadIcon,
+    TrashIcon,
+    FieldArray,
+    UploadImageGridLayout,
+    TextMessage,
+  },
   props: {
     name: {
       type: String,
@@ -116,6 +134,12 @@ export default {
     max: {
       type: Number,
       required: false,
+      default: 1,
+    },
+    showError: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   data() {

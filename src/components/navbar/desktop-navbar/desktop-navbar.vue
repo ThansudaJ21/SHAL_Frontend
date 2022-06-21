@@ -57,7 +57,7 @@
             />
           </div>
           <div class="truncate">
-            admin test
+            admin
             <!-- {{ user.firstname }} {{ user.lastname }} -->
           </div>
           <div><DropdownIcon /></div>

@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Showcase from "@/views/showcase/showcase.vue"
-import RegisterPage from "@/views/auth/register.vue"
+/* import RegisterPage from "@/views/auth/register.vue" */
 import BuyerHomePage from "@/views/buyer/buyer-home-page.vue"
 import BuyerProfilePage from "@/views/buyer/buyer-profile-page.vue"
+import ShopRegistrationLayout from "@/views/buyer/buyer-shop-registration/shop-registration-layout.vue"
+import ShopRegistrationPageOne from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-one.vue"
+import ShopRegistrationPageTwo from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-two.vue"
 
 const routes = [
   {
@@ -11,25 +14,39 @@ const routes = [
     name: 'Showcase',
     component: Showcase
   },
+  /*   {
+      path: "/",
+      name: "RegisterPage",
+      component: RegisterPage
+    }, */
   {
     path: "/",
-    name: "RegisterPage",
-    component: RegisterPage
-  },
-  {
-    path: "/buyer",
     name: "BuyerHomePage",
     component: BuyerHomePage
   },
   {
-    path: "/buyer/profile",
+    path: "/profile",
     name: "BuyerProfilePage",
     component: BuyerProfilePage
   },
   {
-    path: '/showcase',
-    name: 'ShowCase',
-    component: () => import('@/views/showcase/showcase.vue')
+    path: "/shop-registration",
+    name: "ShopRegistrationLayout",
+    component: ShopRegistrationLayout,
+    redirect: '/shop-registration/1',
+    children: [
+      {
+        path: "1",
+        name: 'ShopRegistrationPageOne',
+        component: ShopRegistrationPageOne
+      },
+      {
+        path: "2",
+        name: 'ShopRegistrationPageTwo',
+        component: ShopRegistrationPageTwo
+      }
+    ]
+  },
   },
 ];
 
