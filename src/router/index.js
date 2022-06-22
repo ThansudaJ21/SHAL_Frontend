@@ -8,6 +8,9 @@ import ShopRegistrationLayout from "@/views/buyer/buyer-shop-registration/shop-r
 import ShopRegistrationPageOne from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-one.vue"
 import ShopRegistrationPageTwo from "@/views/buyer/buyer-shop-registration/children/shop-registration-page-two.vue"
 
+import SellerHomePage from "@/views/seller/homepage/seller-home-page.vue"
+import SellerFilterCategoryPage from "@/views/seller/homepage/seller-filter-category-page.vue"
+
 import DashboardPage from "@/views/admin/admin-dashboard-page.vue"
 import ShopManagementPage from "@/views/admin/admin-shop-management/shop-management-page.vue"
 import ShopApprovalPage from "@/views/admin/admin-shop-management/shop-approval-page.vue"
@@ -55,6 +58,15 @@ const routes = [
     ]
   },
   {
+    path: "/myshop",
+    name: "SellerHomePage",
+    component: SellerHomePage
+  },
+  {
+    path: "/myshop/result",
+    name: "SellerFilterCategoryPage",
+    component: SellerFilterCategoryPage
+  },
     path: "/dashboard",
     name: "DashboardPage",
     component: DashboardPage
