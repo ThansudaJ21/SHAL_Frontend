@@ -12,8 +12,8 @@
         <div class="flex items-center relative gap-x-2">
           <div class="rounded-full">
             <img
-              class="w-12 h-12 rounded-full"
-              src="@/assets/logo.png"
+              class="w-12 h-12 rounded-full object-fill"
+              src="@/assets/no-image-available.png"
               alt="user profile"
             />
           </div>
