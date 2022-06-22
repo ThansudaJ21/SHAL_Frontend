@@ -10,6 +10,7 @@ import ShopRegistrationPageTwo from "@/views/buyer/buyer-shop-registration/child
 
 import SellerHomePage from "@/views/seller/homepage/seller-home-page.vue"
 import SellerFilterCategoryPage from "@/views/seller/homepage/seller-filter-category-page.vue"
+import SellerProfilePage from "@/views/seller/seller-profile-page.vue"
 
 import DashboardPage from "@/views/admin/admin-dashboard-page.vue"
 import ShopManagementPage from "@/views/admin/admin-shop-management/shop-management-page.vue"
@@ -67,6 +68,12 @@ const routes = [
     name: "SellerFilterCategoryPage",
     component: SellerFilterCategoryPage
   },
+  {
+    path: "/myshop/profile",
+    name: "SellerProfilePage",
+    component: SellerProfilePage
+  },
+  {
     path: "/dashboard",
     name: "DashboardPage",
     component: DashboardPage
