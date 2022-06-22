@@ -41,6 +41,34 @@
         </div>
       </BottomNavbarItems>
     </div>
+    <!-- <div v-if="isSeller"> -->
+    <div
+      class="flex justify-center gap-x-16 w-full text-center"
+      v-if="$route.name == 'SellerHomePage' || $route.name == 'SellerProfilePage'"
+    >
+      <BottomNavbarItems routeName="SellerHomePage">
+        <HomeInactiveIcon v-if="$route.name != 'SellerHomePage'" />
+        <div v-else>
+          <HomeActiveIcon class="inline-block" />
+          <span class="block">Home</span>
+        </div>
+      </BottomNavbarItems>
+      <BottomNavbarItems :click="maintain">
+        <TruckInactiveIcon class="!opacity-60" />
+        <!--         <CartInactiveIcon v-if="$route.name != ''" />
+        <div v-else>
+          <CartActiveIcon class="inline-block" />
+          <span class="block">My Cart</span>
+        </div> -->
+      </BottomNavbarItems>
+      <BottomNavbarItems routeName="SellerProfilePage">
+        <UserInactiveIcon v-if="$route.name != 'SellerProfilePage'" />
+        <div v-else>
+          <UserActiveIcon class="inline-block" />
+          <span class="block">Profile</span>
+        </div>
+      </BottomNavbarItems>
+    </div>
   </div>
 </template>
 
