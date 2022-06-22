@@ -5,7 +5,7 @@
       <BaseField
         :name="name"
         :type="type"
-        :errors="errors.length"
+        :errors="errors"
         :touched="meta.touched"
         :placeholder="placeholder"
         :disabled="disabled"

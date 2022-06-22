@@ -58,7 +58,7 @@ export default {
         ["text", "search", "password", "file"].includes(prop),
     },
     errors: {
-      type: Boolean,
+      type: Array,
       required: true,
     },
     touched: {

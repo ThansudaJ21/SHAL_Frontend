@@ -5,6 +5,7 @@ export default createStore({
     registerShop: null,
     shopName: null,
     product: null,
+    shops: null
   },
   getters: {
     getRegisterShop(state) {
@@ -15,6 +16,9 @@ export default createStore({
     },
     getProduct(state) {
       return state.product
+    },
+    getShops(state) {
+      return state.shops
     },
   },
   mutations: {
@@ -27,6 +31,9 @@ export default createStore({
     setProduct(state, value) {
       state.product = value
     },
+    setShops(state, value) {
+      state.shops = value
+    },
   },
   actions: {
     setRegisterShop(context, value) {
@@ -37,6 +44,9 @@ export default createStore({
     },
     setProduct(context, value) {
       context.commit('setProduct', value)
+    },
+    setShops(context, value) {
+      context.commit('setShops', value)
     },
   },
 });

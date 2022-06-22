@@ -1,6 +1,6 @@
 <template>
   <DesktopLayout>
-    <div class="flex gap-x-6 justify-center">
+    <div class="flex gap-x-6 justify-center" v-if="shop">
       <div
         class="
           bg-white
@@ -141,31 +141,92 @@
                 v-model="currentStatus"
                 class="custom-select w-full h-[42px]"
               >
-                <option value="ENABLE">Enable</option>
-                <option value="DISABLE">Disable</option>
+                <option class="select-selected" value="ENABLE">Enable</option>
+                <option class="select-selected" value="DISABLE">Disable</option>
               </select>
             </div>
             <div v-if="currentStatus == 'DISABLE'">
-              <TextLabel label="Reasons for failure" required />
-              <Checkbox
+              <TextLabel label="Reasons for failure" required class="mb-3" />
+              <div
                 v-for="(fail, index) in reasonsFailureAll"
-                :key="fail"
-                :name="'reasonsFailure_' + index"
-                :label="fail.reason"
-                :checkValue="fail.reason"
-              />
-              <div @click="switchMethod">
-                <Checkbox
-                  name="reasonsFailure_six"
-                  label="Others"
-                  checkValue="Others"
-                />
+                :key="fail.reason"
+              >
+                <Field v-slot="{ field }" :name="'reasonsFailure_' + index">
+                  <div
+                    @click="addCheck(fail.reason)"
+                    class="flex items-center inline-block"
+                  >
+                    <div>
+                      <input
+                        v-bind="field"
+                        type="checkbox"
+                        :value="fail.reason"
+                        :id="fail.reason"
+                        v-model="checkFailure"
+                        class="
+                          my-3
+                          mr-4
+                          h-5
+                          w-5
+                          border-[1px]
+                          !border-neutral-500
+                          checked:!border-primary-900 checked:!bg-primary-900
+                        "
+                      />
+                    </div>
+                    <div>
+                      <label
+                        :class="[
+                          checkFailure.includes(fail.reason)
+                            ? 'text-black'
+                            : 'text-neutral-500',
+                        ]"
+                        class="text-start text-sm font-normal leading-[17px]"
+                        for="fail.reason"
+                        >{{ fail.reason }}</label
+                      >
+                    </div>
+                  </div>
+                </Field>
               </div>
-              <div v-if="switchData">
+              <Field v-slot="{ field }" name="reasonsFailure_six">
+                <div
+                  @click="switchMethod"
+                  class="flex items-center inline-block mt-3 mb-6"
+                >
+                  <input
+                    v-bind="field"
+                    type="checkbox"
+                    value="Others"
+                    id="Others"
+                    v-model="checkFailure2"
+                    class="
+                      mr-4
+                      h-5
+                      w-5
+                      border-[1px]
+                      !border-neutral-500
+                      checked:!border-primary-900 checked:!bg-primary-900
+                    "
+                  />
+
+                  <label
+                    :class="[
+                      checkFailure2 == true ? 'text-black' : 'text-neutral-500',
+                    ]"
+                    class="text-start text-sm font-normal leading-[17px]"
+                    for="Others"
+                  >
+                    Others
+                  </label>
+                </div>
+              </Field>
+              <div v-if="checkFailure2 == true">
                 <TextField
                   label="Others reasons for failure"
                   class="flex w-full"
                   type="text"
+                  :valueField="textForOther"
                   name="reasonsFailure_six_other"
                   placeholder="eg: ID card has expired"
                   required
@@ -204,7 +265,8 @@
 
 <script>
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
-import { Form } from "vee-validate";
+import { Form, Field } from "vee-validate";
+import * as yup from "yup";
 import ShopService from "@/services/shop/shop-service";
 import DesktopLayout from "@/components/layout/desktop-app-layout.vue";
 import Dropdown from "@/components/dropdown/dropdown.vue";
@@ -227,19 +289,19 @@ export default {
     CheckboxField,
     Form,
     TextField,
+    Field,
   },
   methods: {
-    /*  confirmation() {
-      showAlert(
-        "confirm",
-        "Confirmation",
-        "Are you sure to enable this shop?"
-      ).then((response) => {
-        if (response.isConfirmed) {
-          this.$router.push({ name: "ShopManagementPage" });
-        }
-      });
-    }, */
+    addCheck(reason) {
+      if (
+        this.checkFailure.includes(reason) &&
+        this.checkFailure.indexOf(reason) !== -1
+      ) {
+        this.checkFailure.splice(this.checkFailure.indexOf(reason), 1);
+      } else {
+        this.checkFailure.push(reason);
+      }
+    },
     getStatus(status) {
       if (status == "Enable") {
         this.currentStatus = "ENABLE";
@@ -259,55 +321,108 @@ export default {
       }
     },
     handleSubmit(shopStatus) {
-      let arr = [];
-      if (shopStatus.reasonsFailure_0 != undefined) {
-        arr.push({
-          text: null,
-          failureReasons: { reason: shopStatus.reasonsFailure_0 },
-        });
-      }
-      if (shopStatus.reasonsFailure_1 != undefined) {
-        arr.push({
-          text: null,
-          failureReasons: { reason: shopStatus.reasonsFailure_1 },
-        });
-      }
-      if (shopStatus.reasonsFailure_2 != undefined) {
-        arr.push({
-          text: null,
-          failureReasons: { reason: shopStatus.reasonsFailure_2 },
-        });
-      }
-      if (shopStatus.reasonsFailure_3 != undefined) {
-        arr.push({
-          text: null,
-          failureReasons: { reason: shopStatus.reasonsFailure_3 },
-        });
-      }
-      if (shopStatus.reasonsFailure_4 != undefined) {
-        arr.push({
-          text: null,
-          failureReasons: { reason: shopStatus.reasonsFailure_4 },
-        });
-      }
       if (
-        shopStatus.reasonsFailure_six != undefined &&
-        shopStatus.reasonsFailure_six_other != undefined
+        this.currentStatus == "DISABLE" &&
+        this.checkFailure.length == 0 &&
+        this.checkFailure2 == false
       ) {
-        arr.push({
-          text: shopStatus.reasonsFailure_six_other,
-          failureReasons: { reason: shopStatus.reasonsFailure_six },
+        showAlert(
+          "error",
+          "Error",
+          "Please select the reason for failure at least 1 reason"
+        );
+      } else if (
+        this.currentStatus == "DISABLE" &&
+        this.checkFailure2 == true &&
+        (shopStatus.reasonsFailure_six_other === undefined ||
+          shopStatus.reasonsFailure_six_other === "")
+      ) {
+        showAlert(
+          "error",
+          "Error",
+          "Please fill the others reasons for failure"
+        );
+      } else {
+        showAlert(
+          "confirm",
+          "Confirmation",
+          "Are you sure to " + this.currentStatus.toLowerCase() + " this shop?"
+        ).then((res) => {
+          if (res.isConfirmed) {
+            let arr = [];
+            if (this.currentStatus == "ENABLE") {
+              arr = [];
+            } else {
+              if (
+                this.checkFailure.includes(
+                  "Selfie Photo with ID card does not clear"
+                )
+              ) {
+                arr.push({
+                  text: null,
+                  failureReasons: {
+                    reason: "Selfie Photo with ID card does not clear",
+                  },
+                });
+              }
+              if (this.checkFailure.includes("Inappropriate shop logo")) {
+                arr.push({
+                  text: null,
+                  failureReasons: { reason: "Inappropriate shop logo" },
+                });
+              }
+              if (this.checkFailure.includes("Inappropriate shop name")) {
+                arr.push({
+                  text: null,
+                  failureReasons: { reason: "Inappropriate shop name" },
+                });
+              }
+              if (
+                this.checkFailure.includes(
+                  "ID card number does not match the selfie photo with ID card"
+                )
+              ) {
+                arr.push({
+                  text: null,
+                  failureReasons: {
+                    reason:
+                      "ID card number does not match the selfie photo with ID card",
+                  },
+                });
+              }
+              if (
+                this.checkFailure.includes("Name does not match the ID card")
+              ) {
+                arr.push({
+                  text: null,
+                  failureReasons: { reason: "Name does not match the ID card" },
+                });
+              }
+              if (
+                this.checkFailure2 == true &&
+                shopStatus.reasonsFailure_six_other != undefined
+              ) {
+                arr.push({
+                  text: shopStatus.reasonsFailure_six_other,
+                  failureReasons: { reason: "Others" },
+                });
+              }
+            }
+
+            let shopStatusObject = {
+              id: this.$route.params.id,
+              shopStatus: this.currentStatus,
+            };
+            ShopService.updateShopStatus(shopStatusObject).then(() => {
+              ShopService.shopFailureReason(this.$route.params.id, arr).then(
+                () => {
+                  this.$router.push({ name: "ShopManagementPage" });
+                }
+              );
+            });
+          }
         });
       }
-      let shopStatusObject = {
-        id: this.$route.params.id,
-        shopStatus: this.currentStatus,
-      };
-      ShopService.updateShopStatus(shopStatusObject).then(() => {
-        ShopService.shopFailureReason(this.$route.params.id, arr).then(() => {
-          this.$router.push({ name: "ShopManagementPage" });
-        });
-      });
     },
   },
   data() {
@@ -317,18 +432,47 @@ export default {
       currentStatus: null,
       showReason: false,
       switchData: false,
+      checkFailure: [],
+      checkFailure2: "",
+      textForOther: "",
     };
   },
-  created() {
-    let failureArray = null;
-    ShopService.getRegisterShop(this.$route.params.id).then((res) => {
-      this.shop = res.data.data.getRegisterShop;
-      console.log(res.data.data.getRegisterShop);
-      this.currentStatus = this.getStatus(
-        res.data.data.getRegisterShop.shopStatus
-      );
-      failureArray = res.data.data.getRegisterShop.failureReasonLists;
-    });
+  async created() {
+    await ShopService.getRegisterShop(this.$route.params.id).then(
+      async (res) => {
+        this.shop = await res.data.data.getRegisterShop;
+        console.log(res.data.data.getRegisterShop);
+        console.log(res.data.data.getRegisterShop.failureReasonLists);
+        this.currentStatus = this.getStatus(
+          res.data.data.getRegisterShop.shopStatus
+        );
+        for (
+          let index = 0;
+          index < res.data.data.getRegisterShop.failureReasonLists.length;
+          index++
+        ) {
+          this.checkFailure.push(
+            res.data.data.getRegisterShop.failureReasonLists[index]
+              .failureReasons.reason
+          );
+          if (
+            this.checkFailure.includes("Others") &&
+            this.checkFailure.indexOf("Others") !== -1
+          ) {
+            this.checkFailure.splice(this.checkFailure.indexOf("Others"), 1);
+          }
+          if (
+            res.data.data.getRegisterShop.failureReasonLists[index]
+              .failureReasons.reason == "Others"
+          ) {
+            this.checkFailure2 = true;
+            this.textForOther =
+              res.data.data.getRegisterShop.failureReasonLists[index].text;
+          }
+        }
+        this.checkFailure = JSON.parse(JSON.stringify(this.checkFailure));
+      }
+    );
     ShopService.getFailureReason(this.$route.params.id).then((res) => {
       for (
         let index = 0;
@@ -344,63 +488,16 @@ export default {
 
 <style>
 .custom-select {
-  border: 1px solid #a7a7ad;
-  border-radius: 20px;
+  @apply h-[42px] !rounded-[20px] !border-neutral-500 !p-0 !placeholder-neutral-500  hover:border-neutral-500 border-2;
 }
 
-.custom-select select {
-  display: none;
+.select option {
+  border: 1px solid #1f3a89;
+  box-shadow: 0px 8px 15px 0px rgba(190, 219, 254, 0.2);
+  @apply z-10 mt-2 rounded-[20px] py-0;
 }
 
 .select-selected {
-  background-color: white;
-}
-
-/* Style the arrow inside the select element: */
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 14px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #1f3a89 transparent transparent transparent;
-}
-
-/* Point the arrow upwards when the select box is open (active): */
-.select-selected.select-arrow-active:after {
-  border-color: transparent transparent #1f3a89 transparent;
-  top: 7px;
-}
-
-/* style the items (options), including the selected item: */
-.select-items div,
-.select-selected {
-  color: #1f3a89;
-  padding: 8px 16px;
-  border: 1px solid transparent;
-  border-color: transparent transparent #0000001a transparent;
-  cursor: pointer;
-}
-
-/* Style items (options): */
-.select-items {
-  position: absolute;
-  background-color: white;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-}
-
-/* Hide the items when the select box is closed: */
-.select-hide {
-  display: none;
-}
-
-.select-items div:hover,
-.same-as-selected {
-  background-color: #bfdbfe;
+  @apply !h-6 !py-0 !px-4 !text-sm leading-[17px] !text-neutral-600 hover:bg-primary-100 hover:!text-black;
 }
 </style>

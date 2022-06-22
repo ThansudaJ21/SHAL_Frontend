@@ -9,14 +9,17 @@
     </div>
     <div class="space-y-6 pb-6">
       <p class="text-black font-medium text-xl leading-6">Shops Overall</p>
-      <DashboardCard title="Total shops" :amount="shops.totalElements">
+      <DashboardCard title="Total shops" :amount="totalElements">
         <ShopIcon />
       </DashboardCard>
       <div class="flex gap-6">
         <DashboardCard title="Total shops enabled" :amount="shopEnabled.length">
           <ShopEnabledIcon />
         </DashboardCard>
-        <DashboardCard title="Total shops disabled" :amount="shopDisabled.length">
+        <DashboardCard
+          title="Total shops disabled"
+          :amount="shopDisabled.length"
+        >
           <ShopDisabledIcon />
         </DashboardCard>
       </div>
@@ -46,24 +49,26 @@ export default {
   data() {
     return {
       shops: null,
+      totalElements: 0,
       shopEnabled: [],
       shopDisabled: [],
     };
   },
-  created() {
+  async created() {
     let queryText = {
       shopName: "",
       shopStatus: "",
     };
-    ShopService.shopQueryFilter(queryText, 0, 999).then((res) => {
-      this.shops = res.data.data.shopQueryFilter;
-      console.log(res.data.data.shopQueryFilter);
+    await ShopService.shopQueryFilter(queryText, 0, 999).then(async (res) => {
+      this.shops = await res.data.data.shopQueryFilter;
+      this.totalElements = await res.data.data.shopQueryFilter.totalElements
+      console.log(await res.data.data.shopQueryFilter);
       let content = res.data.data.shopQueryFilter.content;
       for (let index = 0; index < content.length; index++) {
         if (content[index].shopStatus == "Enable") {
           this.shopEnabled.push(content);
-        } else if (content[index].shopStatus == "Disable"){
-          this.shopDisabled.push(content)
+        } else if (content[index].shopStatus == "Disable") {
+          this.shopDisabled.push(content);
         }
       }
     });

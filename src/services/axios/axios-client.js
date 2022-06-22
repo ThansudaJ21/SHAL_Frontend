@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { showAlert } from '../hooks/sweet-alert/sweet-alert'
+import { showAlert } from '../../hooks/sweet-alert/sweet-alert'
 
 const router = useRouter()
 

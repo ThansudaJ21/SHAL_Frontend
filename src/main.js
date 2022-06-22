@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import Store from './store'
-import '@/services/axios-interceptor-setup.js'
+import '@/services/axios/axios-interceptor-setup.js'
 
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'

@@ -1,5 +1,5 @@
 <template>
-  <DesktopLayout v-if="shops">
+  <DesktopLayout>
     <p class="text-black font-semibold text-[32px] leading-10">
       Shop Management
     </p>
@@ -327,7 +327,6 @@
 <script>
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import ShopService from "@/services/shop/shop-service";
 import DesktopLayout from "@/components/layout/desktop-app-layout.vue";
 import IconTextField from "@/components/field/icon-text-field/icon-text-field.vue";
 import TextButton from "@/components/button/text-button.vue";
@@ -349,9 +348,8 @@ export default {
     TabPanel,
   },
   data() {
-    const shopsNameSearch = [];
     return {
-      shopsNameSearch,
+      shopsNameSearch: [],
       search: "",
       shopName: "",
       found: null,
@@ -388,22 +386,16 @@ export default {
       showAlert("error", "Maintenance", "");
     },
   },
-  async created() {
-    let queryText = {
-      shopName: "",
-      shopStatus: "",
-    };
-    await ShopService.shopQueryFilter(queryText, 0, 10).then((res) => {
-      this.shops = res.data.data.shopQueryFilter.content;
-      let content = res.data.data.shopQueryFilter.content;
-      for (let index = 0; index < content.length; index++) {
-        if (content[index].shopStatus == "Enable") {
-          this.shopEnabled.push(content[index]);
-        } else if (content[index].shopStatus == "Disable") {
-          this.shopDisabled.push(content[index]);
-        }
+  created() {
+    this.shops = JSON.parse(JSON.stringify(this.$store.getters.getShops));
+    let content = JSON.parse(JSON.stringify(this.$store.getters.getShops));
+    for (let index = 0; index < content.length; index++) {
+      if (content[index].shopStatus == "Enable") {
+        this.shopEnabled.push(content[index]);
+      } else if (content[index].shopStatus == "Disable") {
+        this.shopDisabled.push(content[index]);
       }
-    });
+    }
   },
 };
 </script>

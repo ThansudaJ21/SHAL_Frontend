@@ -125,11 +125,11 @@ export default {
     },
     fullbox: {
       type: Boolean,
-      required: true,
+      required: false,
     },
     fixbox: {
       type: Boolean,
-      required: true,
+      required: false,
     },
     max: {
       type: Number,
