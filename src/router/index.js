@@ -12,6 +12,9 @@ import DashboardPage from "@/views/admin/admin-dashboard-page.vue"
 import ShopManagementPage from "@/views/admin/admin-shop-management/shop-management-page.vue"
 import ShopApprovalPage from "@/views/admin/admin-shop-management/shop-approval-page.vue"
 
+import ShopService from "@/services/shop/shop-service";
+import store from "@/store";
+
 const routes = [
   {
     path: "/showcase",
@@ -59,7 +62,16 @@ const routes = [
   {
     path: "/shop-management",
     name: "ShopManagementPage",
-    component: ShopManagementPage
+    component: ShopManagementPage,
+    beforeEnter: async () => {
+      let queryText = {
+        shopName: "",
+        shopStatus: "",
+      };
+      await ShopService.shopQueryFilter(queryText, 0, 10).then(async (res) => {
+        await store.dispatch("setShops", res.data.data.shopQueryFilter.content);
+      });
+    }
   },
   {
     path: "/shop-approval/:id",

@@ -7,10 +7,7 @@
             <BackIcon />
           </a>
         </div>
-        <div
-          class="flex items-center w-6"
-          v-if="!exceptPage"
-        ></div>
+        <div class="flex items-center w-6" v-if="!exceptPage"></div>
         <div class="flex items-center">
           <p class="text-base font-semibold text-white">
             {{ title }}
@@ -26,7 +23,10 @@
           </div>
         </div>
       </div>
-      <div class="w-full flex items-center" v-if="showPage">
+      <div
+        class="w-full flex items-center"
+        v-if="$route.name == 'BuyerHomePage'"
+      >
         <IconTextField
           type="text"
           class="w-full"
@@ -67,13 +67,6 @@ export default {
         return false;
       } else {
         return true;
-      }
-    },
-    showPage() {
-      if (this.page.includes(this.$route.name)) {
-        return true;
-      } else {
-        return false;
       }
     },
   },

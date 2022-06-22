@@ -45,7 +45,7 @@ export default {
       required: true,
     },
     errors: {
-      type: Boolean,
+      type: Array,
       required: true,
     },
     touched: {

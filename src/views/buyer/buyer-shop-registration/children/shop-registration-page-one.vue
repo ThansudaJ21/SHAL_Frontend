@@ -11,7 +11,7 @@
       <template #body>
         <TextLabel label="Shop Logo" required />
 
-        <UploadImage name="shopLogo" fullbox="true" />
+        <UploadImage name="shopLogo" :fullbox="true" />
         <TextField
           type="text"
           name="shopName"
@@ -41,7 +41,7 @@
           required
         />
         <TextLabel label="Selfie Photo with ID Card" required />
-        <UploadImage name="selfiePhotoWithIdCard" fullbox="true" />
+        <UploadImage name="selfiePhotoWithIdCard" :fullbox="true" />
       </template>
       <template #footer>
         <PrimaryButton type="submit"> Next </PrimaryButton>
