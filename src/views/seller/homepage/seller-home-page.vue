@@ -1,5 +1,5 @@
 <template>
-  <MobileLayout title="MY SHOP">
+  <MobileLayout title="MY SHOP" v-if="products">
     <p class="text-[14px] leading-[17px] text-black uppercase">CATEGORY</p>
     <div class="overflow-x-auto flex gap-x-4">
       <router-link
@@ -102,6 +102,7 @@
               v-for="product in products"
               :key="product.id"
               :product="product"
+              :click="() => goToProductDetail(product.id)"
             />
           </TabPanel>
           <TabPanel class="grid grid-cols-2 gap-4">
@@ -122,6 +123,7 @@
               v-for="product in productActive"
               :key="product.id"
               :product="product"
+              :click="() => goToProductDetail(product.id)"
             />
           </TabPanel>
           <TabPanel class="grid grid-cols-2 gap-4">
@@ -142,6 +144,7 @@
               v-for="product in productHidden"
               :key="product.id"
               :product="product"
+              :click="() => goToProductDetail(product.id)"
             />
           </TabPanel>
         </TabPanels>
@@ -202,9 +205,12 @@ export default {
         });
       } else {
         await ProductService.getAllProduct(id).then((res) => {
-          console.log(res.data.data);
-          this.products = res.data.data.getAllProduct;
           let content = res.data.data.getAllProduct;
+          for (let index = 0; index < content.length; index++) {
+            if (content[index].productStatus != "DELETED") {
+              this.products.push(content[index]);
+            }
+          }
           for (let index = 0; index < content.length; index++) {
             if (content[index].productStatus == "ACTIVE") {
               this.productActive.push(content[index]);
@@ -217,8 +223,11 @@ export default {
     });
   },
   methods: {
-    goToCategory() {
-      console.log();
+    goToProductDetail(productID) {
+      this.$router.push({
+        name: "ProductDetailsPage",
+        params: { id: productID },
+      });
     },
   },
 };

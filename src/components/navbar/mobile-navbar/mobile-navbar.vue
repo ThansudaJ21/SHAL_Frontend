@@ -17,7 +17,7 @@
           <div class="rounded-full">
             <img
               class="w-8 h-8 rounded-full"
-              src="@/assets/logo.png"
+              src="@/assets/no-image-available.png"
               alt="user profile"
             />
           </div>
