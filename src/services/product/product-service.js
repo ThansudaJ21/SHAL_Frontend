@@ -239,7 +239,7 @@ export default {
 
 
         const variable = {
-            id: id
+            xid: id
         }
 
         const graphql = {

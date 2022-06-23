@@ -18,6 +18,7 @@
         v-for="product in products"
         :key="product.id"
         :product="product"
+        :click="() => goToProductDetail(product.id)"
       />
     </div>
   </MobileLayout>
@@ -45,11 +46,19 @@ export default {
       console.log(res.data.data.getAllProduct);
       let content = res.data.data.getAllProduct;
       for (let index = 0; index < content.length; index++) {
-        if (content[index].category == this.$route.query.category) {
+        if (content[index].category == this.$route.query.category && content[index].productStatus != "DELETED") {
           this.products.push(content[index]);
         }
       }
     });
+  },
+  methods: {
+    goToProductDetail(productID) {
+      this.$router.push({
+        name: "ProductDetailsPage",
+        params: { id: productID },
+      });
+    },
   },
 };
 </script>
