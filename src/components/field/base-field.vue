@@ -4,22 +4,7 @@
       v-bind="field"
       v-facade="mask"
       :type="type"
-      class="
-        outline-none
-        h-[42px]
-        w-full
-        rounded-full
-        border-[1px]
-        px-4
-        py-2
-        text-[14px]
-        font-normal
-        leading-[17px]
-        focus:text-black focus:placeholder-transparent
-        disabled:!border-neutral-500
-        disabled:bg-neutral-100
-        disabled:!placeholder-neutral-500
-      "
+      class="outline-none h-[42px] w-full rounded-full border-[1px] px-4 py-2 text-[14px] font-normal leading-[17px] focus:text-black focus:placeholder-transparent disabled:!border-neutral-500 disabled:bg-neutral-100 disabled:!placeholder-neutral-500"
       :class="[
         errors && touched
           ? '!border-error-500 bg-white text-error-500 placeholder-error-500 focus:ring-2 focus:ring-error-200'
@@ -133,7 +118,7 @@ export default {
     },
     isHouseNumber(e) {
       let char = String.fromCharCode(e.keyCode);
-      if (/^[0-9_/]+$/.test(char)) return true;
+      if (/^[0-9-/]+$/.test(char)) return true;
       else e.preventDefault();
     },
   },
