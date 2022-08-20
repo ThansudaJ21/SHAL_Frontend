@@ -3,10 +3,9 @@
     :initial-values="
       this.$store.getters.getProduct && this.$store.getters.getProduct.p2
     "
-    @submit="handleBeautySubmit"
-    v-if="category == 'BEAUTY'"
+    @submit="checkCategoryToSubmit"
   >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-if="category == 'BEAUTY'">
       <template #body>
         <TextField
           type="text"
@@ -21,20 +20,8 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
-      <template #footer>
-        <PrimaryButton type="submit"> Next </PrimaryButton>
-      </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handleFashionSubmit"
-    v-else-if="category == 'FASHION'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'FASHION'">
       <template #body>
         <TextField
           type="text"
@@ -67,21 +54,8 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
-
-      <template #footer>
-        <PrimaryButton type="submit"> Next </PrimaryButton>
-      </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handleElectronicSubmit"
-    v-else-if="category == 'ELECTRONIC'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'ELECTRONIC'">
       <template #body>
         <TextField
           type="text"
@@ -115,20 +89,8 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
-      <template #footer>
-        <PrimaryButton type="submit"> Next </PrimaryButton>
-      </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handleToySubmit"
-    v-else-if="category == 'TOY'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'TOY'">
       <template #body>
         <TextField
           type="text"
@@ -155,20 +117,8 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
-      <template #footer>
-        <PrimaryButton type="submit"> Next </PrimaryButton>
-      </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handleHealthSubmit"
-    v-else-if="category == 'HEALTH'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'HEALTH'">
       <template #body>
         <TextField
           type="text"
@@ -193,16 +143,7 @@
         <PrimaryButton type="submit"> Next </PrimaryButton>
       </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handleSportsSubmit"
-    v-else-if="category == 'SPORTS'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'SPORTS'">
       <template #body>
         <TextField
           type="text"
@@ -236,20 +177,8 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
-      <template #footer>
-        <PrimaryButton type="submit"> Next </PrimaryButton>
-      </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handleHomeSubmit"
-    v-else-if="category == 'HOME'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'HOME'">
       <template #body>
         <TextField
           type="text"
@@ -283,20 +212,8 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
-      <template #footer>
-        <PrimaryButton type="submit"> Next </PrimaryButton>
-      </template>
     </FormWrapper>
-  </Form>
-
-  <Form
-    :initial-values="
-      this.$store.getters.getProduct && this.$store.getters.getProduct.p2
-    "
-    @submit="handlePetsSubmit"
-    v-else-if="category == 'PETS'"
-  >
-    <FormWrapper label="Attribute">
+    <FormWrapper label="Attribute" v-else-if="category == 'PETS'">
       <template #body>
         <TextField
           type="text"
@@ -331,6 +248,110 @@
           placeholder="eg. Thailand, China, etc."
         />
       </template>
+    </FormWrapper>
+    <FormWrapper label="Sales Information" class="mt-4">
+      <template #body>
+        <div v-if="saleTypeName == 'SALE' || saleTypeName == 'AUCTIONANDSALE'">
+          <TextLabel label="Sale Price" required />
+          <div class="flex gap-x-2">
+            <p
+              class="flex items-center text-sm leading-[17px] text-black w-fit"
+            >
+              ฿
+            </p>
+            <BaseField
+              type="text"
+              name="salePrice"
+              placeholder="Sale Price"
+              :minLength="1"
+              regex="numberOnly"
+            />
+          </div>
+        </div>
+        <div
+          v-if="saleTypeName == 'AUCTION' || saleTypeName == 'AUCTIONANDSALE'"
+        >
+          <TextLabel label="Starting bid" required />
+          <div class="flex gap-x-2">
+            <p
+              class="flex items-center text-sm leading-[17px] text-black w-fit"
+            >
+              ฿
+            </p>
+            <BaseField
+              type="text"
+              name="startingBid"
+              placeholder="Starting bid"
+              :minLength="1"
+              regex="numberOnly"
+            />
+          </div>
+        </div>
+        <div class="mt-2">
+          <TextField
+            type="text"
+            name="storage"
+            placeholder="Storage"
+            label="Storage"
+            :minLength="1"
+            class="min-w-[218px]"
+            regex="numberOnly"
+            required
+          />
+        </div>
+        <div
+          class="flex gap-x-1.5"
+          v-if="saleTypeName == 'AUCTION' || saleTypeName == 'AUCTIONANDSALE'"
+        >
+          <TextField
+            type="text"
+            name="auctionPeriod"
+            placeholder="Auction Time"
+            label="Auction Period"
+            :minLength="1"
+            class="min-w-[218px]"
+            regex="numberOnly"
+            required
+          />
+          <TextLabel label="Unit of Time" required />
+          <Field v-slot="{ field }" name="periodUnit" v-model="periodUnit">
+            <select
+              v-bind="field"
+              class="custom-select w-full h-[42px]"
+              v-model="periodUnit"
+            >
+              <option class="select-selected" value="Hour">Hour</option>
+              <option class="select-selected" value="Minute">Minute</option>
+              <option class="select-selected" value="Second">Second</option>
+            </select>
+          </Field>
+        </div>
+        <div
+          class="flex gap-x-1.5"
+          v-if="saleTypeName == 'AUCTION' || saleTypeName == 'AUCTIONANDSALE'"
+        >
+          <TextField
+            type="text"
+            name="nextAuction"
+            placeholder="Next Auction Time"
+            label="Next Auction in"
+            :minLength="1"
+            class="min-w-[218px]"
+            regex="numberOnly"
+          />
+          <Field v-slot="{ field }" name="nextUnit" v-model="nextUnit">
+            <select
+              v-bind="field"
+              class="custom-select w-full h-[42px]"
+              v-model="nextUnit"
+            >
+              <option class="select-selected" value="Hour">Hour</option>
+              <option class="select-selected" value="Minute">Minute</option>
+              <option class="select-selected" value="Second">Second</option>
+            </select>
+          </Field>
+        </div>
+      </template>
       <template #footer>
         <PrimaryButton type="submit"> Next </PrimaryButton>
       </template>
@@ -339,22 +360,29 @@
 </template>
 
 <script>
-import { Form } from "vee-validate";
+import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 import ProductService from "@/services/product/product-service";
 import FormWrapper from "@/components/form/form-wrapper.vue";
 import TextField from "@/components/field/text-field/text-field.vue";
 import TextArea from "@/components/field/text-area/text-area.vue";
 import PrimaryButton from "@/components/button/primary-button.vue";
+import BaseField from "@/components/field/base-field.vue";
+import Dropdown from "@/components/dropdown/dropdown.vue";
+import TextLabel from "@/components/field/text-label.vue";
 
 export default {
-  name: "EditProductPageTwo",
+  name: "AddProductPageTwo",
   components: {
     Form,
+    Field,
     FormWrapper,
     TextField,
     TextArea,
     PrimaryButton,
+    BaseField,
+    Dropdown,
+    TextLabel,
   },
   data() {
     /* const schema = yup.object().shape({
@@ -376,11 +404,88 @@ export default {
       /*schema,*/
       attributeCount: 0,
       attribute: [],
+      saleTypeName: null,
       category: null,
       pageOneData: null,
+      periodUnit: null,
+      nextUnit: null,
+      information: null,
     };
   },
   methods: {
+    checkCategoryToSubmit(product) {
+      if (this.category == "BEAUTY") {
+        return this.handleBeautySubmit(product);
+      } else if (this.category == "FASHION") {
+        return this.handleFashionSubmit(product);
+      } else if (this.category == "ELECTRONIC") {
+        return this.handleElectronicSubmit(product);
+      } else if (this.category == "TOY") {
+        return this.handleToySubmit(product);
+      } else if (this.category == "HEALTH") {
+        return this.handleHealthSubmit(product);
+      } else if (this.category == "SPORTS") {
+        return this.handleSportsSubmit(product);
+      } else if (this.category == "HOME") {
+        return this.handleHomeSubmit(product);
+      } else if (this.category == "PETS") {
+        return this.handlePetsSubmit(product);
+      }
+    },
+    getPageTwoObject(product) {
+      if (this.$store.getters.getProduct.p1.saleTypeName == "SALE") {
+        this.information = {
+          productName: this.$store.getters.getProduct.p1.productName,
+          details: this.$store.getters.getProduct.p1.details,
+          category: this.$store.getters.getProduct.p1.categoryName,
+          imagesPath: this.$store.getters.getProduct.p1.imagesPath,
+          saleTypeName: this.$store.getters.getProduct.p1.saleTypeName,
+          salePrice: product.salePrice,
+          storage: product.storage,
+          auction: null,
+          productAttribute: this.attribute,
+        };
+      } else if (this.$store.getters.getProduct.p1.saleTypeName == "AUCTION") {
+        this.information = {
+          productName: this.$store.getters.getProduct.p1.productName,
+          details: this.$store.getters.getProduct.p1.details,
+          category: this.$store.getters.getProduct.p1.categoryName,
+          imagesPath: this.$store.getters.getProduct.p1.imagesPath,
+          saleTypeName: this.$store.getters.getProduct.p1.saleTypeName,
+          salePrice: 0,
+          storage: product.storage,
+          auction: {
+            startingBid: product.startingBid,
+            auctionPeriod: product.auctionPeriod,
+            nextAuction: product.nextAuction,
+            timeUnitForAuctionPeriod: product.periodUnit,
+            timeUnitForNextAuction: product.nextUnit,
+          },
+          productAttribute: this.attribute,
+        };
+      } else if (
+        this.$store.getters.getProduct.p1.saleTypeName == "AUCTIONANDSALE"
+      ) {
+        this.information = {
+          productName: this.$store.getters.getProduct.p1.productName,
+          details: this.$store.getters.getProduct.p1.details,
+          category: this.$store.getters.getProduct.p1.categoryName,
+          imagesPath: this.$store.getters.getProduct.p1.imagesPath,
+          saleTypeName: this.$store.getters.getProduct.p1.saleTypeName,
+          salePrice: product.salePrice,
+          storage: product.storage,
+          auction: {
+            startingBid: product.startingBid,
+            auctionPeriod: product.auctionPeriod,
+            nextAuction: product.nextAuction,
+            timeUnitForAuctionPeriod: product.periodUnit,
+            timeUnitForNextAuction: product.nextUnit,
+          },
+          productAttribute: this.attribute,
+        };
+      }
+      return this.information;
+    },
     handleBeautySubmit(product) {
       this.attribute.push({
         text: product.brand,
@@ -394,13 +499,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -408,10 +507,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleFashionSubmit(product) {
@@ -445,13 +541,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -459,10 +549,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleElectronicSubmit(product) {
@@ -496,13 +583,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -510,10 +591,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleToySubmit(product) {
@@ -541,13 +619,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -555,10 +627,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleHealthSubmit(product) {
@@ -592,13 +661,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -606,10 +669,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleToySubmit(product) {
@@ -631,13 +691,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -645,10 +699,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleSportsSubmit(product) {
@@ -682,13 +733,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -696,10 +741,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handleHomeSubmit(product) {
@@ -734,13 +776,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -748,10 +784,7 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
     handlePetsSubmit(product) {
@@ -785,13 +818,7 @@ export default {
           attribute: "Country of origin",
         },
       });
-      let pageTwo = {
-        productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
-        productAttribute: this.attribute,
-      };
+      let pageTwo = this.getPageTwoObject(product);
       console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
@@ -799,21 +826,22 @@ export default {
           p2: pageTwo,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageThree",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageThree" });
         });
     },
   },
-  created() {
+  async created() {
     this.pageOneData = JSON.parse(
-      JSON.stringify(this.$store.getters.getProduct)
+      JSON.stringify(await this.$store.getters.getProduct)
     );
     ProductService.getCategory(this.pageOneData.p1.category).then((res) => {
+      console.log(res.data.data.getCategory);
       this.category = res.data.data.getCategory.categoryName;
       this.attributeCount = res.data.data.getCategory.attributes.length;
     });
+    this.saleTypeName = this.pageOneData.p1.saleTypeName;
+    this.periodUnit = "Minute";
+    this.nextUnit = "Minute";
   },
 };
 </script>

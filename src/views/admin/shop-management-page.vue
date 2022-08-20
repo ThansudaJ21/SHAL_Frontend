@@ -143,9 +143,6 @@
                       >
                         <PencilIcon />
                       </span>
-                      <span class="cursor-pointer" @click="maintain">
-                        <TrashIcon />
-                      </span>
                     </div>
                   </td>
                 </tr>
@@ -225,9 +222,6 @@
                         "
                       >
                         <PencilIcon />
-                      </span>
-                      <span class="cursor-pointer" @click="maintain">
-                        <TrashIcon />
                       </span>
                     </div>
                   </td>
@@ -309,9 +303,6 @@
                       >
                         <PencilIcon />
                       </span>
-                      <span class="cursor-pointer" @click="maintain">
-                        <TrashIcon />
-                      </span>
                     </div>
                   </td>
                 </tr>
@@ -325,7 +316,7 @@
 </template>
 
 <script>
-import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
+import ShopService from "@/services/shop/shop-service";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import DesktopLayout from "@/components/layout/desktop-app-layout.vue";
 import IconTextField from "@/components/field/icon-text-field/icon-text-field.vue";
@@ -382,9 +373,6 @@ export default {
         this.shopDisabled = res.data.data.shopQueryFilter.content;
       });
     },
-    maintain() {
-      showAlert("error", "Maintenance", "");
-    },
   },
   created() {
     this.shops = JSON.parse(JSON.stringify(this.$store.getters.getShops));
@@ -396,6 +384,26 @@ export default {
         this.shopDisabled.push(content[index]);
       }
     }
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_ADMIN_SHOP_MANAGEMENT,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

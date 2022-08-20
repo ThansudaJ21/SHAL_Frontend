@@ -14,13 +14,8 @@ export default {
                 productStatus
                 shopId
                 salePrice
-                startingBid
                 storage
-                auctionPeriod
-                nextAuction
                 saleTypeName
-                timeUnitForAuctionPeriod
-                timeUnitForNextAuction
                 variations {
                     id
                     variationName
@@ -43,7 +38,13 @@ export default {
                 }
             }
         }`
-
+        /* auction {
+                            timeUnitForAuctionPeriod
+                            timeUnitForNextAuction
+                            auctionPeriod
+                            nextAuction
+                            startingBid
+                        } */
 
         const variable = {
             shopId: shopId
@@ -85,13 +86,8 @@ export default {
                 shopId
                 productStatus
                 salePrice
-                startingBid
-                storage
-                auctionPeriod
-                nextAuction
                 saleTypeName
-                timeUnitForAuctionPeriod
-                timeUnitForNextAuction
+                storage
                 shipments
                 variations {
                     id
@@ -112,8 +108,15 @@ export default {
                     }
                 }
             }
-        }`
-
+        }
+        `
+        /* auction {
+            startingBid
+            auctionPeriod
+            nextAuction
+            timeUnitForAuctionPeriod
+            timeUnitForNextAuction
+        } */
         const variable = {
             shopId: shopId,
             product: product
@@ -208,17 +211,30 @@ export default {
                 productStatus
                 shopId
                 salePrice
-                startingBid
+                shop {
+                    id
+                    shopName
+                    idCard
+                    shopLogoImagePath
+                    selfiePhotoWithIdCardPath
+                    promptPay
+                    email
+                    shopStatus
+                    shopAddress {
+                        houseNumber
+                        moo
+                        postalCode
+                        district
+                        subDistrict
+                        province
+                    }
+                }
                 storage
-                auctionPeriod
-                nextAuction
                 saleTypeName
-                timeUnitForAuctionPeriod
-                timeUnitForNextAuction
-                variations{
+                variations {
                     id
                     variationName
-                    options{
+                    options {
                         id
                         optionName
                         price
@@ -236,7 +252,13 @@ export default {
                 }
             }
         }`
-
+        /* auction {
+                            timeUnitForAuctionPeriod
+                            timeUnitForNextAuction
+                            auctionPeriod
+                            nextAuction
+                            startingBid
+                        } */
 
         const variable = {
             xid: id
@@ -339,15 +361,9 @@ export default {
                     category
                     productStatus
                     imagesPath
-        
                     salePrice
-                    startingBid
                     storage
-                    auctionPeriod
-                    nextAuction
                     saleTypeName
-                    timeUnitForAuctionPeriod
-                    timeUnitForNextAuction
                     variations {
                         id
                         variationName

@@ -6,6 +6,7 @@
     <input
       type="checkbox"
       value=""
+      @click="click"
       id="checked-toggle"
       class="sr-only peer"
       :checked="isPublish"
@@ -43,8 +44,10 @@ export default {
   props: {
     isPublish: {
       type: Boolean,
-      required: true,
       default: true,
+    },
+    click: {
+      type: Function,
     },
   },
 };

@@ -266,7 +266,6 @@
 <script>
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import { Form, Field } from "vee-validate";
-import * as yup from "yup";
 import ShopService from "@/services/shop/shop-service";
 import DesktopLayout from "@/components/layout/desktop-app-layout.vue";
 import Dropdown from "@/components/dropdown/dropdown.vue";
@@ -321,6 +320,7 @@ export default {
       }
     },
     handleSubmit(shopStatus) {
+      console.log(shopStatus);
       if (
         this.currentStatus == "DISABLE" &&
         this.checkFailure.length == 0 &&
@@ -413,7 +413,7 @@ export default {
               id: this.$route.params.id,
               shopStatus: this.currentStatus,
             };
-            ShopService.updateShopStatus(shopStatusObject).then(() => {
+            ShopService.updateShopStatus(shopStatusObject, 1).then(() => {
               ShopService.shopFailureReason(this.$route.params.id, arr).then(
                 () => {
                   this.$router.push({ name: "ShopManagementPage" });
@@ -423,6 +423,9 @@ export default {
           }
         });
       }
+    },
+    currentStatusAtNow() {
+      return this.currentStatus;
     },
   },
   data() {
@@ -482,6 +485,26 @@ export default {
         this.reasonsFailureAll.push(res.data.data.getFailureReason[index]);
       }
     });
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_ADMIN_SHOP_APPROVAL,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

@@ -22,7 +22,7 @@
               Welcome,
             </p>
             <p class="text-[40px] leading-[48px] font-semibold text-white">
-              username
+              {{ displayName }}
             </p>
           </div>
         </div>
@@ -34,5 +34,11 @@
 <script>
 export default {
   name: "MobileRegisterNavbar",
+  props: {
+    displayName: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>

@@ -2,10 +2,10 @@ import graphqlClient from "@/services/graphql-client.js";
 
 export default {
     /* register */
-    registerShop(shop) {
+    registerShop(shop, userId) {
         const mutation = `
-        mutation ($shop: ShopInput) {
-            registerShop(shop: $shop) {
+        mutation ($userId: Int,$shop: ShopInput) {
+            registerShop(userId: $userId,shop: $shop) {
                 id
                 shopName
                 idCard
@@ -13,6 +13,7 @@ export default {
                 selfiePhotoWithIdCardPath
                 promptPay
                 email
+                userId
                 shopStatus
                 shopAddress {
                     houseNumber
@@ -29,11 +30,11 @@ export default {
                     text
                 }
             }
-        }
-        `
+        }`
 
         const variable = {
-            shop: shop
+            shop: shop,
+            userId: userId
         }
 
         const graphql = {
@@ -124,31 +125,32 @@ export default {
     },
 
     /* update */
-    updateShopStatus(shopStatus) {
+    updateShopStatus(shopStatus, userId) {
         const mutation = `
-            mutation ($shopStatus: ShopStatusInput){
-                updateShopStatus(shopStatus:$shopStatus){
+        mutation ($shopStatus: ShopStatusInput, $userId: Int){
+            updateShopStatus(shopStatus:$shopStatus, userId: $userId){
                 id
-                    shopName
-                    idCard
-                    shopLogoImagePath
-                    selfiePhotoWithIdCardPath
-                    promptPay
-                    email
-                    shopStatus
-                    shopAddress {
-                        houseNumber
-                        moo
-                        postalCode
-                        district
-                        subDistrict
-                        province
-                    }
+                shopName
+                idCard
+                shopLogoImagePath
+                selfiePhotoWithIdCardPath
+                promptPay
+                email
+                shopStatus
+                shopAddress {
+                    houseNumber
+                    moo
+                    postalCode
+                    district
+                    subDistrict
+                    province
                 }
-            }`
+            }
+        }`
 
         const variable = {
-            shopStatus: shopStatus
+            shopStatus: shopStatus,
+            userId: userId
         };
 
         const graphql = {
@@ -189,11 +191,7 @@ export default {
     shopQueryFilter(queryText, pageNo, pageSize) {
         const query = `
         query ($queryText: ShopQueryFilter, $pageNo: Int, $pageSize: Int) {
-            shopQueryFilter(
-                queryText: $queryText
-                pageNo: $pageNo
-                pageSize: $pageSize
-            ) {
+            shopQueryFilter(queryText: $queryText, pageNo: $pageNo, pageSize: $pageSize) {
                 number
                 totalPages
                 totalElements
@@ -202,7 +200,7 @@ export default {
                     shopName
                     idCard
                     shopStatus
-                        failureReasonLists {
+                    failureReasonLists {
                         id
                         text
                         failureReasons {

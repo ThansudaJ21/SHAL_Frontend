@@ -143,7 +143,7 @@ export default {
         },
       };
       this.$store.dispatch("setRegisterShop", shopObject);
-      ShopService.registerShop(shopObject);
+      ShopService.registerShop(shopObject, 1);
       console.log(shopObject);
       this.$router.push({ name: "BuyerProfilePage" });
     },

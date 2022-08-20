@@ -23,10 +23,7 @@
           </div>
         </div>
       </div>
-      <div
-        class="w-full flex items-center"
-        v-if="$route.name == 'BuyerHomePage'"
-      >
+      <div class="w-full flex items-center" v-if="$route.name == 'HomePage'">
         <IconTextField
           type="text"
           class="w-full"
@@ -58,7 +55,7 @@ export default {
   },
   data() {
     return {
-      page: ["BuyerHomePage", "SellerHomePage"],
+      page: ["HomePage", "SellerShopPage", "OrdersPage"],
     };
   },
   computed: {

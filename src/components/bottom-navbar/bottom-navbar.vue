@@ -16,10 +16,10 @@
     <!-- <div v-if="isBuyer"> -->
     <div
       class="flex justify-center gap-x-16 w-full text-center"
-      v-if="$route.name == 'BuyerHomePage' || $route.name == 'BuyerProfilePage'"
+      v-if="$route.name == 'HomePage' || $route.name == 'BuyerProfilePage'"
     >
-      <BottomNavbarItems routeName="BuyerHomePage">
-        <HomeInactiveIcon v-if="$route.name != 'BuyerHomePage'" />
+      <BottomNavbarItems routeName="HomePage">
+        <HomeInactiveIcon v-if="$route.name != 'HomePage'" />
         <div v-else>
           <HomeActiveIcon class="inline-block" />
           <span class="block">Home</span>
@@ -41,18 +41,36 @@
         </div>
       </BottomNavbarItems>
     </div>
+
     <!-- <div v-if="isSeller"> -->
+    <!--     <div
+      class="flex justify-center gap-x-16 w-full text-center"
+      v-if="
+        $route.name == 'SellerShopPage' ||
+        $route.name == 'OrdersPage' ||
+        $route.name == 'SellerProfilePage'
+      "
+    > -->
     <div
       class="flex justify-center gap-x-16 w-full text-center"
-      v-if="$route.name == 'SellerHomePage' || $route.name == 'SellerProfilePage'"
+      v-if="
+        $route.name == 'SellerShopPage' || $route.name == 'SellerProfilePage'
+      "
     >
-      <BottomNavbarItems routeName="SellerHomePage">
-        <HomeInactiveIcon v-if="$route.name != 'SellerHomePage'" />
+      <BottomNavbarItems routeName="SellerShopPage">
+        <HomeInactiveIcon v-if="$route.name != 'SellerShopPage'" />
         <div v-else>
           <HomeActiveIcon class="inline-block" />
           <span class="block">Home</span>
         </div>
       </BottomNavbarItems>
+      <!--       <BottomNavbarItems routeName="OrdersPage">
+        <TruckInactiveIcon v-if="$route.name != 'OrdersPage'" />
+        <div v-else>
+          <TruckActiveIcon class="inline-block" />
+          <span class="block">Orders</span>
+        </div>
+      </BottomNavbarItems> -->
       <BottomNavbarItems :click="maintain">
         <TruckInactiveIcon class="!opacity-60" />
         <!--         <CartInactiveIcon v-if="$route.name != ''" />
