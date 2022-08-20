@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.6.4",
     "@line/liff": "^2.20.3",
+    "@takuma-ru/vue-swipe-modal": "4.0.0",
     "@vue/compat": "^3.2.36",
     "@wyhaya/vue-slide": "^1.0.2",
     "axios": "^0.27.2",
