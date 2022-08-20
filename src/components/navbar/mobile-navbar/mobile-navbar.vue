@@ -76,11 +76,10 @@ export default {
   },
   methods: {
     handleProductSearch(product) {
-      this.$router
-        .push({
-          name: "SearchResult",
-          params: { keyWord: product.productName },
-        })
+      this.$router.push({
+        name: "SearchResultPage",
+        params: { keyWord: product.productName },
+      });
     },
   },
 };

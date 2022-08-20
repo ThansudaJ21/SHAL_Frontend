@@ -50,6 +50,7 @@ const routes = [
     path: "/",
     name: "HomePage",
     component: HomePage,
+    meta: { requiresAuth: true }
   },
   {
     path: "/result/:keyWord",
@@ -189,6 +190,54 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  to.matched.some((record) => {
+    record.meta.requiresAuth;
+    record.meta.requiresBuyer;
+    record.meta.requiresSeller;
+    record.meta.requiresAdmin;
+  });
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (localStorage.getItem("userId") == null) {
+      next({ name: "Showcase" });
+    } else {
+      let keepRole = []
+      AuthService.findByUserId(localStorage.getItem("userId")).then((response) => {
+        let roles = response.data.data.findByUserId.authorities
+        for (let index = 0; index < roles.length; index++) {
+          keepRole.push(roles[index].name)
+        }
+        store.dispatch("setRole", keepRole);
+        let role = JSON.parse(JSON.stringify(store.getters.getRole))
+        console.log(role);
+        if (to.matched.some((record) => record.meta.requiresAdmin)) {
+          if (to.matched.some((record) => record.meta.requiresBuyer)) {
+            if (role.includes("BUYER")) {
+              next();
+            } else {
+              next({ name: "Showcase" });
+            }
+          } else if (to.matched.some((record) => record.meta.requiresSeller)) {
+            if (role.includes("SELLER") && role.includes("BUYER")) {
+              next();
+            } else {
+              next({ name: "Showcase" });
+            }
+          } else if (role.includes("ADMIN") && role.includes("BUYER")) {
+            next();
+          } else {
+            next({ name: "Showcase" });
+          }
+        } else {
+          next();
+        }
+      })
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

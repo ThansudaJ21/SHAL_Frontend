@@ -36,15 +36,15 @@ export default {
                         attribute
                     }
                 }
+                auction {
+                    timeUnitForAuctionPeriod
+                    timeUnitForNextAuction
+                    auctionPeriod
+                    nextAuction
+                    startingBid
+                }
             }
         }`
-        /* auction {
-                            timeUnitForAuctionPeriod
-                            timeUnitForNextAuction
-                            auctionPeriod
-                            nextAuction
-                            startingBid
-                        } */
 
         const variable = {
             shopId: shopId
@@ -250,15 +250,15 @@ export default {
                         attribute
                     }
                 }
+                auction {
+                    timeUnitForAuctionPeriod
+                    timeUnitForNextAuction
+                    auctionPeriod
+                    nextAuction
+                    startingBid
+                }
             }
         }`
-        /* auction {
-                            timeUnitForAuctionPeriod
-                            timeUnitForNextAuction
-                            auctionPeriod
-                            nextAuction
-                            startingBid
-                        } */
 
         const variable = {
             xid: id

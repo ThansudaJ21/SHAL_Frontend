@@ -8,8 +8,8 @@
         v-for="category in this.categoryItems"
         :key="category.name"
         :to="{
-          name: 'SellerFilterCategoryPage',
-          query: { category: category.pageName },
+          name: 'SearchResultPage',
+          params: { keyWord: category.pageName },
         }"
         class="
           h-20
@@ -235,7 +235,7 @@ export default {
       categoryItems,
     };
   },
-  mounted() {
+  /* mounted() {
     liff
       .init({
         liffId: process.env.VUE_APP_LINELIFF_BUYER_HOMEPAGE,
@@ -247,6 +247,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem('userId', liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;
@@ -260,7 +261,7 @@ export default {
             .catch((err) => console.error(err));
         }
       });
-  },
+  }, */
   methods: {
     goToProductDetail(productID) {
       this.$router.push({
