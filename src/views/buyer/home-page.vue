@@ -8,7 +8,7 @@
         v-for="category in this.categoryItems"
         :key="category.name"
         :to="{
-          name: 'SellerFilterCategoryPage',
+          name: 'SearchResultPage',
           query: { category: category.pageName },
         }"
         class="

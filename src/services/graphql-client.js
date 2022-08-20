@@ -3,7 +3,7 @@ import axios from "axios";
 const graphqlClient = (query) => {
   let token = localStorage.getItem("token");
   return axios({
-    url: `http://localhost:8080/graphql`,
+    url: `${process.env.VUE_APP_BACKEND_URL}/graphql`,
     method: "post",
     headers: {
       Accept: "application/json",
