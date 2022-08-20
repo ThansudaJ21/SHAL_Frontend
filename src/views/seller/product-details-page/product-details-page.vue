@@ -10,7 +10,7 @@
       <div class="absolute top-2 w-full flex justify-between px-4">
         <div class="items-start">
           <div
-            @click="() => this.$router.push({ name: 'SellerHomePage' })"
+            @click="() => this.$router.push({ name: 'SellerShopPage' })"
             class="
               !w-8
               !h-8
@@ -221,7 +221,7 @@ import TextButton from "@/components/button/text-button.vue";
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 
 export default {
-  name: "ProductDetailsPage",
+  name: "ProductDetailsPageForSeller",
   components: {
     slide,
     Form,
@@ -263,11 +263,31 @@ export default {
             productStatus: "DELETED",
           };
           ProductService.updateProductStatus(productStatus).then(() => {
-            this.$router.push({ name: "SellerHomePage" });
+            this.$router.push({ name: "SellerShopPage" });
           });
         }
       });
     },
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_SELLER_PRODUCT_DETAILS,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

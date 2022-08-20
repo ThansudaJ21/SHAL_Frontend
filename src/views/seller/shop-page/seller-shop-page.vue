@@ -166,7 +166,7 @@ import PrimaryButton from "@/components/button/primary-button.vue";
 import AddWhiteIcon from "@/assets/icons/add-white.svg?inline";
 
 export default {
-  name: "SellerHomePage",
+  name: "SellerShopPage",
   components: {
     MobileLayout,
     Category,
@@ -200,11 +200,12 @@ export default {
           "Please wait for admin approve this shop."
         ).then((res) => {
           if (res.isConfirmed) {
-            this.$router.push({ name: "BuyerHomePage" });
+            this.$router.push({ name: "HomePage" });
           }
         });
       } else {
         await ProductService.getAllProduct(id).then((res) => {
+          console.log(res);
           let content = res.data.data.getAllProduct;
           for (let index = 0; index < content.length; index++) {
             if (content[index].productStatus != "DELETED") {
@@ -225,10 +226,30 @@ export default {
   methods: {
     goToProductDetail(productID) {
       this.$router.push({
-        name: "ProductDetailsPage",
+        name: "ProductDetailsPageForSeller",
         params: { id: productID },
       });
     },
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_SELLER_HOMEPAGE,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

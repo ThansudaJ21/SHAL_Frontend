@@ -1,12 +1,16 @@
 <template>
   <div class="bg-primary-50 min-h-screen">
     <!-- Register Navbar -->
-    <MobileRegisterNavbar v-if="$route.name == 'RegisterPage'" />
+    <MobileRegisterNavbar
+      v-if="$route.name == 'RegisterPage'"
+      :displayName="displayName"
+    />
 
     <!-- Profile Navbar -->
     <MobileProfileNavbar
       v-else-if="$route.name == 'BuyerProfilePage'"
       :click="() => this.$router.push({ name: 'ShopRegistrationPageOne' })"
+      :displayName="displayName"
     >
       <template v-slot:icon />
       <slot name="button" />
@@ -14,7 +18,8 @@
 
     <MobileProfileNavbar
       v-else-if="$route.name == 'SellerProfilePage'"
-      :click="() => this.$router.push({ name: 'BuyerHomePage' })"
+      :click="() => this.$router.push({ name: 'HomePage' })"
+      :displayName="displayName"
     >
       <template v-slot:icon />
       <slot name="button" />
@@ -24,7 +29,9 @@
     <MobileDefaultNavbar
       :title="title"
       v-else-if="
-        $route.name == 'BuyerHomePage' || $route.name == 'SellerHomePage'
+        $route.name == 'HomePage' ||
+        $route.name == 'SellerShopPage' ||
+        $route.name == 'OrdersPage'
       "
     />
 
@@ -51,6 +58,10 @@ export default {
   },
   props: {
     title: {
+      type: String,
+      required: true,
+    },
+    displayName: {
       type: String,
       required: true,
     },

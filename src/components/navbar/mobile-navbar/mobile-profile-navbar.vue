@@ -8,17 +8,16 @@
         </div>
         <div class="flex items-center w-8"></div>
       </div>
-      <div class="w-full flex justify-between mt-4">
+      <div class="w-full flex justify-between mt-4 gap-x-2">
         <div class="flex items-center relative gap-x-2">
-          <div class="rounded-full">
-            <img
-              class="w-12 h-12 rounded-full object-fill"
-              src="@/assets/no-image-available.png"
-              alt="user profile"
-            />
-          </div>
-          <div>
-            <p class="text-base font-semibold text-white">displayName</p>
+          <img
+            class="w-12 h-12 rounded-full object-fill"
+            src="@/assets/no-image-available.png"
+            alt="user profile"
+          />
+
+          <div class="text-base font-semibold text-white truncate">
+            {{ displayName }}
           </div>
         </div>
         <div class="flex items-center relative">
@@ -42,6 +41,10 @@ export default {
   props: {
     click: {
       type: Function,
+      required: true,
+    },
+    displayName: {
+      type: String,
       required: true,
     },
   },

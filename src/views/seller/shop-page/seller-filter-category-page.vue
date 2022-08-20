@@ -46,7 +46,10 @@ export default {
       console.log(res.data.data.getAllProduct);
       let content = res.data.data.getAllProduct;
       for (let index = 0; index < content.length; index++) {
-        if (content[index].category == this.$route.query.category && content[index].productStatus != "DELETED") {
+        if (
+          content[index].category == this.$route.query.category &&
+          content[index].productStatus != "DELETED"
+        ) {
           this.products.push(content[index]);
         }
       }
@@ -55,10 +58,30 @@ export default {
   methods: {
     goToProductDetail(productID) {
       this.$router.push({
-        name: "ProductDetailsPage",
+        name: "ProductDetailsPageForSeller",
         params: { id: productID },
       });
     },
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_SELLER_SEARCH_RESULT,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

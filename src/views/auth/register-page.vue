@@ -1,5 +1,5 @@
 <template>
-  <MobileLayout>
+  <MobileLayout :displayName="this.name">
     <Form :validation-schema="schema" @submit="handleSubmit">
       <FormWrapper
         label="SHAL Registration"
@@ -55,7 +55,6 @@ import MobileLayout from "@/components/layout/mobile-app-layout.vue";
 import FormWrapper from "@/components/form/form-wrapper.vue";
 import TextField from "@/components/field/text-field/text-field.vue";
 import PrimaryButton from "@/components/button/primary-button.vue";
-import OutlinedButton from "@/components/button/outlined-button.vue";
 
 export default {
   name: "RegisterPage",
@@ -66,7 +65,6 @@ export default {
     FormWrapper,
     TextField,
     PrimaryButton,
-    OutlinedButton,
   },
   data() {
     const schema = yup.object().shape({
@@ -87,15 +85,15 @@ export default {
     return {
       schema,
       email: "",
-      liffId: "",
-      lineId: "",
+      userId: "",
+      picture: "",
       name: "",
     };
   },
   mounted() {
     liff
       .init({
-        liffId: process.env.VUE_APP_LINELIFF_REGISTER,
+        liffId: process.env.VUE_APP_LINELIFF_REGISTER_NEW_USER,
       })
       .then(() => {
         if (!liff.isLoggedIn()) {
@@ -103,17 +101,11 @@ export default {
         } else {
           liff
             .getProfile()
-            .then((profile) => {
+            .then(() => {
               this.email = liff.getDecodedIDToken().email;
-              console.log(liff.getDecodedIDToken().email);
               this.name = liff.getDecodedIDToken().name;
-              console.log(liff.getDecodedIDToken().name);
-              this.liffId = liff.getDecodedIDToken().sub;
-              console.log(liff.getDecodedIDToken().sub);
-
-              this.lineId = this.$route.query["lineId"];
-              console.log(this.lineId);
-              console.log(profile);
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
             })
             .catch((err) => console.error(err));
         }
@@ -122,25 +114,30 @@ export default {
   methods: {
     handleSubmit(user) {
       let userObject = {
-        firstname: user.firstname,
-        lastname: user.lastname,
-        phoneNumber: user.phoneNumber,
-        password: "mineteeraa",
-        name: this.name,
-        userId: this.liffId,
-        username: this.email,
+        firstname: user.firstname.toString(),
+        lastname: user.lastname.toString(),
+        email: this.email,
+        pictureUrl: this.picture,
+        displayName: this.name,
+        userId: this.userId,
+        phoneNumber: user.phoneNumber.toString(),
         enabled: true,
       };
-      AuthService.registerUser(userObject).then(() => {
-        this.$store.dispatch("setUser", userObject);
-        showAlert("success", "", "Registration Successfully!").then(() => {
-          this.$router.push({ name: "BuyerHomePage" });
-        });
-        /* this.$router.push({ name: "BuyerHomePage" }); */
-        /* console.log(userObject); */
+      AuthService.registerUser(userObject).then((res) => {
+        if (res.data.data.registerUser != null) {
+          this.$store.dispatch("setUser", userObject);
+          showAlert("success", "", "Registration Successfully!").then(() => {
+            liff.closeWindow();
+          });
+        } else {
+          showAlert(
+            "error",
+            "Registration Unsuccessfully!",
+            "At least one in the field is invalid."
+          );
+        }
       });
     },
   },
 };
 </script>
-,

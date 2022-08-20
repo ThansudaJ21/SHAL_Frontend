@@ -4,6 +4,7 @@
     <Field type="text" :name="name" v-slot="{ field }">
       <v-select
         v-bind="field"
+        :value="value"
         :class="{ error: errors.length && meta.touched }"
         :name="name"
         :options="options"
@@ -63,6 +64,9 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    value: {
+      type: String,
     },
     showError: {
       type: Boolean,

@@ -1,5 +1,5 @@
 <template>
-  <MobileLayout>
+  <MobileLayout :displayName="this.name">
     <template #button> <ShopIcon /> Start Selling </template>
   </MobileLayout>
 </template>
@@ -15,6 +15,26 @@ export default {
     MobileLayout,
     Category,
     ShopIcon,
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PROFILE,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

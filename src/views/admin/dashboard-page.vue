@@ -9,7 +9,7 @@
     </div>
     <div class="space-y-6 pb-6">
       <p class="text-black font-medium text-xl leading-6">Shops Overall</p>
-      <DashboardCard title="Total shops" :amount="totalElements">
+      <DashboardCard title="Total shops" :amount="totalShops">
         <ShopIcon />
       </DashboardCard>
       <div class="flex gap-6">
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       shops: null,
-      totalElements: 0,
+      totalShops: 0,
       shopEnabled: [],
       shopDisabled: [],
     };
@@ -61,7 +61,7 @@ export default {
     };
     await ShopService.shopQueryFilter(queryText, 0, 999).then(async (res) => {
       this.shops = await res.data.data.shopQueryFilter;
-      this.totalElements = await res.data.data.shopQueryFilter.totalElements
+      this.totalShops = await res.data.data.shopQueryFilter.totalShops;
       console.log(await res.data.data.shopQueryFilter);
       let content = res.data.data.shopQueryFilter.content;
       for (let index = 0; index < content.length; index++) {
@@ -72,6 +72,26 @@ export default {
         }
       }
     });
+  },
+  mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_ADMIN_DASHBOARD,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>

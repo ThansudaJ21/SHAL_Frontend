@@ -1,21 +1,24 @@
 import graphqlClient from "@/services/graphql-client.js";
-import apiClient from "@/services/axios/axios-client.js";
 
 export default {
   registerUser(user) {
     const mutation = `
-        mutation ($user: User) {
-            registerUser(user: $user) {
-                firstname
-                lastname
-                phoneNumber
-                password
-                name
-                userId
-                username
-                enabled
-            }
-        }`;
+    mutation ($user: User) {
+      registerUser(user: $user) {
+        id
+        firstname
+        lastname
+        email
+        pictureUrl
+        displayName
+        userId
+        phoneNumber
+        enabled
+        authorities {
+          name
+        }
+      }
+    }`
 
     const variable = {
       user: user,
@@ -28,8 +31,34 @@ export default {
 
     return graphqlClient(graphql);
   },
-  async login(data) {
-    const res = await apiClient.post('/auth', data);
-    localStorage.setItem('token', res.data.token);
+  findByUserId(userId) {
+    const query = `
+    query ($userId: String) {
+      findByUserId(userId: $userId) {
+        id
+        firstname
+        lastname
+        email
+        pictureUrl
+        displayName
+        userId
+        phoneNumber
+        enabled
+        authorities {
+          name
+        }
+      }
+    }`
+
+    const variable = {
+      userId: userId,
+    };
+
+    const graphql = {
+      query: query,
+      variables: variable,
+    };
+
+    return graphqlClient(graphql);
   },
 };

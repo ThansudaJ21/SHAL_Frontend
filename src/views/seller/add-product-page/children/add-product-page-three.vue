@@ -7,11 +7,8 @@
   >
     <FormWrapper label="Variations">
       <template #body>
-        <DashedButton :click="variationUp"
-          ><AddIcon />Add Variation ({{ variationCount }}/2)</DashedButton
-        >
         <div v-if="variationArray.includes(1)">
-          <div class="flex w-full gap-x-4 py-4">
+          <div class="flex w-full gap-x-4">
             <p
               class="
                 flex
@@ -45,36 +42,39 @@
           />
           <TextField
             type="text"
-            name="variation_one_option"
+            name="variation_one_option_1"
             placeholder="eg: Blue, etc."
             label="Options"
             :minLength="1"
             required
           />
-          <div class="flex w-full gap-x-4">
-            <BaseField
-              type="text"
-              name="variation_two_option"
-              placeholder="eg: Blue, etc."
-              :minLength="1"
-            />
-            <div class="space-x-4 flex items-center">
-              <span
-                @click="
-                  () => {
-                    this.$router.push({ name: 'ShopApprovalPage' });
-                  }
-                "
+          <div v-for="option in optionOneCount" :key="option">
+            <div class="flex w-full gap-x-4 pb-4" v-if="optionOneCount > 0">
+              <BaseField
+                type="text"
+                :name="'variation_one_option_' + (option + 1)"
+                placeholder="eg: Blue, etc."
+                :minLength="1"
+              />
+              <div
+                class="space-x-4 flex items-center"
+                v-if="option == optionOneCount"
               >
-                <TrashOutlinedIcon />
-              </span>
+                <span @click="optionOneDown">
+                  <TrashOutlinedIcon />
+                </span>
+              </div>
             </div>
           </div>
-          <TextLabel label="Option Image" required />
+          <DashedButton :click="optionOneUp">
+            <AddIcon />Add Option
+          </DashedButton>
+          <TextLabel class="pt-4" label="Option Image" required />
           <UploadImage name="images" :fixbox="true" label="Option 1" />
         </div>
         <div v-if="variationArray.includes(2)">
-          <div class="flex w-full gap-x-4 py-4">
+          <hr class="border-primary-100 mb-4" />
+          <div class="flex w-full gap-x-4">
             <p
               class="
                 flex
@@ -100,7 +100,7 @@
           </div>
           <TextField
             type="text"
-            name="variation_one_name"
+            name="variation_two_name"
             placeholder="eg: Color, Size, etc."
             label="Name"
             :minLength="1"
@@ -108,31 +108,40 @@
           />
           <TextField
             type="text"
-            name="variation_one_option"
+            name="variation_two_option_1"
             placeholder="eg: Blue, etc."
             label="Options"
             :minLength="1"
             required
           />
-          <div class="flex w-full gap-x-4">
-            <BaseField
-              type="text"
-              name="variation_two_option"
-              placeholder="eg: Blue, etc."
-              :minLength="1"
-            />
-            <div class="space-x-4 flex items-center">
-              <span
-                @click="
-                  () => {
-                    this.$router.push({ name: 'ShopApprovalPage' });
-                  }
-                "
+          <div v-for="option in optionTwoCount" :key="option">
+            <div class="flex w-full gap-x-4 pb-4" v-if="optionTwoCount > 0">
+              <BaseField
+                type="text"
+                :name="'variation_two_option_' + (option + 1)"
+                placeholder="eg: Blue, etc."
+                :minLength="1"
+              />
+              <div
+                class="space-x-4 flex items-center"
+                v-if="option == optionTwoCount"
               >
-                <TrashOutlinedIcon />
-              </span>
+                <span @click="optionTwoDown">
+                  <TrashOutlinedIcon />
+                </span>
+              </div>
             </div>
           </div>
+          <DashedButton :click="optionTwoUp">
+            <AddIcon />Add Option
+          </DashedButton>
+          <hr class="border-primary-100 mt-4" />
+        </div>
+        <div v-if="variationArray.length != 2">
+          <hr class="border-primary-100 my-4" />
+          <DashedButton :click="variationUp">
+            <AddIcon />Add Variation ({{ variationCount }}/2)
+          </DashedButton>
         </div>
       </template>
     </FormWrapper>
@@ -223,17 +232,53 @@ export default {
       /* schema, */
       variationCount: 0,
       variationArray: [],
+      optionOneCount: 0,
+      optionTwoCount: 0,
     };
   },
   methods: {
     handleProductSubmit(product) {
+      if (product.variation_one_name) {
+        var variationOne = {
+          variationName: product.variation_one_name,
+          options: [],
+        };
+        for (let index = 1; index <= this.optionOneCount; index++) {
+          variationOne.options.push({
+            optionName: "product.variation_one_option_ + index",
+            price: 20,
+            stock: 20,
+            image: null,
+          });
+        }
+        this.variationArray.push(variationOne);
+      }
+      if (product.variation_two_name) {
+        var variationTwo = {
+          variationName: product.variation_two_name,
+          options: [],
+        };
+        for (let index = 1; index <= this.optionTwoCount; index++) {
+          variationTwo.options.push({
+            optionName: "product.variation_two_option_ + index",
+            price: 20,
+            stock: 20,
+            image: null,
+          });
+        }
+        this.variationArray.push(variationTwo);
+      }
       let pageThree = {
         productName: this.$store.getters.getProduct.p1.productName,
-        productDetails: this.$store.getters.getProduct.p1.productDetails,
-        category: this.$store.getters.getProduct.p1.category,
-        imagePath: this.$store.getters.getProduct.p1.imagePath,
+        details: this.$store.getters.getProduct.p1.details,
+        category: this.$store.getters.getProduct.p2.category,
+        imagesPath: this.$store.getters.getProduct.p1.imagesPath,
+        saleTypeName: this.$store.getters.getProduct.p1.saleTypeName,
+        salePrice: this.$store.getters.getProduct.p2.salePrice,
+        storage: this.$store.getters.getProduct.p2.storage,
+        /* auction: this.$store.getters.getProduct.p2.auction, */
         productAttribute: this.$store.getters.getProduct.p2.productAttribute,
-        variations: [],
+        variations: this.variationArray,
       };
       console.log(pageThree);
       this.$store
@@ -259,6 +304,22 @@ export default {
         } else {
           this.variationArray.splice(this.variationArray.indexOf(2), 1);
         }
+      }
+    },
+    optionOneUp() {
+      this.optionOneCount = this.optionOneCount + 1;
+    },
+    optionOneDown() {
+      if (this.optionOneCount > 0) {
+        this.optionOneCount = this.optionOneCount - 1;
+      }
+    },
+    optionTwoUp() {
+      this.optionTwoCount = this.optionTwoCount + 1;
+    },
+    optionTwoDown() {
+      if (this.optionTwoCount > 0) {
+        this.optionTwoCount = this.optionTwoCount - 1;
       }
     },
   },

@@ -1,25 +1,32 @@
 <template>
-  <MobileLayout :displayName="this.name">
-    <template #button> <ShoppingBagIcon /> Shopping </template>
+  <MobileLayout>
+    <!--     <p class="text-[14px] leading-[17px] text-black uppercase">CATEGORY</p>
+    <Category /> -->
   </MobileLayout>
 </template>
 
 <script>
+import liff from "@line/liff";
 import MobileLayout from "@/components/layout/mobile-app-layout.vue";
 import Category from "@/components/category/category.vue";
-import ShoppingBagIcon from "@/assets/icons/shopping-bag.svg?inline";
 
 export default {
-  name: "SellerProfilePage",
+  name: "HomePage",
   components: {
     MobileLayout,
     Category,
-    ShoppingBagIcon,
+  },
+  data() {
+    return {
+      userId: "",
+      picture: "",
+      name: "",
+    };
   },
   mounted() {
     liff
       .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_PROFILE,
+        liffId: process.env.VUE_APP_LINELIFF_BUYER_HOMEPAGE,
       })
       .then(() => {
         if (!liff.isLoggedIn()) {

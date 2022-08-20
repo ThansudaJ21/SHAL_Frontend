@@ -5,21 +5,21 @@
     :initial-values="
       this.$store.getters.getProduct && this.$store.getters.getProduct.p1
     "
-    v-if="product"
   >
     <FormWrapper label="Basic Information">
       <template #body>
+        {{ productEditName }}
         <TextLabel label="Product Images" required />
         <UploadImage name="productImages" :fixbox="true" :max="8" />
         <TextField
           type="text"
           name="productName"
+          v-model="productEditName"
           placeholder="Product Name"
           label="Product Name"
           :minLength="2"
           :maxLength="20"
           required
-          v-model="product.productName"
         />
         <TextArea
           type="text"
@@ -29,17 +29,26 @@
           :minLength="15"
           :maxLength="2500"
           required
-          v-model="product.details"
+          v-model="productDetails"
         />
-        <!-- <Dropdown
-          label="Category"
-          name="categoryName"
-          placeholder="Category"
-          :options="categoryName"
-          required
-        /> -->
+        <TextLabel label="Sale Type" required />
+        <Field v-slot="{ field }" name="saleTypeName" v-model="defaultCategory">
+          <select
+            v-bind="field"
+            class="custom-select w-full h-[42px]"
+            v-model="defaultSaleType"
+          >
+            <option class="select-selected" value="SALE">Sale Only</option>
+            <option class="select-selected" value="AUCTION">
+              Auction Only
+            </option>
+            <option class="select-selected" value="AUCTIONANDSALE">
+              Sale and Auction
+            </option>
+          </select>
+        </Field>
         <div>
-          <TextLabel label="Category" required />
+          <TextLabel label="Category" required class="mt-4" />
           <Field
             v-slot="{ field }"
             name="categoryName"
@@ -111,9 +120,13 @@ export default {
 
     return {
       schema,
-      categories: [],
-      defaultCategory: 1,
       product: null,
+      productEditName: "",
+      productDetails: "",
+      categories: [],
+      categoryName: [],
+      defaultCategory: 1,
+      defaultSaleType: "SALE",
     };
   },
   methods: {
@@ -123,15 +136,16 @@ export default {
         UtilService.uploadImage(product.productImages[index].value).then(
           (res) => {
             imageArray.push(res.data);
-            console.log(imageArray);
           }
         );
       }
       let pageOne = {
         productName: product.productName,
-        productDetails: product.productDetails,
+        details: product.productDetails,
         category: product.categoryName,
-        imagePath: imageArray,
+        categoryName: this.categoryName[product.categoryName - 1],
+        imagesPath: imageArray,
+        saleTypeName: product.saleTypeName,
       };
       console.log(pageOne);
       this.$store
@@ -140,29 +154,57 @@ export default {
           p1: pageOne,
         })
         .then(() => {
-          this.$router.push({
-            name: "EditProductPageTwo",
-            params: { id: this.$route.params.id },
-          });
+          this.$router.push({ name: "AddProductPageTwo" });
         });
     },
   },
   created() {
+    ProductService.getProduct(this.$route.params.id).then((res) => {
+      this.product = res.data.data.getProduct;
+      this.productEditName = this.product.productName;
+      this.productDetails = this.product.details;
+    });
     ProductService.getAllCategory().then((res) => {
       this.categories = res.data.data.getAllCategory;
       this.categories.pop();
+      for (
+        let index = 0;
+        index < res.data.data.getAllCategory.length;
+        index++
+      ) {
+        this.categoryName.push(res.data.data.getAllCategory[index].name);
+      }
       try {
         this.defaultCategory = this.$store.getters.getProduct.p1.category;
       } catch (error) {
         this.defaultCategory = 1;
       }
+      try {
+        this.defaultSaleType = this.$store.getters.getProduct.p1.saleType;
+      } catch (error) {
+        this.defaultSaleType = "SALE";
+      }
     });
   },
-  created() {
-    ProductService.getProduct(this.$route.params.id).then((res) => {
-      this.product = res.data.data.getProduct;
-      let content = res.data.data.getProduct.imagesPath;
-    });
+    mounted() {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_SELLER_EDIT_NEW_PRODUCT,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(() => {
+              this.name = liff.getDecodedIDToken().name;
+              this.userId = liff.getDecodedIDToken().sub;
+              this.picture = liff.getDecodedIDToken().picture;
+            })
+            .catch((err) => console.error(err));
+        }
+      });
   },
 };
 </script>
