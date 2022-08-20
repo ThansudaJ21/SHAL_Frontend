@@ -4,7 +4,7 @@
       <div class="w-full flex justify-between">
         <div
           class="flex items-center"
-          v-if="exceptPage || $route.name == 'SearchResult'"
+          v-if="exceptPage || $route.name == 'SearchResultPage'"
         >
           <a @click="$router.go(-1)">
             <BackIcon />
@@ -24,7 +24,7 @@
       </div>
       <div
         class="w-full flex items-center"
-        v-if="$route.name == 'HomePage' || $route.name == 'SearchResult'"
+        v-if="$route.name == 'HomePage' || $route.name == 'SearchResultPage'"
       >
         <Form @submit="handleProductSearch" class="w-full">
           <IconTextField
@@ -62,7 +62,7 @@ export default {
   },
   data() {
     return {
-      page: ["HomePage", "SellerShopPage", "OrdersPage", "SearchResult"],
+      page: ["HomePage", "SellerShopPage", "OrdersPage", "SearchResultPage"],
     };
   },
   computed: {

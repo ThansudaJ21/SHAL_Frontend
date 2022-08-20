@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import AuthServices from "@/services/auth/auth-service";
 import { Form } from "vee-validate";
 import * as yup from "yup";
 import ShopService from "@/services/shop/shop-service";
@@ -119,11 +120,17 @@ export default {
       province: [],
       amphoes: [],
       tumbons: [],
+      userId: null,
     };
   },
   created() {
     this.firstPageData = this.$store.getters.getRegisterShop.firstPage;
     console.log(this.firstPageData);
+    AuthServices.findByUserId(
+      JSON.parse(JSON.stringify(localStorage.getItem("userId")))
+    ).then((response) => {
+      this.userId = response.data.data.findByUserId.id;
+    });
   },
   methods: {
     handleSubmit(shop) {
@@ -132,6 +139,7 @@ export default {
         idCard: this.firstPageData.idCard,
         shopLogoImagePath: this.firstPageData.shopLogoImagePath,
         selfiePhotoWithIdCardPath: this.firstPageData.selfiePhotoWithIdCardPath,
+        email: this.firstPageData.email,
         promptPay: this.firstPageData.promptPay,
         shopAddress: {
           houseNumber: shop.houseNumber,
@@ -143,7 +151,7 @@ export default {
         },
       };
       this.$store.dispatch("setRegisterShop", shopObject);
-      ShopService.registerShop(shopObject, 1);
+      ShopService.registerShop(shopObject, this.userId);
       console.log(shopObject);
       this.$router.push({ name: "BuyerProfilePage" });
     },

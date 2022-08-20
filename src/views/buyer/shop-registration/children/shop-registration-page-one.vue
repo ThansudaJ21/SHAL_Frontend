@@ -51,8 +51,10 @@
 </template>
 
 <script>
+import AuthServices from "@/services/auth/auth-service";
 import { Form } from "vee-validate";
 import * as yup from "yup";
+import liff from "@line/liff";
 import UtilService from "@/services/util-service";
 import FormWrapper from "@/components/form/form-wrapper.vue";
 import TextLabel from "@/components/field/text-label.vue";
@@ -118,13 +120,13 @@ export default {
                 shopLogoImagePath: this.shopLogoPath,
                 selfiePhotoWithIdCardPath: this.selfiePhotoPath,
                 promptPay: shop.promptPay,
-                email: this.$store.currentUser.email,
+                email: this.email,
               };
               this.$store.dispatch("setRegisterShop", {
                 ...this.$store.getters.getRegisterShop,
                 firstPage: pageOne,
               });
-              console.log(this.$store.getters.getRegisterShop);
+              console.log(this.$store.getters.getRegisterShop.data);
               this.$router.push({ name: "ShopRegistrationPageTwo" });
             });
         });
@@ -146,6 +148,11 @@ export default {
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;
+              AuthServices.findByUserId(
+                JSON.parse(JSON.stringify(liff.getDecodedIDToken().sub))
+              ).then((response) => {
+                this.email = response.data.data.findByUserId.email;
+              });
             })
             .catch((err) => console.error(err));
         }

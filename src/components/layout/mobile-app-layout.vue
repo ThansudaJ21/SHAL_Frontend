@@ -34,7 +34,7 @@
         $route.name == 'HomePage' ||
         $route.name == 'SellerShopPage' ||
         $route.name == 'OrdersPage' ||
-        $route.name == 'SearchResult'
+        $route.name == 'SearchResultPage'
       "
     />
 

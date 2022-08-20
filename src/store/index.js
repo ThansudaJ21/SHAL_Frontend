@@ -1,9 +1,15 @@
 import { createStore } from "vuex";
 import AuthService from "@/services/auth/auth-service";
 
+function getUser(params) {
+  AuthService.findByUserId(params).then((response) => {
+    return response.data.data.findByUserId
+  })
+}
+
 export default createStore({
   state: {
-    currentUser: AuthService.findByUserId(localStorage.getItem("userId")),
+    currentUser: localStorage.getItem("userId") != null ? getUser(localStorage.getItem("userId")) : null,
     registerShop: null,
     shopName: null,
     product: null,
@@ -12,6 +18,9 @@ export default createStore({
     role: null
   },
   getters: {
+    getCurrentUser(state) {
+      return state.currentUser;
+    },
     getRegisterShop(state) {
       return state.registerShop;
     },
