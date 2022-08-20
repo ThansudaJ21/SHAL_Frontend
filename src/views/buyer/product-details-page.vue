@@ -10,7 +10,7 @@
       <div class="absolute top-2 w-full flex justify-between px-4">
         <div class="items-start">
           <div
-            @click="() => this.$router.push({ name: 'SellerShopPage' })"
+            @click="() => this.$router.push({ name: 'HomePage' })"
             class="
               !w-8
               !h-8
@@ -47,24 +47,7 @@
               items-center
             "
           >
-            <PencilIcon />
-          </div>
-          <div
-            @click="deleteProduct"
-            class="
-              !w-8
-              !h-8
-              !px-[0px]
-              border-error-500
-              bg-white
-              rounded-full
-              !min-w-8 !min-h-8
-              flex
-              justify-center
-              items-center
-            "
-          >
-            <TrashIcon />
+            <CartIcon />
           </div>
         </div>
       </div>
@@ -202,6 +185,36 @@
         </template>
       </FormWrapper>
     </div>
+    <div class="flex gap-x-1">
+      <PrimaryButton class="w-1/4 rounded-lg bg-primary-500"
+        ><div class="grid justify-center w-full">
+          <div class="flex justify-center"><CartIcon class="" /></div>
+          <div class="text-[10px]">Add to Cart</div>
+        </div>
+      </PrimaryButton>
+      <div class="flex gap-x-1 w-3/4">
+        <PrimaryButton
+          class="
+            w-full
+            rounded-lg
+            bg-error-500
+            active:bg-error-700
+            focus:bg-error-600
+          "
+          >PLACE BID</PrimaryButton
+        >
+        <PrimaryButton
+          class="
+            w-full
+            rounded-lg
+            bg-success-500
+            active:bg-success-700
+            focus:bg-success-600
+          "
+          >BUY NOW</PrimaryButton
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -216,13 +229,12 @@ import PrimaryButton from "@/components/button/primary-button.vue";
 import ShoppingBagIcon from "@/assets/icons/shopping-bag-black.svg?inline";
 import TruckIcon from "@/assets/icons/truck-outlined-black.svg?inline";
 import BackIcon from "@/assets/icons/chevron-solid-left.svg?inline";
-import PencilIcon from "@/assets/icons/pencil-alt.svg?inline";
-import TrashIcon from "@/assets/icons/trash-outlined.svg?inline";
+import CartIcon from "@/assets/icons/shopping-cart.svg?inline";
 import TextButton from "@/components/button/text-button.vue";
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 
 export default {
-  name: "ProductDetailsPageForSeller",
+  name: "ProductDetailsPageForBuyer",
   components: {
     slide,
     Form,
@@ -232,8 +244,7 @@ export default {
     ShoppingBagIcon,
     TruckIcon,
     BackIcon,
-    PencilIcon,
-    TrashIcon,
+    CartIcon,
     TextButton,
   },
   data() {
@@ -273,7 +284,7 @@ export default {
   mounted() {
     liff
       .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_PRODUCT_DETAILS,
+        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PRODUCT_DETAILS,
       })
       .then(() => {
         if (!liff.isLoggedIn()) {

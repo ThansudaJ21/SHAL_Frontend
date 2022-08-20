@@ -1,16 +1,6 @@
 <template>
-  <MobileLayout :image="this.picture" :displayName="this.name">
-    <template #button> <ShopIcon /> Start Selling </template>
-    <PrimaryButton
-      class="!bg-white !text-black !items-start !justify-start"
-      :click="
-        () => {
-          this.$router.push({ name: 'PurchaseHistoryPage' });
-        }
-      "
-    >
-      <HistoryIcon /> Purchase History
-    </PrimaryButton>
+  <MobileLayout title="Purchase History" :image="this.picture">
+    
   </MobileLayout>
 </template>
 
@@ -24,7 +14,7 @@ import PrimaryButton from "@/components/button/primary-button.vue";
 import HistoryIcon from "@/assets/icons/history.svg?inline";
 
 export default {
-  name: "BuyerProfilePage",
+  name: "PurchaseHistoryPage",
   components: {
     MobileLayout,
     Category,
@@ -42,7 +32,7 @@ export default {
   mounted() {
     liff
       .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PROFILE,
+        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PURCHASE_HISTORY,
       })
       .then(() => {
         if (!liff.isLoggedIn()) {

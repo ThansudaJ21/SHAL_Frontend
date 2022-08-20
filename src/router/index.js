@@ -6,9 +6,11 @@ import RegisterPage from "@/views/auth/register-page.vue";
 
 import HomePage from "@/views/buyer/home-page.vue";
 import BuyerProfilePage from "@/views/buyer/buyer-profile-page.vue";
+import SearchResultPage from "@/views/buyer/search-result-page.vue";
 import ShopRegistrationLayout from "@/views/buyer/shop-registration/shop-registration-layout.vue";
 import ShopRegistrationPageOne from "@/views/buyer/shop-registration/children/shop-registration-page-one.vue";
 import ShopRegistrationPageTwo from "@/views/buyer/shop-registration/children/shop-registration-page-two.vue";
+import ProductDetailsPageForBuyer from "@/views/buyer/product-details-page.vue";
 
 import SellerShopPage from "@/views/seller/shop-page/seller-shop-page.vue";
 import SellerFilterCategoryPage from "@/views/seller/shop-page/seller-filter-category-page.vue";
@@ -48,6 +50,16 @@ const routes = [
     path: "/",
     name: "HomePage",
     component: HomePage,
+  },
+  {
+    path: "/result/:keyWord",
+    name: "SearchResultPage",
+    component: SearchResultPage,
+  },
+  {
+    path: "/product/:id",
+    name: "ProductDetailsPageForBuyer",
+    component: ProductDetailsPageForBuyer,
   },
   {
     path: "/profile",
@@ -171,7 +183,7 @@ const routes = [
     path: "/admin/shop-approval/:id",
     name: "ShopApprovalPage",
     component: ShopApprovalPage,
-  },
+  }
 ];
 
 const router = createRouter({

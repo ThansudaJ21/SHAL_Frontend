@@ -12,7 +12,7 @@
         <div class="flex items-center relative gap-x-2">
           <img
             class="w-12 h-12 rounded-full object-fill"
-            src="@/assets/no-image-available.png"
+            :src="image"
             alt="user profile"
           />
 
@@ -46,6 +46,9 @@ export default {
     displayName: {
       type: String,
       required: true,
+    },
+    image: {
+      type: String,
     },
   },
 };

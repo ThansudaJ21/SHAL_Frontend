@@ -2,7 +2,10 @@
   <nav class="bg-primary-900 rounded-b-[28px]">
     <div class="md:hidden h-fit justify-between p-4 items-center space-y-4">
       <div class="w-full flex justify-between">
-        <div class="flex items-center" v-if="exceptPage">
+        <div
+          class="flex items-center"
+          v-if="exceptPage || $route.name == 'SearchResult'"
+        >
           <a @click="$router.go(-1)">
             <BackIcon />
           </a>
@@ -15,28 +18,28 @@
         </div>
         <div class="flex items-center relative">
           <div class="rounded-full">
-            <img
-              class="w-8 h-8 rounded-full"
-              src="@/assets/no-image-available.png"
-              alt="user profile"
-            />
+            <img class="w-8 h-8 rounded-full" :src="image" alt="user profile" />
           </div>
         </div>
       </div>
-      <div class="w-full flex items-center" v-if="$route.name == 'HomePage'">
-        <IconTextField
-          type="text"
-          class="w-full"
-          name="product name"
-          placeholder="What are you looking for?"
-          :showError="false"
-        />
+      <div
+        class="w-full flex items-center"
+        v-if="$route.name == 'HomePage' || $route.name == 'SearchResult'"
+      >
+        <Form @submit="handleProductSearch" class="w-full">
+          <IconTextField
+            type="text"
+            name="productName"
+            placeholder="What are you looking for?"
+            :showError="false"
+        /></Form>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import { Form } from "vee-validate";
 import IconTextField from "@/components/field/icon-text-field/icon-text-field.vue";
 import BackIcon from "@/assets/icons/chevron-left.svg?inline";
 
@@ -45,6 +48,7 @@ export default {
   components: {
     IconTextField,
     BackIcon,
+    Form,
   },
   props: {
     title: {
@@ -52,10 +56,13 @@ export default {
       required: false,
       default: "SHAL",
     },
+    image: {
+      type: String,
+    },
   },
   data() {
     return {
-      page: ["HomePage", "SellerShopPage", "OrdersPage"],
+      page: ["HomePage", "SellerShopPage", "OrdersPage", "SearchResult"],
     };
   },
   computed: {
@@ -65,6 +72,15 @@ export default {
       } else {
         return true;
       }
+    },
+  },
+  methods: {
+    handleProductSearch(product) {
+      this.$router
+        .push({
+          name: "SearchResult",
+          params: { keyWord: product.productName },
+        })
     },
   },
 };

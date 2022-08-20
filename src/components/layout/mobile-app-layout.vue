@@ -8,6 +8,7 @@
 
     <!-- Profile Navbar -->
     <MobileProfileNavbar
+      :image="image"
       v-else-if="$route.name == 'BuyerProfilePage'"
       :click="() => this.$router.push({ name: 'ShopRegistrationPageOne' })"
       :displayName="displayName"
@@ -27,16 +28,18 @@
 
     <!-- Navbar with search bar -->
     <MobileDefaultNavbar
+      :image="image"
       :title="title"
       v-else-if="
         $route.name == 'HomePage' ||
         $route.name == 'SellerShopPage' ||
-        $route.name == 'OrdersPage'
+        $route.name == 'OrdersPage' ||
+        $route.name == 'SearchResult'
       "
     />
 
     <!-- Navbar without search bar -->
-    <MobileDefaultNavbar :title="title" v-else />
+    <MobileDefaultNavbar :title="title" :image="image" v-else />
 
     <div class="space-y-4 px-2 py-4 md:hidden">
       <slot />
@@ -64,6 +67,9 @@ export default {
     displayName: {
       type: String,
       required: true,
+    },
+    image: {
+      type: String,
     },
   },
 };
