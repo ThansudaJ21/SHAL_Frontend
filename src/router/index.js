@@ -34,6 +34,7 @@ import ShopApprovalPage from "@/views/admin/shop-approval-page.vue";
 import AuthService from "@/services/auth/auth-service";
 import ShopService from "@/services/shop/shop-service";
 import store from "@/store";
+import liff from "@line/liff";
 
 const routes = [
   {
@@ -50,6 +51,7 @@ const routes = [
     path: "/",
     name: "HomePage",
     component: HomePage,
+    meta: { requiresAuth: true }
   },
   {
     path: "/result/:keyWord",
@@ -189,6 +191,73 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  to.matched.some((record) => {
+    record.meta.requiresAuth;
+    record.meta.requiresBuyer;
+    record.meta.requiresSeller;
+    record.meta.requiresAdmin;
+  });
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_BUYER_HOMEPAGE,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff
+            .getProfile()
+            .then(async () => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub)
+              if (localStorage.getItem("userId") == null) {
+                next({ name: "Showcase" });
+              } else {
+                let keepRole = []
+                await AuthService.findByUserId(liff.getDecodedIDToken().sub).then((response) => {
+                  console.log(response);
+                  let roles = response.data.data.findByUserId.authorities
+                  for (let index = 0; index < roles.length; index++) {
+                    keepRole.push(roles[index].name)
+                  }
+                  store.dispatch("setRole", keepRole);
+                  let role = JSON.parse(JSON.stringify(store.getters.getRole))
+                  console.log(role);
+                  if (to.matched.some((record) => record.meta.requiresAdmin)) {
+                    if (to.matched.some((record) => record.meta.requiresBuyer)) {
+                      if (role.includes("BUYER")) {
+                        next();
+                      } else {
+                        next({ name: "Showcase" });
+                      }
+                    } else if (to.matched.some((record) => record.meta.requiresSeller)) {
+                      if (role.includes("SELLER") && role.includes("BUYER")) {
+                        next();
+                      } else {
+                        next({ name: "Showcase" });
+                      }
+                    } else if (role.includes("ADMIN") && role.includes("BUYER")) {
+                      next();
+                    } else {
+                      next({ name: "Showcase" });
+                    }
+                  } else {
+                    next();
+                  }
+                })
+              }
+
+
+            })
+            .catch((err) => console.error(err));
+        }
+      })
+  } else {
+    next();
+  }
 });
 
 export default router;

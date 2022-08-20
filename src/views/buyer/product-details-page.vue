@@ -188,7 +188,7 @@
     <div class="flex gap-x-1">
       <PrimaryButton class="w-1/4 rounded-lg bg-primary-500"
         ><div class="grid justify-center w-full">
-          <div class="flex justify-center"><CartIcon class="" /></div>
+          <div class="flex justify-center"><AddToCartIcon class="" /></div>
           <div class="text-[10px]">Add to Cart</div>
         </div>
       </PrimaryButton>
@@ -230,6 +230,7 @@ import ShoppingBagIcon from "@/assets/icons/shopping-bag-black.svg?inline";
 import TruckIcon from "@/assets/icons/truck-outlined-black.svg?inline";
 import BackIcon from "@/assets/icons/chevron-solid-left.svg?inline";
 import CartIcon from "@/assets/icons/shopping-cart.svg?inline";
+import AddToCartIcon from "@/assets/icons/cart-outlined.svg?inline";
 import TextButton from "@/components/button/text-button.vue";
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 
@@ -245,6 +246,7 @@ export default {
     TruckIcon,
     BackIcon,
     CartIcon,
+    AddToCartIcon,
     TextButton,
   },
   data() {
@@ -281,7 +283,7 @@ export default {
       });
     },
   },
-  mounted() {
+    mounted() {
     liff
       .init({
         liffId: process.env.VUE_APP_LINELIFF_BUEYR_PRODUCT_DETAILS,
@@ -293,6 +295,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;

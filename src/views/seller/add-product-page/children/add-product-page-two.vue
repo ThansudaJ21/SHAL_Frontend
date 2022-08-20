@@ -385,23 +385,7 @@ export default {
     TextLabel,
   },
   data() {
-    /* const schema = yup.object().shape({
-      brand: yup.string().required("Please fill brand of the product"),
-      size: yup.string().required("Please fill size of the product"),
-      material: yup.string().required("Please fill material of the product"),
-      materialCountry: yup
-        .string()
-        .required("Please fill material contry of the product"),
-      weight: yup.number().required("Please fill weight of the product"),
-      unitOfWeight: yup.string().required("Please select unit of weight"),
-      recommendedAge: yup.string().required("Please fill the recommended age"),
-      fda: yup.string().required("Please fill FDA license number"),
-      countryOfOrigin: yup
-        .string()
-        .required("Please fill country of origin of the product"),
-    }); */
     return {
-      /*schema,*/
       attributeCount: 0,
       attribute: [],
       saleTypeName: null,

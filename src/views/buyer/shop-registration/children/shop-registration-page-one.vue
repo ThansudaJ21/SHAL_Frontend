@@ -94,6 +94,7 @@ export default {
       schema,
       shopLogoPath: null,
       selfiePhotoPath: null,
+      email: "",
     };
   },
   async created() {
@@ -117,6 +118,7 @@ export default {
                 shopLogoImagePath: this.shopLogoPath,
                 selfiePhotoWithIdCardPath: this.selfiePhotoPath,
                 promptPay: shop.promptPay,
+                email: this.$store.currentUser.email,
               };
               this.$store.dispatch("setRegisterShop", {
                 ...this.$store.getters.getRegisterShop,
@@ -140,6 +142,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;

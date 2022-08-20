@@ -198,6 +198,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;

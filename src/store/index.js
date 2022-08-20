@@ -1,12 +1,15 @@
 import { createStore } from "vuex";
+import AuthService from "@/services/auth/auth-service";
 
 export default createStore({
   state: {
+    currentUser: AuthService.findByUserId(localStorage.getItem("userId")),
     registerShop: null,
     shopName: null,
     product: null,
     shops: null,
     user: null,
+    role: null
   },
   getters: {
     getRegisterShop(state) {
@@ -23,6 +26,9 @@ export default createStore({
     },
     getUser(state) {
       return state.user;
+    },
+    getRole(state) {
+      return state.role;
     },
   },
   mutations: {
@@ -41,6 +47,9 @@ export default createStore({
     setUser(state, value) {
       state.user = value;
     },
+    setRole(state, value) {
+      state.role = value;
+    },
   },
   actions: {
     setRegisterShop(context, value) {
@@ -57,6 +66,9 @@ export default createStore({
     },
     setUser(context, value) {
       context.commit("setUser", value);
+    },
+    setRole(context, value) {
+      context.commit("setRole", value);
     },
   },
 });

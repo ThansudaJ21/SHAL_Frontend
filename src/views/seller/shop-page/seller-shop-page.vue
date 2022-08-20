@@ -191,7 +191,6 @@ export default {
     };
   },
   async created() {
-    let id = 2;
     await ShopService.getRegisterShop(id).then(async (res) => {
       if (res.data.data.getRegisterShop.shopStatus == "Disable") {
         showAlert(
@@ -243,6 +242,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;

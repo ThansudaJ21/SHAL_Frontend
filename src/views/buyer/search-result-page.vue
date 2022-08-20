@@ -208,6 +208,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;
@@ -256,32 +257,6 @@ export default {
         } 
       }
     });
-  },
-    mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUEYR_SEARCH_RESULT,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-              console.log(liff.getDecodedIDToken().picture);
-              AuthServices.findByUserId(
-                JSON.parse(JSON.stringify(liff.getDecodedIDToken().sub))
-              ).then((response) => {
-                console.log(response);
-              });
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

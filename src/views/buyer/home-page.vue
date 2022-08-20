@@ -9,7 +9,7 @@
         :key="category.name"
         :to="{
           name: 'SearchResultPage',
-          query: { category: category.pageName },
+          params: { keyWord: category.pageName },
         }"
         class="
           h-20
@@ -247,6 +247,7 @@ export default {
           liff
             .getProfile()
             .then(() => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;
