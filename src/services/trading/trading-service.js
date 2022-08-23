@@ -90,7 +90,6 @@ export default {
             }
         }`
 
-
         const variable = {
             userId: userId
         }
@@ -146,7 +145,6 @@ export default {
             }
         }`
 
-
         const variable = {
             shopId: shopId
         }
@@ -198,53 +196,10 @@ export default {
             }
         }`
 
-
         const variable = {
             userId: userId,
             productId: productId,
             shopId: shopId
-        }
-
-        const graphql = {
-            query: query,
-            variables: variable
-        }
-
-        return graphqlClient(graphql)
-    },
-    getShopByUserId(userId) {
-        const query = `
-        query ($userId: Int) {
-            getShopByUserId(userId: $userId) {
-                id
-                shopName
-                idCard
-                shopLogoImagePath
-                selfiePhotoWithIdCardPath
-                promptPay
-                email
-        
-                shopStatus
-                shopAddress {
-                    houseNumber
-                    moo
-                    postalCode
-                    district
-                    subDistrict
-                    province
-                }
-                failureReasonLists {
-                    failureReasons {
-                        reason
-                    }
-                    text
-                }
-            }
-        }`
-
-
-        const variable = {
-            userId: userId
         }
 
         const graphql = {

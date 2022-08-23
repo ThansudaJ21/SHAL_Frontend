@@ -1,12 +1,13 @@
 <template>
-  <MobileLayout title="Purchase History" :image="this.picture">
-    
+  <MobileLayout
+    title="Purchase History"
+    :image="this.$store.getters.getUser.pictureUrl"
+  >
   </MobileLayout>
 </template>
 
 <script>
 import AuthServices from "@/services/auth/auth-service";
-import liff from "@line/liff";
 import MobileLayout from "@/components/layout/mobile-app-layout.vue";
 import Category from "@/components/category/category.vue";
 import ShopIcon from "@/assets/icons/shop-outlined.svg?inline";
@@ -28,33 +29,6 @@ export default {
       picture: "",
       name: "",
     };
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PURCHASE_HISTORY,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-              console.log(liff.getDecodedIDToken().picture);
-              AuthServices.findByUserId(
-                JSON.parse(JSON.stringify(liff.getDecodedIDToken().sub))
-              ).then((response) => {
-                console.log(response);
-              });
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

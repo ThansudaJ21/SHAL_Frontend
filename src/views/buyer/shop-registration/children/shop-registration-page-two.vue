@@ -84,6 +84,7 @@
 <script>
 import AuthServices from "@/services/auth/auth-service";
 import { Form } from "vee-validate";
+import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import * as yup from "yup";
 import ShopService from "@/services/shop/shop-service";
 import FormWrapper from "@/components/form/form-wrapper.vue";
@@ -151,9 +152,27 @@ export default {
         },
       };
       this.$store.dispatch("setRegisterShop", shopObject);
-      ShopService.registerShop(shopObject, this.userId);
-      console.log(shopObject);
-      this.$router.push({ name: "BuyerProfilePage" });
+      ShopService.registerShop(shopObject, this.userId).then(() => {
+        try {
+          showAlert("success", "Register shop successfully", "").then(
+            (response) => {
+              if (response.isConfirmed) {
+                console.log(shopObject);
+                this.$router.push({ name: "BuyerProfilePage" });
+              }
+            }
+          );
+        } catch (error) {
+          showAlert("error", "Register shop unsuccessfully", "").then(
+            (response) => {
+              if (response.isConfirmed) {
+                console.log(shopObject);
+                this.$router.push({ name: "BuyerProfilePage" });
+              }
+            }
+          );
+        }
+      });
     },
     getAddressByPostalCode(e) {
       if (e && e.length == 5) {

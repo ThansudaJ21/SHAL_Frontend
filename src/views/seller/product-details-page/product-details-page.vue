@@ -206,7 +206,6 @@
 </template>
 
 <script>
-import liff from "@line/liff";
 import slide from "@wyhaya/vue-slide";
 import { Form } from "vee-validate";
 import ProductService from "@/services/product/product-service";
@@ -269,27 +268,6 @@ export default {
         }
       });
     },
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_PRODUCT_DETAILS,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

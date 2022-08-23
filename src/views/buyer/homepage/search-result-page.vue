@@ -1,45 +1,5 @@
 <template>
   <MobileLayout :image="this.picture" :displayName="this.name">
-    <p class="text-[14px] leading-[17px] text-black uppercase">
-      <b>CATEGORIES</b>
-    </p>
-    <div class="overflow-x-auto flex gap-x-4">
-      <router-link
-        v-for="category in this.categoryItems"
-        :key="category.name"
-        :to="{
-          name: 'SearchResultPage',
-          params: { keyWord: category.pageName },
-        }"
-        class="
-          h-20
-          min-w-[80px]
-          bg-primary-800
-          border-4 border-primary-400
-          rounded-tl-[40px] rounded-br-[14px]
-          flex
-          items-center
-        "
-      >
-        <Category :category="category" />
-      </router-link>
-    </div>
-    <!--     <div class="flex w-full h-8">
-      <p class="text-[14px] leading-[17px] text-black uppercase">
-        <b>SUGGESTION ITEMS</b>
-      </p>
-    </div> -->
-
-    <!--     <div class="grid items-center gap-x-1 grid-cols-2">
-      <ProductCard
-        class="mb-4 mx-auto"
-        v-for="product in products"
-        :key="product.id"
-        :product="product"
-        :click="() => goToProductDetail(product.id)"
-      />
-    </div> -->
-
     <div class="space-y-6 px-4">
       <TabGroup>
         <TabList class="flex space-x-12 w-full h-[30px] bg-white rounded-t-lg">
@@ -195,30 +155,30 @@
 </template>
 
 <script>
-import { categoryItems } from "@/components/category/category-items.js";
+import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { categoryItems } from "@/components/category/category-items.js";
 import ProductService from "@/services/product/product-service";
 import ProductCard from "@/components/card/product-card.vue";
 import PrimaryButton from "@/components/button/primary-button.vue";
 import AddWhiteIcon from "@/assets/icons/add-white.svg?inline";
 import AuthServices from "@/services/auth/auth-service";
-import liff from "@line/liff";
 import MobileLayout from "@/components/layout/mobile-app-layout.vue";
 import Category from "@/components/category/category.vue";
 
 export default {
-  name: "HomePage",
+  name: "SearchResultPage",
   components: {
     MobileLayout,
     Category,
-    ProductCard,
-    PrimaryButton,
-    AddWhiteIcon,
     TabGroup,
     TabList,
     Tab,
     TabPanels,
     TabPanel,
+    ProductCard,
+    PrimaryButton,
+    AddWhiteIcon,
   },
   data() {
     return {
@@ -235,33 +195,6 @@ export default {
       categoryItems,
     };
   },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUYER_HOMEPAGE,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-              console.log(liff.getDecodedIDToken().sub);
-              AuthServices.findByUserId(
-                JSON.parse(JSON.stringify(liff.getDecodedIDToken().sub))
-              ).then((response) => {
-                console.log(response);
-              });
-            })
-            .catch((err) => console.error(err));
-        }
-      });
-  },
   methods: {
     goToProductDetail(productID) {
       this.$router.push({
@@ -274,7 +207,7 @@ export default {
     ProductService.productFilter(
       {
         category: "",
-        productName: "",
+        productName: this.$route.params.keyWord,
         productStatus: "",
         saleTypeName: "",
       },
@@ -295,7 +228,7 @@ export default {
           this.productSale.push(content[index]);
         } else if (content[index].saleTypeName == "Auction only") {
           this.productAuction.push(content[index]);
-        }
+        } 
       }
     });
   },

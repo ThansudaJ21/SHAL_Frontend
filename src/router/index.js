@@ -4,9 +4,9 @@ import Showcase from "@/views/showcase/showcase.vue";
 
 import RegisterPage from "@/views/auth/register-page.vue";
 
-import HomePage from "@/views/buyer/home-page.vue";
+import HomePage from "@/views/buyer/homepage/home-page.vue";
+import SearchResultPage from "@/views/buyer/homepage/search-result-page.vue";
 import BuyerProfilePage from "@/views/buyer/buyer-profile-page.vue";
-import SearchResultPage from "@/views/buyer/search-result-page.vue";
 import ShopRegistrationLayout from "@/views/buyer/shop-registration/shop-registration-layout.vue";
 import ShopRegistrationPageOne from "@/views/buyer/shop-registration/children/shop-registration-page-one.vue";
 import ShopRegistrationPageTwo from "@/views/buyer/shop-registration/children/shop-registration-page-two.vue";
@@ -46,32 +46,37 @@ const routes = [
     path: "/register",
     name: "RegisterPage",
     component: RegisterPage,
+    meta: { requiresAuth: true }
   },
   {
     path: "/",
     name: "HomePage",
     component: HomePage,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/result/:keyWord",
     name: "SearchResultPage",
     component: SearchResultPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/product/:id",
     name: "ProductDetailsPageForBuyer",
     component: ProductDetailsPageForBuyer,
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/profile",
     name: "BuyerProfilePage",
     component: BuyerProfilePage,
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/shop-registration",
     name: "ShopRegistrationLayout",
     component: ShopRegistrationLayout,
+    meta: { requiresAuth: true, requiresBuyer: true },
     redirect: "/shop-registration/page=1",
     children: [
       {
@@ -89,22 +94,26 @@ const routes = [
   {
     path: "/myshop",
     name: "SellerShopPage",
+    meta: { requiresAuth: true, requiresSeller: true },
     component: SellerShopPage,
   },
   {
     path: "/myshop/result",
     name: "SellerFilterCategoryPage",
+    meta: { requiresAuth: true, requiresSeller: true },
     component: SellerFilterCategoryPage,
   },
   {
     path: "/myshop/profile",
     name: "SellerProfilePage",
+    meta: { requiresAuth: true, requiresSeller: true },
     component: SellerProfilePage,
   },
   {
     path: "/myshop/add-product",
     name: "AddProductLayout",
     component: AddProductLayout,
+    meta: { requiresAuth: true, requiresSeller: true },
     redirect: "/myshop/add-product/page=1",
     children: [
       {
@@ -133,6 +142,7 @@ const routes = [
     path: "/myshop/edit-product/id=:id",
     name: "EditProductLayout",
     component: EditProductLayout,
+    meta: { requiresAuth: true, requiresSeller: true },
     redirect: "/myshop/edit-product/id=:id/page=1",
     children: [
       {
@@ -161,16 +171,19 @@ const routes = [
     path: "/myshop/product/:id",
     name: "ProductDetailsPageForSeller",
     component: ProductDetailsPageForSeller,
+    meta: { requiresAuth: true, requiresSeller: true },
   },
   {
     path: "/admin/dashboard",
     name: "DashboardPage",
     component: DashboardPage,
+    meta: { requiresAuth: true },
   },
   {
     path: "/admin/shop-management",
     name: "ShopManagementPage",
     component: ShopManagementPage,
+    meta: { requiresAuth: true },
     beforeEnter: async () => {
       let queryText = {
         shopName: "",
@@ -185,6 +198,7 @@ const routes = [
     path: "/admin/shop-approval/:id",
     name: "ShopApprovalPage",
     component: ShopApprovalPage,
+    meta: { requiresAuth: true },
   }
 ];
 
@@ -218,14 +232,21 @@ router.beforeEach((to, from, next) => {
               } else {
                 let keepRole = []
                 await AuthService.findByUserId(liff.getDecodedIDToken().sub).then((response) => {
-                  console.log(response);
                   let roles = response.data.data.findByUserId.authorities
                   for (let index = 0; index < roles.length; index++) {
                     keepRole.push(roles[index].name)
                   }
                   store.dispatch("setRole", keepRole);
+                  store.dispatch("setUser", response.data.data.findByUserId);
+                  try {
+                    ShopService.getShopByUserId(response.data.data.findByUserId.id).then((res) => {
+                      store.dispatch("setMyShop", res.data.data.getShopByUserId)
+                    })
+                  } catch (error) {
+                    store.dispatch("setMyShop", null)
+                  }
+
                   let role = JSON.parse(JSON.stringify(store.getters.getRole))
-                  console.log(role);
                   if (to.matched.some((record) => record.meta.requiresAdmin)) {
                     if (to.matched.some((record) => record.meta.requiresBuyer)) {
                       if (role.includes("BUYER")) {

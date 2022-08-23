@@ -10,7 +10,6 @@
     <MobileProfileNavbar
       :image="image"
       v-else-if="$route.name == 'BuyerProfilePage'"
-      :click="() => this.$router.push({ name: 'ShopRegistrationPageOne' })"
       :displayName="displayName"
     >
       <template v-slot:icon />
@@ -18,6 +17,7 @@
     </MobileProfileNavbar>
 
     <MobileProfileNavbar
+      :image="image"
       v-else-if="$route.name == 'SellerProfilePage'"
       :click="() => this.$router.push({ name: 'HomePage' })"
       :displayName="displayName"

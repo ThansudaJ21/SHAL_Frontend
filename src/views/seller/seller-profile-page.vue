@@ -1,5 +1,8 @@
 <template>
-  <MobileLayout :displayName="this.name">
+  <MobileLayout
+    :displayName="this.$store.getters.getMyShop.shopName"
+    :image="this.$store.getters.getMyShop.shopLogoImagePath"
+  >
     <template #button> <ShoppingBagIcon /> Shopping </template>
   </MobileLayout>
 </template>
@@ -15,27 +18,6 @@ export default {
     MobileLayout,
     Category,
     ShoppingBagIcon,
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_PROFILE,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

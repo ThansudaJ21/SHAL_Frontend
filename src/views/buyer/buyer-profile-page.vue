@@ -1,6 +1,43 @@
 <template>
-  <MobileLayout :image="this.picture" :displayName="this.name">
-    <template #button> <ShopIcon /> Start Selling </template>
+  <MobileLayout
+    :image="this.$store.getters.getUser.pictureUrl"
+    :displayName="this.$store.getters.getUser.displayName"
+  >
+    <template #button>
+      <div
+        v-if="
+          !this.$store.getters.getRole.includes('SELLER') &&
+          this.$store.getters.getMyShop == null
+        "
+        class="flex gap-1 flex items-center"
+        @click="() => this.$router.push({ name: 'ShopRegistrationPageOne' })"
+      >
+        <ShopIcon /> Start Selling
+      </div>
+      <div
+        v-if="
+          !this.$store.getters.getRole.includes('SELLER') &&
+          checkShopFailureReason() == 0
+        "
+        class="flex gap-1 flex items-center opacity-50 cursor-not-allowed"
+      >
+        <ShopIcon /> Start Selling
+      </div>
+      <div
+        v-if="this.$store.getters.getRole.includes('SELLER')"
+        class="flex gap-1 flex items-center"
+        @click="
+          () => {
+            this.$router.push({
+              name: 'SellerShopPage',
+              params: { id: this.$store.getters.getMyShop.id },
+            });
+          }
+        "
+      >
+        <ShopIcon /> My Shop
+      </div>
+    </template>
     <PrimaryButton
       class="!bg-white !text-black !items-start !justify-start"
       :click="
@@ -15,8 +52,7 @@
 </template>
 
 <script>
-import AuthServices from "@/services/auth/auth-service";
-import liff from "@line/liff";
+import ShopService from "@/services/shop/shop-service";
 import MobileLayout from "@/components/layout/mobile-app-layout.vue";
 import Category from "@/components/category/category.vue";
 import ShopIcon from "@/assets/icons/shop-outlined.svg?inline";
@@ -39,32 +75,21 @@ export default {
       name: "",
     };
   },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PROFILE,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
+  methods: {
+    checkShopFailureReason() {
+      try {
+        if (this.$store.getters.getMyShop.failureReasonLists.length == 0) {
+          console.log(this.$store.getters.getMyShop.failureReasonLists.length);
+          return 0;
         } else {
-          liff
-            .getProfile()
-            .then(() => {
-              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-              console.log(liff.getDecodedIDToken().picture);
-              AuthServices.findByUserId(
-                JSON.parse(JSON.stringify(liff.getDecodedIDToken().sub))
-              ).then((response) => {
-                console.log(response);
-              });
-            })
-            .catch((err) => console.error(err));
+          console.log("nooooo");
+          return this.$store.getters.getMyShop.failureReasonLists.length;
         }
-      });
+      } catch (error) {
+        console.log("errorrrr");
+        return 0;
+      }
+    },
   },
 };
 </script>

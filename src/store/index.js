@@ -1,25 +1,19 @@
 import { createStore } from "vuex";
-import AuthService from "@/services/auth/auth-service";
-
-function getUser(params) {
-  AuthService.findByUserId(params).then((response) => {
-    return response.data.data.findByUserId
-  })
-}
 
 export default createStore({
   state: {
-    currentUser: localStorage.getItem("userId") != null ? getUser(localStorage.getItem("userId")) : null,
+    user: null,
     registerShop: null,
     shopName: null,
     product: null,
     shops: null,
     user: null,
-    role: null
+    role: null,
+    myshop: null,
   },
   getters: {
-    getCurrentUser(state) {
-      return state.currentUser;
+    getUser(state) {
+      return state.user;
     },
     getRegisterShop(state) {
       return state.registerShop;
@@ -39,8 +33,14 @@ export default createStore({
     getRole(state) {
       return state.role;
     },
+    getMyShop(state) {
+      return state.myshop;
+    },
   },
   mutations: {
+    setUser(state, value) {
+      state.user = value;
+    },
     setRegisterShop(state, value) {
       state.registerShop = value;
     },
@@ -59,8 +59,14 @@ export default createStore({
     setRole(state, value) {
       state.role = value;
     },
+    setMyShop(state, value) {
+      state.myshop = value;
+    },
   },
   actions: {
+    setUser(context, value) {
+      context.commit("setUser", value);
+    },
     setRegisterShop(context, value) {
       context.commit("setRegisterShop", value);
     },
@@ -78,6 +84,9 @@ export default createStore({
     },
     setRole(context, value) {
       context.commit("setRole", value);
+    },
+    setMyShop(context, value) {
+      context.commit("setMyShop", value);
     },
   },
 });

@@ -62,7 +62,7 @@ export default {
   },
   data() {
     return {
-      page: ["HomePage", "SellerShopPage", "OrdersPage", "SearchResultPage"],
+      page: ["HomePage", "SellerShopPage", "OrdersPage"],
     };
   },
   computed: {

@@ -3,7 +3,7 @@ import graphqlClient from "@/services/graphql-client.js";
 export default {
   registerUser(user) {
     const mutation = `
-    mutation ($user: User) {
+    mutation ($user: UserInput) {
       registerUser(user: $user) {
         id
         firstname

@@ -26,6 +26,38 @@ export default {
 
         return graphqlClient(graphql);
     },
+    getCurrentBid(productId) {
+        const query = `
+        query ($productId: Int) {
+            getCurrentBid(productId: $productId) {
+                localDateTime
+                times
+                bidAmount
+                auctionResult
+                user{
+                    firstname
+                    lastname
+                }
+                product {
+                    productName
+                }
+                shop{
+                    shopName
+                }
+            }
+        }`
+
+        const variable = {
+            productId: productId
+        }
+
+        const graphql = {
+            query: query,
+            variables: variable
+        }
+
+        return graphqlClient(graphql)
+    },
     getAuctionWinner(productId) {
         const query = `
         query ($xid: Int) {
@@ -51,7 +83,6 @@ export default {
                 }
             }
         }`
-
 
         const variable = {
             productId: productId
@@ -98,44 +129,10 @@ export default {
             }
         }`
 
-
         const variable = {
             userId: userId,
             shopId: shopId,
             auctionId: auctionId
-        }
-
-        const graphql = {
-            query: query,
-            variables: variable
-        }
-
-        return graphqlClient(graphql)
-    },
-    getCurrentBid(productId) {
-        const query = `
-        query ($productId: Int) {
-            getCurrentBid(productId: $productId) {
-                localDateTime
-                times
-                bidAmount
-                auctionResult
-                user{
-                    firstname
-                    lastname
-                }
-                product {
-                    productName
-                }
-                shop{
-                    shopName
-                }
-            }
-        }`
-
-
-        const variable = {
-            productId: productId
         }
 
         const graphql = {
