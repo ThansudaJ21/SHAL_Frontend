@@ -2,10 +2,7 @@
   <nav class="bg-primary-900 rounded-b-[28px]">
     <div class="md:hidden h-fit justify-between p-4 items-center space-y-4">
       <div class="w-full flex justify-between">
-        <div
-          class="flex items-center"
-          v-if="exceptPage || $route.name == 'SearchResultPage'"
-        >
+        <div class="flex items-center" v-if="exceptPage">
           <a @click="$router.go(-1)">
             <BackIcon />
           </a>
@@ -28,11 +25,21 @@
       >
         <Form @submit="handleProductSearch" class="w-full">
           <IconTextField
+            v-if="$route.name == 'HomePage'"
             type="text"
             name="productName"
             placeholder="What are you looking for?"
             :showError="false"
-        /></Form>
+          />
+          <IconTextField
+            v-if="$route.name == 'SearchResultPage'"
+            type="text"
+            :valueField="$route.params.keyWord"
+            name="productName"
+            placeholder="What are you looking for?"
+            :showError="false"
+          />
+        </Form>
       </div>
     </div>
   </nav>
@@ -58,11 +65,12 @@ export default {
     },
     image: {
       type: String,
+      required: false,
     },
   },
   data() {
     return {
-      page: ["HomePage", "SellerShopPage", "OrdersPage"],
+      page: ["HomePage", "MyShopPage"],
     };
   },
   computed: {

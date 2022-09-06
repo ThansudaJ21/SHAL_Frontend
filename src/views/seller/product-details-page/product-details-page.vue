@@ -10,7 +10,7 @@
       <div class="absolute top-2 w-full flex justify-between px-4">
         <div class="items-start">
           <div
-            @click="() => this.$router.push({ name: 'SellerShopPage' })"
+            @click="() => this.$router.push({ name: 'MyShopPage' })"
             class="
               !w-8
               !h-8
@@ -263,7 +263,7 @@ export default {
             productStatus: "DELETED",
           };
           ProductService.updateProductStatus(productStatus).then(() => {
-            this.$router.push({ name: "SellerShopPage" });
+            this.$router.push({ name: "MyShopPage" });
           });
         }
       });

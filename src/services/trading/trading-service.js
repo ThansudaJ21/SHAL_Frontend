@@ -12,7 +12,6 @@ export default {
                 Quantity
                 orderStatus
                 paymentStatus
-                variationsList
                 shop
                 optionsList
             }
@@ -41,7 +40,6 @@ export default {
                 orderStatus
                 paymentStatus
                 products
-                variationsList
                 optionsList
             }
         }`
@@ -76,9 +74,23 @@ export default {
                     firstname
                     lastname
                 }
-                variationsList {
+                shop {
                     id
-                    variationName
+                    shopName
+                    idCard
+                    shopLogoImagePath
+                    selfiePhotoWithIdCardPath
+                    promptPay
+                    email
+                    shopStatus
+                    shopAddress {
+                        houseNumber
+                        moo
+                        postalCode
+                        district
+                        subDistrict
+                        province
+                    }
                 }
                 optionsList {
                     id
@@ -180,10 +192,6 @@ export default {
                     id
                     firstname
                     lastname
-                }
-                variationsList{
-                        id
-                    variationName
                 }
                 optionsList{
                         id

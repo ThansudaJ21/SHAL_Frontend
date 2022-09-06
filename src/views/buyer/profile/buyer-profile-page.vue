@@ -29,7 +29,7 @@
         @click="
           () => {
             this.$router.push({
-              name: 'SellerShopPage',
+              name: 'MyShopPage',
               params: { id: this.$store.getters.getMyShop.id },
             });
           }
@@ -38,16 +38,18 @@
         <ShopIcon /> My Shop
       </div>
     </template>
-    <PrimaryButton
-      class="!bg-white !text-black !items-start !justify-start"
-      :click="
-        () => {
-          this.$router.push({ name: 'PurchaseHistoryPage' });
-        }
-      "
-    >
-      <HistoryIcon /> Purchase History
-    </PrimaryButton>
+    <div>
+      <PrimaryButton
+        class="!bg-white !text-black !items-start !justify-start"
+        :click="
+          () => {
+            this.$router.push({ name: 'PurchaseHistoryPage' });
+          }
+        "
+      >
+        <HistoryIcon /> Purchase History
+      </PrimaryButton>
+    </div>
   </MobileLayout>
 </template>
 
@@ -82,11 +84,9 @@ export default {
           console.log(this.$store.getters.getMyShop.failureReasonLists.length);
           return 0;
         } else {
-          console.log("nooooo");
           return this.$store.getters.getMyShop.failureReasonLists.length;
         }
       } catch (error) {
-        console.log("errorrrr");
         return 0;
       }
     },

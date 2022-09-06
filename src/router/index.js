@@ -6,15 +6,19 @@ import RegisterPage from "@/views/auth/register-page.vue";
 
 import HomePage from "@/views/buyer/homepage/home-page.vue";
 import SearchResultPage from "@/views/buyer/homepage/search-result-page.vue";
-import BuyerProfilePage from "@/views/buyer/buyer-profile-page.vue";
+import CategoryResultPage from "@/views/buyer/homepage/category-result-page.vue";
+import MyCartPage from "@/views/buyer/my-cart/my-cart-page.vue";
+import BuyerProfilePage from "@/views/buyer/profile/buyer-profile-page.vue";
 import ShopRegistrationLayout from "@/views/buyer/shop-registration/shop-registration-layout.vue";
 import ShopRegistrationPageOne from "@/views/buyer/shop-registration/children/shop-registration-page-one.vue";
 import ShopRegistrationPageTwo from "@/views/buyer/shop-registration/children/shop-registration-page-two.vue";
-import ProductDetailsPageForBuyer from "@/views/buyer/product-details-page.vue";
+import ShopPage from "@/views/buyer/shop/shop-page.vue";
+import ProductDetailsPageForBuyer from "@/views/buyer/product/product-details-page.vue";
+import PurchaseHistoryPage from "@/views/buyer/history/purchase-history-page.vue";
 
-import SellerShopPage from "@/views/seller/shop-page/seller-shop-page.vue";
-import SellerFilterCategoryPage from "@/views/seller/shop-page/seller-filter-category-page.vue";
-import SellerProfilePage from "@/views/seller/seller-profile-page.vue";
+import MyShopPage from "@/views/seller/my-shop-page/my-shop-page.vue";
+import MyShopFilterCategoryPage from "@/views/seller/my-shop-page/my-shop-filter-category-page.vue";
+import MyShopProfilePage from "@/views/seller/profile/my-shop-profile-page.vue";
 import AddProductLayout from "@/views/seller/add-product-page/add-product-layout.vue";
 import AddProductPageOne from "@/views/seller/add-product-page/children/add-product-page-one.vue";
 import AddProductPageTwo from "@/views/seller/add-product-page/children/add-product-page-two.vue";
@@ -46,7 +50,6 @@ const routes = [
     path: "/register",
     name: "RegisterPage",
     component: RegisterPage,
-    meta: { requiresAuth: true }
   },
   {
     path: "/",
@@ -55,9 +58,21 @@ const routes = [
     meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
-    path: "/result/:keyWord",
+    path: "/result/search/:keyWord",
     name: "SearchResultPage",
     component: SearchResultPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/result/category/:category",
+    name: "CategoryResultPage",
+    component: CategoryResultPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/mycart",
+    name: "MyCartPage",
+    component: MyCartPage,
     meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
@@ -67,9 +82,21 @@ const routes = [
     meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
+    path: "/shop/:id",
+    name: "ShopPage",
+    component: ShopPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
     path: "/profile",
     name: "BuyerProfilePage",
     component: BuyerProfilePage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/purchase-history",
+    name: "PurchaseHistoryPage",
+    component: PurchaseHistoryPage,
     meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
@@ -93,21 +120,21 @@ const routes = [
   },
   {
     path: "/myshop",
-    name: "SellerShopPage",
+    name: "MyShopPage",
     meta: { requiresAuth: true, requiresSeller: true },
-    component: SellerShopPage,
+    component: MyShopPage,
   },
   {
     path: "/myshop/result",
-    name: "SellerFilterCategoryPage",
+    name: "MyShopFilterCategoryPage",
     meta: { requiresAuth: true, requiresSeller: true },
-    component: SellerFilterCategoryPage,
+    component: MyShopFilterCategoryPage,
   },
   {
     path: "/myshop/profile",
-    name: "SellerProfilePage",
+    name: "MyShopProfilePage",
     meta: { requiresAuth: true, requiresSeller: true },
-    component: SellerProfilePage,
+    component: MyShopProfilePage,
   },
   {
     path: "/myshop/add-product",
@@ -227,11 +254,12 @@ router.beforeEach((to, from, next) => {
             .getProfile()
             .then(async () => {
               localStorage.setItem("userId", liff.getDecodedIDToken().sub)
-              if (localStorage.getItem("userId") == null) {
-                next({ name: "Showcase" });
+              if (!localStorage.getItem("userId")) {
+                liff.login();
               } else {
                 let keepRole = []
                 await AuthService.findByUserId(liff.getDecodedIDToken().sub).then((response) => {
+                  console.log(response.data.data.findByUserId);
                   let roles = response.data.data.findByUserId.authorities
                   for (let index = 0; index < roles.length; index++) {
                     keepRole.push(roles[index].name)
@@ -245,35 +273,34 @@ router.beforeEach((to, from, next) => {
                   } catch (error) {
                     store.dispatch("setMyShop", null)
                   }
-
                   let role = JSON.parse(JSON.stringify(store.getters.getRole))
-                  if (to.matched.some((record) => record.meta.requiresAdmin)) {
-                    if (to.matched.some((record) => record.meta.requiresBuyer)) {
-                      if (role.includes("BUYER")) {
-                        next();
-                      } else {
-                        next({ name: "Showcase" });
-                      }
-                    } else if (to.matched.some((record) => record.meta.requiresSeller)) {
-                      if (role.includes("SELLER") && role.includes("BUYER")) {
-                        next();
-                      } else {
-                        next({ name: "Showcase" });
-                      }
-                    } else if (role.includes("ADMIN") && role.includes("BUYER")) {
+                  if (to.matched.some((record) => record.meta.requiresBuyer)) {
+                    if (role.includes("BUYER")) {
                       next();
                     } else {
-                      next({ name: "Showcase" });
+                      next({ name: "RegisterPage" });
+                    }
+                  } else if (to.matched.some((record) => record.meta.requiresSeller)) {
+                    if (role.includes("SELLER") && role.includes("BUYER")) {
+                      next();
+                    } else {
+                      next({ name: "RegisterPage" });
+                    }
+                  } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
+                    if (role.includes("ADMIN")) {
+                      next();
+                    } else {
+                      next({ name: "RegisterPage" });
                     }
                   } else {
                     next();
                   }
                 })
               }
-
-
             })
-            .catch((err) => console.error(err));
+            .catch(() => {
+              next({ name: "RegisterPage" });
+            });
         }
       })
   } else {

@@ -30,7 +30,7 @@ import ProductService from "@/services/product/product-service";
 import ProductCard from "@/components/card/product-card.vue";
 
 export default {
-  name: "SellerFilterCategoryPage",
+  name: "MyShopFilterCategoryPage",
   components: {
     MobileLayout,
     ProductCard,

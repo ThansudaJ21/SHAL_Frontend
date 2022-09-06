@@ -10,7 +10,7 @@
         v-for="category in this.categoryItems"
         :key="category.name"
         :to="{
-          name: 'SellerFilterCategoryPage',
+          name: 'MyShopFilterCategoryPage',
           query: { category: category.pageName },
         }"
         class="
@@ -170,7 +170,7 @@ import PrimaryButton from "@/components/button/primary-button.vue";
 import AddWhiteIcon from "@/assets/icons/add-white.svg?inline";
 
 export default {
-  name: "SellerShopPage",
+  name: "MyShopPage",
   components: {
     MobileLayout,
     Category,

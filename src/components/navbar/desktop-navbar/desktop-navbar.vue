@@ -52,13 +52,12 @@
           <div class="rounded-full">
             <img
               class="w-8 h-8 rounded-full"
-              src="@/assets/logo.png"
+              :src="this.$store.getters.getUser.pictureUrl"
               alt="user profile"
             />
           </div>
           <div class="truncate">
-            admin
-            <!-- {{ user.firstname }} {{ user.lastname }} -->
+            {{ this.$store.getters.getUser.displayName }}
           </div>
           <div><DropdownIcon /></div>
         </button>
@@ -89,12 +88,12 @@
             aria-orientation="vertical"
             aria-labelledby="user-menu"
           >
-            <router-link
-              :to="{ name: '' }"
+            <div
+              @click="logout"
               class="w-full justify-center text-sm font-bold text-shade-black"
             >
               <div class="py-2">Logout</div>
-            </router-link>
+            </div>
             <!--         <button
           class="
             w-full
@@ -117,6 +116,7 @@
 </template>
 
 <script>
+import liff from "@line/liff";
 import { desktopNavbarItems } from "../desktop-navbar/desktop-navbar-items.js";
 import DashboardIcon from "@/assets/icons/dashboard.svg?inline";
 import ShopManagementIcon from "@/assets/icons/shop-solid.svg?inline";
@@ -129,6 +129,12 @@ export default {
     return {
       desktopNavbarItems,
     };
+  },
+  methods: {
+    logout() {
+      liff.logout();
+      window.location.reload();
+    },
   },
 };
 </script>
