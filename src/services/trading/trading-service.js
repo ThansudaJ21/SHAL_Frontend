@@ -187,14 +187,31 @@ export default {
                     productName
         
                 }
-                
                 users {
                     id
                     firstname
                     lastname
                 }
+                shop {
+                    id
+                    shopName
+                    idCard
+                    shopLogoImagePath
+                    selfiePhotoWithIdCardPath
+                    promptPay
+                    email
+                    shopStatus
+                    shopAddress {
+                        houseNumber
+                        moo
+                        postalCode
+                        district
+                        subDistrict
+                        province
+                    }
+                }
                 optionsList{
-                        id
+                    id
                     optionName
                     price
                     stock

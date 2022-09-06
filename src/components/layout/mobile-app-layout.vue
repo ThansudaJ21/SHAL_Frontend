@@ -1,7 +1,11 @@
 <template>
   <div
     class="bg-primary-50 min-h-screen"
-    :class="[$route.name != 'RegisterPage' ? 'mb-12' : '']"
+    :class="[
+      $route.name != 'RegisterPage' && $route.name != 'PurchaseHistoryPage'
+        ? 'mb-12'
+        : '',
+    ]"
   >
     <!-- Register Navbar -->
     <MobileRegisterNavbar

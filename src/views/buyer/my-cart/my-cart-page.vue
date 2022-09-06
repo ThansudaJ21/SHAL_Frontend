@@ -25,7 +25,7 @@
       <div class="justify-start w-full">
         <p class="text-xs leading-[14px] text-white">Total Payment</p>
         <p class="text-sm leading-[17px] text-white text-semibold">
-          ฿{{ Number(this.$store.getters.getTotalPrice).toLocaleString() }}
+          ฿{{ Number(totalPrice).toLocaleString() }}
         </p>
       </div>
       <div class="flex justify-end">
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       cartObject: [],
+      totalPrice: 0,
     };
   },
   created() {
@@ -63,6 +64,7 @@ export default {
       (response) => {
         let data = response.data.data.getAddToCartProduct;
         for (let index = 0; index < data.length; index++) {
+          this.totalPrice = this.totalPrice + (data[index].totalPrice * data[index].quantity)
           let shopId = data[index].shop.id;
           products.push(shopId);
           if (!shops.includes(shopId)) {

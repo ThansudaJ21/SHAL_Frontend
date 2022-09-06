@@ -81,13 +81,12 @@ export default {
     checkShopFailureReason() {
       try {
         if (this.$store.getters.getMyShop.failureReasonLists.length == 0) {
-          console.log(this.$store.getters.getMyShop.failureReasonLists.length);
           return 0;
         } else {
           return this.$store.getters.getMyShop.failureReasonLists.length;
         }
       } catch (error) {
-        return 0;
+        return 1;
       }
     },
   },

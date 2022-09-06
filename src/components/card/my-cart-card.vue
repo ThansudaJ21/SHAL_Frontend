@@ -53,7 +53,7 @@
                 </div>
               </div>
               <div class="text-[10px] h-4 text-primary-900">
-                {{ productProps[index].optionsList[0] }}
+                {{ options[index] }}
               </div>
             </div>
             <div class="flex justify-between w-full items-center">
@@ -67,7 +67,7 @@
                   w-full
                 "
               >
-                ฿{{ product.salePrice }}
+                ฿{{ Number(product.salePrice).toLocaleString() }}
               </p>
               <div class="flex items-center mr-4 h-2 w-2/5">
                 <div
@@ -150,6 +150,7 @@ export default defineComponent({
       amount: [],
       products: [],
       totalPrice: [],
+      options: [],
     };
   },
   created() {
@@ -161,6 +162,14 @@ export default defineComponent({
         (response) => {
           this.products.push(response.data.data.getProduct);
           this.amount.push(this.productProps[index].quantity);
+          try {
+            this.options.push(
+              this.productProps[index].optionsList[0].optionName
+            );
+          } catch (error) {
+            this.options.push("");
+          }
+
           this.totalPrice.push(
             this.amount[index] * response.data.data.getProduct.salePrice
           );

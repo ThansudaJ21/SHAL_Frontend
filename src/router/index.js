@@ -259,7 +259,6 @@ router.beforeEach((to, from, next) => {
               } else {
                 let keepRole = []
                 await AuthService.findByUserId(liff.getDecodedIDToken().sub).then((response) => {
-                  console.log(response.data.data.findByUserId);
                   let roles = response.data.data.findByUserId.authorities
                   for (let index = 0; index < roles.length; index++) {
                     keepRole.push(roles[index].name)
