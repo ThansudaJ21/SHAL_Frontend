@@ -107,16 +107,16 @@ export default {
                         attribute
                     }
                 }
+                auction {
+                    startingBid
+                    auctionPeriod
+                    nextAuction
+                    timeUnitForAuctionPeriod
+                    timeUnitForNextAuction
+                }
             }
-        }
-        `
-        /* auction {
-            startingBid
-            auctionPeriod
-            nextAuction
-            timeUnitForAuctionPeriod
-            timeUnitForNextAuction
-        } */
+        }`
+
         const variable = {
             shopId: shopId,
             product: product
@@ -251,6 +251,7 @@ export default {
                     }
                 }
                 auction {
+                    id
                     timeUnitForAuctionPeriod
                     timeUnitForNextAuction
                     auctionPeriod

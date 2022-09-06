@@ -4,17 +4,21 @@ import Showcase from "@/views/showcase/showcase.vue";
 
 import RegisterPage from "@/views/auth/register-page.vue";
 
-import HomePage from "@/views/buyer/home-page.vue";
-import BuyerProfilePage from "@/views/buyer/buyer-profile-page.vue";
-import SearchResultPage from "@/views/buyer/search-result-page.vue";
+import HomePage from "@/views/buyer/homepage/home-page.vue";
+import SearchResultPage from "@/views/buyer/homepage/search-result-page.vue";
+import CategoryResultPage from "@/views/buyer/homepage/category-result-page.vue";
+import MyCartPage from "@/views/buyer/my-cart/my-cart-page.vue";
+import BuyerProfilePage from "@/views/buyer/profile/buyer-profile-page.vue";
 import ShopRegistrationLayout from "@/views/buyer/shop-registration/shop-registration-layout.vue";
 import ShopRegistrationPageOne from "@/views/buyer/shop-registration/children/shop-registration-page-one.vue";
 import ShopRegistrationPageTwo from "@/views/buyer/shop-registration/children/shop-registration-page-two.vue";
-import ProductDetailsPageForBuyer from "@/views/buyer/product-details-page.vue";
+import ShopPage from "@/views/buyer/shop/shop-page.vue";
+import ProductDetailsPageForBuyer from "@/views/buyer/product/product-details-page.vue";
+import PurchaseHistoryPage from "@/views/buyer/history/purchase-history-page.vue";
 
-import SellerShopPage from "@/views/seller/shop-page/seller-shop-page.vue";
-import SellerFilterCategoryPage from "@/views/seller/shop-page/seller-filter-category-page.vue";
-import SellerProfilePage from "@/views/seller/seller-profile-page.vue";
+import MyShopPage from "@/views/seller/my-shop-page/my-shop-page.vue";
+import MyShopFilterCategoryPage from "@/views/seller/my-shop-page/my-shop-filter-category-page.vue";
+import MyShopProfilePage from "@/views/seller/profile/my-shop-profile-page.vue";
 import AddProductLayout from "@/views/seller/add-product-page/add-product-layout.vue";
 import AddProductPageOne from "@/views/seller/add-product-page/children/add-product-page-one.vue";
 import AddProductPageTwo from "@/views/seller/add-product-page/children/add-product-page-two.vue";
@@ -34,6 +38,7 @@ import ShopApprovalPage from "@/views/admin/shop-approval-page.vue";
 import AuthService from "@/services/auth/auth-service";
 import ShopService from "@/services/shop/shop-service";
 import store from "@/store";
+import liff from "@line/liff";
 
 const routes = [
   {
@@ -50,27 +55,55 @@ const routes = [
     path: "/",
     name: "HomePage",
     component: HomePage,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
-    path: "/result/:keyWord",
+    path: "/result/search/:keyWord",
     name: "SearchResultPage",
     component: SearchResultPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/result/category/:category",
+    name: "CategoryResultPage",
+    component: CategoryResultPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/mycart",
+    name: "MyCartPage",
+    component: MyCartPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/product/:id",
     name: "ProductDetailsPageForBuyer",
     component: ProductDetailsPageForBuyer,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/shop/:id",
+    name: "ShopPage",
+    component: ShopPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/profile",
     name: "BuyerProfilePage",
     component: BuyerProfilePage,
+    meta: { requiresAuth: true, requiresBuyer: true }
+  },
+  {
+    path: "/purchase-history",
+    name: "PurchaseHistoryPage",
+    component: PurchaseHistoryPage,
+    meta: { requiresAuth: true, requiresBuyer: true }
   },
   {
     path: "/shop-registration",
     name: "ShopRegistrationLayout",
     component: ShopRegistrationLayout,
+    meta: { requiresAuth: true, requiresBuyer: true },
     redirect: "/shop-registration/page=1",
     children: [
       {
@@ -87,23 +120,27 @@ const routes = [
   },
   {
     path: "/myshop",
-    name: "SellerShopPage",
-    component: SellerShopPage,
+    name: "MyShopPage",
+    meta: { requiresAuth: true, requiresSeller: true },
+    component: MyShopPage,
   },
   {
     path: "/myshop/result",
-    name: "SellerFilterCategoryPage",
-    component: SellerFilterCategoryPage,
+    name: "MyShopFilterCategoryPage",
+    meta: { requiresAuth: true, requiresSeller: true },
+    component: MyShopFilterCategoryPage,
   },
   {
     path: "/myshop/profile",
-    name: "SellerProfilePage",
-    component: SellerProfilePage,
+    name: "MyShopProfilePage",
+    meta: { requiresAuth: true, requiresSeller: true },
+    component: MyShopProfilePage,
   },
   {
     path: "/myshop/add-product",
     name: "AddProductLayout",
     component: AddProductLayout,
+    meta: { requiresAuth: true, requiresSeller: true },
     redirect: "/myshop/add-product/page=1",
     children: [
       {
@@ -132,6 +169,7 @@ const routes = [
     path: "/myshop/edit-product/id=:id",
     name: "EditProductLayout",
     component: EditProductLayout,
+    meta: { requiresAuth: true, requiresSeller: true },
     redirect: "/myshop/edit-product/id=:id/page=1",
     children: [
       {
@@ -160,16 +198,19 @@ const routes = [
     path: "/myshop/product/:id",
     name: "ProductDetailsPageForSeller",
     component: ProductDetailsPageForSeller,
+    meta: { requiresAuth: true, requiresSeller: true },
   },
   {
     path: "/admin/dashboard",
     name: "DashboardPage",
     component: DashboardPage,
+    meta: { requiresAuth: true },
   },
   {
     path: "/admin/shop-management",
     name: "ShopManagementPage",
     component: ShopManagementPage,
+    meta: { requiresAuth: true },
     beforeEnter: async () => {
       let queryText = {
         shopName: "",
@@ -184,6 +225,7 @@ const routes = [
     path: "/admin/shop-approval/:id",
     name: "ShopApprovalPage",
     component: ShopApprovalPage,
+    meta: { requiresAuth: true },
   }
 ];
 
@@ -200,41 +242,66 @@ router.beforeEach((to, from, next) => {
     record.meta.requiresAdmin;
   });
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (localStorage.getItem("userId") == null) {
-      next({ name: "Showcase" });
-    } else {
-      let keepRole = []
-      AuthService.findByUserId(localStorage.getItem("userId")).then((response) => {
-        let roles = response.data.data.findByUserId.authorities
-        for (let index = 0; index < roles.length; index++) {
-          keepRole.push(roles[index].name)
-        }
-        store.dispatch("setRole", keepRole);
-        let role = JSON.parse(JSON.stringify(store.getters.getRole))
-        console.log(role);
-        if (to.matched.some((record) => record.meta.requiresAdmin)) {
-          if (to.matched.some((record) => record.meta.requiresBuyer)) {
-            if (role.includes("BUYER")) {
-              next();
-            } else {
-              next({ name: "Showcase" });
-            }
-          } else if (to.matched.some((record) => record.meta.requiresSeller)) {
-            if (role.includes("SELLER") && role.includes("BUYER")) {
-              next();
-            } else {
-              next({ name: "Showcase" });
-            }
-          } else if (role.includes("ADMIN") && role.includes("BUYER")) {
-            next();
-          } else {
-            next({ name: "Showcase" });
-          }
+    liff
+      .init({
+        liffId: process.env.VUE_APP_LINELIFF_BUYER_HOMEPAGE,
+      })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
         } else {
-          next();
+          liff
+            .getProfile()
+            .then(async () => {
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub)
+              if (!localStorage.getItem("userId")) {
+                liff.login();
+              } else {
+                let keepRole = []
+                await AuthService.findByUserId(liff.getDecodedIDToken().sub).then((response) => {
+                  let roles = response.data.data.findByUserId.authorities
+                  for (let index = 0; index < roles.length; index++) {
+                    keepRole.push(roles[index].name)
+                  }
+                  store.dispatch("setRole", keepRole);
+                  store.dispatch("setUser", response.data.data.findByUserId);
+                  try {
+                    ShopService.getShopByUserId(response.data.data.findByUserId.id).then((res) => {
+                      store.dispatch("setMyShop", res.data.data.getShopByUserId)
+                    })
+                  } catch (error) {
+                    store.dispatch("setMyShop", null)
+                  }
+                  let role = JSON.parse(JSON.stringify(store.getters.getRole))
+                  if (to.matched.some((record) => record.meta.requiresBuyer)) {
+                    if (role.includes("BUYER")) {
+                      next();
+                    } else {
+                      next({ name: "RegisterPage" });
+                    }
+                  } else if (to.matched.some((record) => record.meta.requiresSeller)) {
+                    if (role.includes("SELLER") && role.includes("BUYER")) {
+                      next();
+                    } else {
+                      next({ name: "RegisterPage" });
+                    }
+                  } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
+                    if (role.includes("ADMIN")) {
+                      next();
+                    } else {
+                      next({ name: "RegisterPage" });
+                    }
+                  } else {
+                    next();
+                  }
+                })
+              }
+            })
+            .catch(() => {
+              next({ name: "RegisterPage" });
+            });
         }
       })
-    }
   } else {
     next();
   }

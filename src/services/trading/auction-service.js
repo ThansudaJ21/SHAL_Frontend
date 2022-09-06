@@ -26,16 +26,21 @@ export default {
 
         return graphqlClient(graphql);
     },
-    getAuctionWinner(productId) {
+    getAuctionWinner(xid) {
         const query = `
         query ($xid: Int) {
-            getAuctionWinner(productId: $xid) {
+            getAuctionWinner(auctionId: $xid) {
                 id
-                    localDateTime
+                localDateTime
                 times
                 bidAmount
                 auctionResult
-                shop{
+                user{
+                    id
+                    firstname
+                    lastname
+                }
+                shop {
                     id
                     shopName
                 }
@@ -45,16 +50,16 @@ export default {
                     auctionPeriod
                     nextAuction
                     startingBid
-                    product{
+                    product {
                         productName
+                        details
                     }
                 }
             }
         }`
 
-
         const variable = {
-            productId: productId
+            xid: xid
         }
 
         const graphql = {
@@ -98,44 +103,10 @@ export default {
             }
         }`
 
-
         const variable = {
             userId: userId,
             shopId: shopId,
             auctionId: auctionId
-        }
-
-        const graphql = {
-            query: query,
-            variables: variable
-        }
-
-        return graphqlClient(graphql)
-    },
-    getCurrentBid(productId) {
-        const query = `
-        query ($productId: Int) {
-            getCurrentBid(productId: $productId) {
-                localDateTime
-                times
-                bidAmount
-                auctionResult
-                user{
-                    firstname
-                    lastname
-                }
-                product {
-                    productName
-                }
-                shop{
-                    shopName
-                }
-            }
-        }`
-
-
-        const variable = {
-            productId: productId
         }
 
         const graphql = {

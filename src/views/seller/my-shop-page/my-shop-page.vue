@@ -1,12 +1,16 @@
 <template>
-  <MobileLayout title="MY SHOP" v-if="products">
+  <MobileLayout
+    title="MY SHOP"
+    :image="this.$store.getters.getMyShop.shopLogoImagePath"
+    v-if="products"
+  >
     <p class="text-[14px] leading-[17px] text-black uppercase">CATEGORY</p>
     <div class="overflow-x-auto flex gap-x-4">
       <router-link
         v-for="category in this.categoryItems"
         :key="category.name"
         :to="{
-          name: 'SellerFilterCategoryPage',
+          name: 'MyShopFilterCategoryPage',
           query: { category: category.pageName },
         }"
         class="
@@ -166,7 +170,7 @@ import PrimaryButton from "@/components/button/primary-button.vue";
 import AddWhiteIcon from "@/assets/icons/add-white.svg?inline";
 
 export default {
-  name: "SellerShopPage",
+  name: "MyShopPage",
   components: {
     MobileLayout,
     Category,
@@ -191,7 +195,7 @@ export default {
     };
   },
   async created() {
-    let id = 2;
+    let id = this.$store.getters.getMyShop.id;
     await ShopService.getRegisterShop(id).then(async (res) => {
       if (res.data.data.getRegisterShop.shopStatus == "Disable") {
         showAlert(
@@ -204,22 +208,26 @@ export default {
           }
         });
       } else {
-        await ProductService.getAllProduct(id).then((res) => {
-          console.log(res);
-          let content = res.data.data.getAllProduct;
-          for (let index = 0; index < content.length; index++) {
-            if (content[index].productStatus != "DELETED") {
-              this.products.push(content[index]);
-            }
+        await ShopService.getShopByUserId(this.$store.getters.getUser.id).then(
+          async (res) => {
+            console.log(res);
+            await ProductService.getAllProduct(id).then((res) => {
+              let content = res.data.data.getAllProduct;
+              for (let index = 0; index < content.length; index++) {
+                if (content[index].productStatus != "DELETED") {
+                  this.products.push(content[index]);
+                }
+              }
+              for (let index = 0; index < content.length; index++) {
+                if (content[index].productStatus == "ACTIVE") {
+                  this.productActive.push(content[index]);
+                } else if (content[index].productStatus == "HIDDEN") {
+                  this.productHidden.push(content[index]);
+                }
+              }
+            });
           }
-          for (let index = 0; index < content.length; index++) {
-            if (content[index].productStatus == "ACTIVE") {
-              this.productActive.push(content[index]);
-            } else if (content[index].productStatus == "HIDDEN") {
-              this.productHidden.push(content[index]);
-            }
-          }
-        });
+        );
       }
     });
   },
@@ -230,26 +238,6 @@ export default {
         params: { id: productID },
       });
     },
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_HOMEPAGE,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

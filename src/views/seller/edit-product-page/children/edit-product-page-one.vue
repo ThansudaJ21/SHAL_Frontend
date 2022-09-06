@@ -186,26 +186,6 @@ export default {
       }
     });
   },
-    mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_EDIT_NEW_PRODUCT,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
-  },
 };
 </script>
 

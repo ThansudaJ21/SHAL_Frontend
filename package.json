@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@chenfengyuan/vue-countdown": "^2.1.0",
     "@headlessui/vue": "^1.6.4",
     "@line/liff": "^2.20.3",
     "@takuma-ru/vue-swipe-modal": "4.0.0",
@@ -15,13 +16,16 @@
     "@wyhaya/vue-slide": "^1.0.2",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "firebase": "^9.9.3",
+    "has-flag": "^5.0.1",
     "sweetalert2": "^11.4.17",
     "vee-validate": "^4.5.11",
-    "vue": "^3.2.13",
+    "vue": "^3.2.38",
     "vue-input-facade": "^2.0.1",
     "vue-router": "^4.0.3",
     "vue-select": "^4.0.0-beta.3",
     "vue-sweetalert2": "^5.0.5",
+    "vue-swipeable-bottom-sheet": "^0.0.5",
     "vuex": "^4.0.0",
     "yup": "^0.32.11"
   },

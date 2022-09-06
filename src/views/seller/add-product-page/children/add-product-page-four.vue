@@ -197,9 +197,12 @@ export default {
           JSON.stringify(this.$store.getters.getProduct.p2.productAttribute)
         ),
       };
-      ProductService.saveProduct(1, pageFour).then((response) => {
+      ProductService.saveProduct(
+        this.$store.getters.getMyShop.id,
+        pageFour
+      ).then((response) => {
         console.log(response);
-        this.$router.push({ name: "SellerShopPage" });
+        this.$router.push({ name: "MyShopPage" });
       });
     },
     addCheck(shipment) {

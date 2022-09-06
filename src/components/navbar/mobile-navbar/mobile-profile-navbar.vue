@@ -49,6 +49,7 @@ export default {
     },
     image: {
       type: String,
+      required: true,
     },
   },
 };

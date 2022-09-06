@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import AuthServices from "@/services/auth/auth-service";
 import { Form } from "vee-validate";
 import * as yup from "yup";
 import UtilService from "@/services/util-service";
@@ -94,6 +95,7 @@ export default {
       schema,
       shopLogoPath: null,
       selfiePhotoPath: null,
+      email: "",
     };
   },
   async created() {
@@ -117,36 +119,16 @@ export default {
                 shopLogoImagePath: this.shopLogoPath,
                 selfiePhotoWithIdCardPath: this.selfiePhotoPath,
                 promptPay: shop.promptPay,
+                email: this.$store.getters.getUser.email,
               };
               this.$store.dispatch("setRegisterShop", {
                 ...this.$store.getters.getRegisterShop,
                 firstPage: pageOne,
               });
-              console.log(this.$store.getters.getRegisterShop);
               this.$router.push({ name: "ShopRegistrationPageTwo" });
             });
         });
     },
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUEYR_REGISTER_SHOP,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

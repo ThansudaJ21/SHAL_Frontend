@@ -10,7 +10,7 @@
       <div class="absolute top-2 w-full flex justify-between px-4">
         <div class="items-start">
           <div
-            @click="() => this.$router.push({ name: 'SellerShopPage' })"
+            @click="() => this.$router.push({ name: 'MyShopPage' })"
             class="
               !w-8
               !h-8
@@ -206,7 +206,6 @@
 </template>
 
 <script>
-import liff from "@line/liff";
 import slide from "@wyhaya/vue-slide";
 import { Form } from "vee-validate";
 import ProductService from "@/services/product/product-service";
@@ -264,31 +263,11 @@ export default {
             productStatus: "DELETED",
           };
           ProductService.updateProductStatus(productStatus).then(() => {
-            this.$router.push({ name: "SellerShopPage" });
+            this.$router.push({ name: "MyShopPage" });
           });
         }
       });
     },
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_PRODUCT_DETAILS,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

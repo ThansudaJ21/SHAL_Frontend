@@ -79,6 +79,19 @@ export default {
                 selfiePhotoWithIdCardPath
                 promptPay
                 email
+                user {
+                    firstname
+                    lastname
+                    email
+                    pictureUrl
+                    displayName
+                    userId
+                    phoneNumber
+                    enabled
+                    authorities {
+                        name
+                    }
+                }
                 shopStatus
                 shopAddress {
                     houseNumber
@@ -129,7 +142,7 @@ export default {
         const mutation = `
         mutation ($shopStatus: ShopStatusInput, $userId: Int){
             updateShopStatus(shopStatus:$shopStatus, userId: $userId){
-                id
+            id
                 shopName
                 idCard
                 shopLogoImagePath
@@ -221,6 +234,51 @@ export default {
             query: query,
             variables: variable
         }
+        return graphqlClient(graphql)
+    },
+    getShopByUserId(userId) {
+        const query = `
+        query ($userId: Int) {
+            getShopByUserId(userId: $userId) {
+                id
+                shopName
+                idCard
+                shopLogoImagePath
+                selfiePhotoWithIdCardPath
+                promptPay
+                email
+                user{
+                    displayName
+                    firstname
+                    lastname
+                }
+                shopStatus
+                shopAddress {
+                    houseNumber
+                    moo
+                    postalCode
+                    district
+                    subDistrict
+                    province
+                }
+                failureReasonLists {
+                    failureReasons {
+                        reason
+                    }
+                    text
+                }
+            }
+        }`
+
+        const variable = {
+            userId: userId
+        }
+
+        const graphql = {
+            query: query,
+            variables: variable
+        }
+
         return graphqlClient(graphql)
     },
 }

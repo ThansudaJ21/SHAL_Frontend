@@ -82,7 +82,9 @@
 </template>
 
 <script>
+import AuthServices from "@/services/auth/auth-service";
 import { Form } from "vee-validate";
+import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import * as yup from "yup";
 import ShopService from "@/services/shop/shop-service";
 import FormWrapper from "@/components/form/form-wrapper.vue";
@@ -119,11 +121,17 @@ export default {
       province: [],
       amphoes: [],
       tumbons: [],
+      userId: null,
     };
   },
   created() {
     this.firstPageData = this.$store.getters.getRegisterShop.firstPage;
     console.log(this.firstPageData);
+    AuthServices.findByUserId(
+      JSON.parse(JSON.stringify(localStorage.getItem("userId")))
+    ).then((response) => {
+      this.userId = response.data.data.findByUserId.id;
+    });
   },
   methods: {
     handleSubmit(shop) {
@@ -132,6 +140,7 @@ export default {
         idCard: this.firstPageData.idCard,
         shopLogoImagePath: this.firstPageData.shopLogoImagePath,
         selfiePhotoWithIdCardPath: this.firstPageData.selfiePhotoWithIdCardPath,
+        email: this.firstPageData.email,
         promptPay: this.firstPageData.promptPay,
         shopAddress: {
           houseNumber: shop.houseNumber,
@@ -143,9 +152,27 @@ export default {
         },
       };
       this.$store.dispatch("setRegisterShop", shopObject);
-      ShopService.registerShop(shopObject, 1);
-      console.log(shopObject);
-      this.$router.push({ name: "BuyerProfilePage" });
+      ShopService.registerShop(shopObject, this.userId).then(() => {
+        try {
+          showAlert("success", "Register shop successfully", "").then(
+            (response) => {
+              if (response.isConfirmed) {
+                console.log(shopObject);
+                this.$router.push({ name: "BuyerProfilePage" });
+              }
+            }
+          );
+        } catch (error) {
+          showAlert("error", "Register shop unsuccessfully", "").then(
+            (response) => {
+              if (response.isConfirmed) {
+                console.log(shopObject);
+                this.$router.push({ name: "BuyerProfilePage" });
+              }
+            }
+          );
+        }
+      });
     },
     getAddressByPostalCode(e) {
       if (e && e.length == 5) {

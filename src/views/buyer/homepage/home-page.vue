@@ -1,5 +1,5 @@
 <template>
-  <MobileLayout :image="this.picture" :displayName="this.name">
+  <MobileLayout :image="this.picture">
     <p class="text-[14px] leading-[17px] text-black uppercase">
       <b>CATEGORIES</b>
     </p>
@@ -8,8 +8,8 @@
         v-for="category in this.categoryItems"
         :key="category.name"
         :to="{
-          name: 'SearchResultPage',
-          params: { keyWord: category.pageName },
+          name: 'CategoryResultPage',
+          params: { category: category.pageName },
         }"
         class="
           h-20
@@ -42,9 +42,9 @@
 
     <div class="space-y-6 px-4">
       <TabGroup>
-        <TabList class="flex space-x-12 w-full h-[30px] bg-white rounded-t-lg">
+        <TabList class="flex w-full h-[30px] bg-white rounded-t-lg">
           <Tab
-            class="w-1/4 h-full text-base text-center leading-[19px]"
+            class="w-1/5 w-full h-full text-sm text-center leading-[17px]"
             v-slot="{ selected }"
             as="template"
           >
@@ -59,7 +59,7 @@
             </button>
           </Tab>
           <Tab
-            class="w-1/4 h-full text-base text-center leading-[19px]"
+            class="w-2/5 h-full text-sm text-center leading-[17px]"
             v-slot="{ selected }"
             as="template"
           >
@@ -74,7 +74,7 @@
             </button>
           </Tab>
           <Tab
-            class="w-1/4 h-full text-base text-center leading-[19px]"
+            class="w-1/5 h-full text-sm text-center leading-[17px]"
             v-slot="{ selected }"
             as="template"
           >
@@ -89,7 +89,7 @@
             </button>
           </Tab>
           <Tab
-            class="w-1/4 h-full text-base text-center leading-[19px]"
+            class="w-1/5 h-full text-sm text-center leading-[17px]"
             v-slot="{ selected }"
             as="template"
           >
@@ -235,7 +235,7 @@ export default {
       categoryItems,
     };
   },
-  /* mounted() {
+  mounted() {
     liff
       .init({
         liffId: process.env.VUE_APP_LINELIFF_BUYER_HOMEPAGE,
@@ -247,21 +247,18 @@ export default {
           liff
             .getProfile()
             .then(() => {
-              localStorage.setItem('userId', liff.getDecodedIDToken().sub);
+              localStorage.setItem("userId", liff.getDecodedIDToken().sub);
               this.name = liff.getDecodedIDToken().name;
               this.userId = liff.getDecodedIDToken().sub;
               this.picture = liff.getDecodedIDToken().picture;
-              console.log(liff.getDecodedIDToken().sub);
               AuthServices.findByUserId(
                 JSON.parse(JSON.stringify(liff.getDecodedIDToken().sub))
-              ).then((response) => {
-                console.log(response);
-              });
+              );
             })
             .catch((err) => console.error(err));
         }
       });
-  }, */
+  },
   methods: {
     goToProductDetail(productID) {
       this.$router.push({
@@ -282,7 +279,6 @@ export default {
       999
     ).then((response) => {
       let content = response.data.data.productFilter.content;
-      console.log(content);
       for (let index = 0; index < content.length; index++) {
         if (content[index].productStatus == "ACTIVE") {
           this.products.push(content[index]);
@@ -290,11 +286,17 @@ export default {
       }
       for (let index = 0; index < content.length; index++) {
         if (content[index].saleTypeName == "Auction and Sale") {
-          this.productSaleAndAuction.push(content[index]);
+          if (content[index].productStatus == "ACTIVE") {
+            this.productSaleAndAuction.push(content[index]);
+          }
         } else if (content[index].saleTypeName == "Sale only") {
-          this.productSale.push(content[index]);
+          if (content[index].productStatus == "ACTIVE") {
+            this.productSale.push(content[index]);
+          }
         } else if (content[index].saleTypeName == "Auction only") {
-          this.productAuction.push(content[index]);
+          if (content[index].productStatus == "ACTIVE") {
+            this.productAuction.push(content[index]);
+          }
         }
       }
     });

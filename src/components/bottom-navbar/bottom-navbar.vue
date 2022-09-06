@@ -13,10 +13,9 @@
       bg-primary-900
     "
   >
-    <!-- <div v-if="isBuyer"> -->
     <div
       class="flex justify-center gap-x-16 w-full text-center"
-      v-if="$route.name == 'HomePage' || $route.name == 'BuyerProfilePage'"
+      v-if="buyerPages"
     >
       <BottomNavbarItems routeName="HomePage">
         <HomeInactiveIcon v-if="$route.name != 'HomePage'" />
@@ -25,13 +24,12 @@
           <span class="block">Home</span>
         </div>
       </BottomNavbarItems>
-      <BottomNavbarItems :click="maintain">
-        <CartInactiveIcon class="!opacity-60" />
-        <!--         <CartInactiveIcon v-if="$route.name != ''" />
+      <BottomNavbarItems routeName="MyCartPage">
+        <CartInactiveIcon v-if="$route.name != 'MyCartPage'" />
         <div v-else>
           <CartActiveIcon class="inline-block" />
           <span class="block">My Cart</span>
-        </div> -->
+        </div>
       </BottomNavbarItems>
       <BottomNavbarItems routeName="BuyerProfilePage">
         <UserInactiveIcon v-if="$route.name != 'BuyerProfilePage'" />
@@ -42,23 +40,12 @@
       </BottomNavbarItems>
     </div>
 
-    <!-- <div v-if="isSeller"> -->
-    <!--     <div
-      class="flex justify-center gap-x-16 w-full text-center"
-      v-if="
-        $route.name == 'SellerShopPage' ||
-        $route.name == 'OrdersPage' ||
-        $route.name == 'SellerProfilePage'
-      "
-    > -->
     <div
       class="flex justify-center gap-x-16 w-full text-center"
-      v-if="
-        $route.name == 'SellerShopPage' || $route.name == 'SellerProfilePage'
-      "
+      v-if="sellerPages"
     >
-      <BottomNavbarItems routeName="SellerShopPage">
-        <HomeInactiveIcon v-if="$route.name != 'SellerShopPage'" />
+      <BottomNavbarItems routeName="MyShopPage">
+        <HomeInactiveIcon v-if="$route.name != 'MyShopPage'" />
         <div v-else>
           <HomeActiveIcon class="inline-block" />
           <span class="block">Home</span>
@@ -79,8 +66,8 @@
           <span class="block">My Cart</span>
         </div> -->
       </BottomNavbarItems>
-      <BottomNavbarItems routeName="SellerProfilePage">
-        <UserInactiveIcon v-if="$route.name != 'SellerProfilePage'" />
+      <BottomNavbarItems routeName="MyShopProfilePage">
+        <UserInactiveIcon v-if="$route.name != 'MyShopProfilePage'" />
         <div v-else>
           <UserActiveIcon class="inline-block" />
           <span class="block">Profile</span>
@@ -101,6 +88,7 @@ import TruckInactiveIcon from "@/assets/icons/truck-outlined.svg?inline";
 import TruckActiveIcon from "@/assets/icons/truck-solid.svg?inline";
 import UserInactiveIcon from "@/assets/icons/user-outlined-white.svg?inline";
 import UserActiveIcon from "@/assets/icons/user-solid-white.svg?inline";
+import PrimaryButton from "../button/primary-button.vue";
 
 export default {
   name: "BottomNavbar",
@@ -114,8 +102,29 @@ export default {
     TruckActiveIcon,
     UserInactiveIcon,
     UserActiveIcon,
+    PrimaryButton,
   },
-  methods: {
+  data() {
+    return {
+      buyerPages: ["HomePage", "BuyerProfilePage"],
+      sellerPages: ["MyShopPage", "MyShopProfilePage"],
+    };
+  },
+  computed: {
+    buyerPages() {
+      if (this.buyerPages.includes(this.$route.name)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    sellerPages() {
+      if (this.sellerPages.includes(this.$route.name)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     maintain() {
       showAlert("error", "Maintenance", "");
     },

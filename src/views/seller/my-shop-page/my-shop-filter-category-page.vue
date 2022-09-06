@@ -30,7 +30,7 @@ import ProductService from "@/services/product/product-service";
 import ProductCard from "@/components/card/product-card.vue";
 
 export default {
-  name: "SellerFilterCategoryPage",
+  name: "MyShopFilterCategoryPage",
   components: {
     MobileLayout,
     ProductCard,
@@ -41,7 +41,7 @@ export default {
     };
   },
   async created() {
-    let id = 2;
+    let id = this.$store.getters.getMyShop.id;
     await ProductService.getAllProduct(id).then((res) => {
       console.log(res.data.data.getAllProduct);
       let content = res.data.data.getAllProduct;
@@ -62,26 +62,6 @@ export default {
         params: { id: productID },
       });
     },
-  },
-  mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_SELLER_SEARCH_RESULT,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
   },
 };
 </script>

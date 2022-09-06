@@ -12,13 +12,7 @@ export default {
   components: { BottomNavbar },
   data() {
     return {
-      page: [
-        "HomePage",
-        "BuyerProfilePage",
-        "SellerShopPage",
-        "OrdersPage",
-        "SellerProfilePage",
-      ],
+      page: ["HomePage", "BuyerProfilePage", "MyShopPage", "MyShopProfilePage"],
     };
   },
   computed: {

@@ -1,5 +1,8 @@
 <template>
-  <MobileLayout title="Shop Registration">
+  <MobileLayout
+    title="Shop Registration"
+    :image="this.$store.getters.getUser.pictureUrl"
+  >
     <router-view />
   </MobileLayout>
 </template>
