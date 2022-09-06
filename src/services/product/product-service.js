@@ -251,6 +251,7 @@ export default {
                     }
                 }
                 auction {
+                    id
                     timeUnitForAuctionPeriod
                     timeUnitForNextAuction
                     auctionPeriod

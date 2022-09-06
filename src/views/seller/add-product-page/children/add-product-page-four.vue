@@ -202,7 +202,7 @@ export default {
         pageFour
       ).then((response) => {
         console.log(response);
-        this.$router.push({ name: "SellerShopPage" });
+        this.$router.push({ name: "MyShopPage" });
       });
     },
     addCheck(shipment) {

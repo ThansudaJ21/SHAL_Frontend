@@ -26,48 +26,21 @@ export default {
 
         return graphqlClient(graphql);
     },
-    getCurrentBid(productId) {
+    getAuctionWinner(xid) {
         const query = `
-        query ($productId: Int) {
-            getCurrentBid(productId: $productId) {
+        query ($xid: Int) {
+            getAuctionWinner(auctionId: $xid) {
+                id
                 localDateTime
                 times
                 bidAmount
                 auctionResult
                 user{
+                    id
                     firstname
                     lastname
                 }
-                product {
-                    productName
-                }
-                shop{
-                    shopName
-                }
-            }
-        }`
-
-        const variable = {
-            productId: productId
-        }
-
-        const graphql = {
-            query: query,
-            variables: variable
-        }
-
-        return graphqlClient(graphql)
-    },
-    getAuctionWinner(productId) {
-        const query = `
-        query ($xid: Int) {
-            getAuctionWinner(productId: $xid) {
-                id
-                    localDateTime
-                times
-                bidAmount
-                auctionResult
-                shop{
+                shop {
                     id
                     shopName
                 }
@@ -77,15 +50,16 @@ export default {
                     auctionPeriod
                     nextAuction
                     startingBid
-                    product{
+                    product {
                         productName
+                        details
                     }
                 }
             }
         }`
 
         const variable = {
-            productId: productId
+            xid: xid
         }
 
         const graphql = {

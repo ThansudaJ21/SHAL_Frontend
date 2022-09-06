@@ -2,14 +2,16 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    user: null,
     registerShop: null,
     shopName: null,
     product: null,
     shops: null,
+    totalPrice: null,
     user: null,
     role: null,
     myshop: null,
+    trading: null,
+    auction: null
   },
   getters: {
     getUser(state) {
@@ -27,6 +29,9 @@ export default createStore({
     getShops(state) {
       return state.shops;
     },
+    getTotalPrice(state) {
+      return state.totalPrice;
+    },
     getUser(state) {
       return state.user;
     },
@@ -35,6 +40,12 @@ export default createStore({
     },
     getMyShop(state) {
       return state.myshop;
+    },
+    getTrading(state) {
+      return state.trading;
+    },
+    getAuction(state) {
+      return state.auction;
     },
   },
   mutations: {
@@ -53,6 +64,9 @@ export default createStore({
     setShops(state, value) {
       state.shops = value;
     },
+    setTotalPrice(state, value) {
+      state.totalPrice = value;
+    },
     setUser(state, value) {
       state.user = value;
     },
@@ -61,6 +75,12 @@ export default createStore({
     },
     setMyShop(state, value) {
       state.myshop = value;
+    },
+    setTrading(state, value) {
+      state.trading = value;
+    },
+    setAuction(state, value) {
+      state.auction = value;
     },
   },
   actions: {
@@ -79,6 +99,9 @@ export default createStore({
     setShops(context, value) {
       context.commit("setShops", value);
     },
+    setTotalPrice(context, value) {
+      context.commit("setTotalPrice", value);
+    },
     setUser(context, value) {
       context.commit("setUser", value);
     },
@@ -87,6 +110,12 @@ export default createStore({
     },
     setMyShop(context, value) {
       context.commit("setMyShop", value);
+    },
+    setTrading(context, value) {
+      context.commit("setTrading", value);
+    },
+    setAuction(context, value) {
+      context.commit("setAuction", value);
     },
   },
 });

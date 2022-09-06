@@ -206,7 +206,7 @@ export default {
       };
       ProductService.saveProduct(1, pageFour).then((response) => {
         console.log(response);
-        this.$router.push({ name: "SellerShopPage" });
+        this.$router.push({ name: "MyShopPage" });
       });
     },
     addCheck(shipment) {

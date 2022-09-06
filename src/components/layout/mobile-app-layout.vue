@@ -1,5 +1,12 @@
 <template>
-  <div class="bg-primary-50 min-h-screen">
+  <div
+    class="bg-primary-50 min-h-screen"
+    :class="[
+      $route.name != 'RegisterPage' && $route.name != 'PurchaseHistoryPage'
+        ? 'mb-12'
+        : '',
+    ]"
+  >
     <!-- Register Navbar -->
     <MobileRegisterNavbar
       v-if="$route.name == 'RegisterPage'"
@@ -18,7 +25,7 @@
 
     <MobileProfileNavbar
       :image="image"
-      v-else-if="$route.name == 'SellerProfilePage'"
+      v-else-if="$route.name == 'MyShopProfilePage'"
       :click="() => this.$router.push({ name: 'HomePage' })"
       :displayName="displayName"
     >
@@ -32,12 +39,15 @@
       :title="title"
       v-else-if="
         $route.name == 'HomePage' ||
-        $route.name == 'SellerShopPage' ||
-        $route.name == 'OrdersPage' ||
+        $route.name == 'MyShopPage' ||
         $route.name == 'SearchResultPage'
       "
     />
-
+    <MobileShopNavbar
+      :title="title"
+      :image="image"
+      v-else-if="$route.name == 'ShopPage'"
+    />
     <!-- Navbar without search bar -->
     <MobileDefaultNavbar :title="title" :image="image" v-else />
 
@@ -51,6 +61,7 @@
 import MobileDefaultNavbar from "@/components/navbar/mobile-navbar/mobile-navbar.vue";
 import MobileProfileNavbar from "@/components/navbar/mobile-navbar/mobile-profile-navbar.vue";
 import MobileRegisterNavbar from "@/components/navbar/mobile-navbar/mobile-register-navbar.vue";
+import MobileShopNavbar from "../navbar/mobile-navbar/mobile-shop-navbar.vue";
 
 export default {
   name: "MobileLayout",
@@ -58,18 +69,20 @@ export default {
     MobileDefaultNavbar,
     MobileProfileNavbar,
     MobileRegisterNavbar,
+    MobileShopNavbar,
   },
   props: {
     title: {
       type: String,
-      required: true,
+      required: false,
     },
     displayName: {
       type: String,
-      required: true,
+      required: false,
     },
     image: {
       type: String,
+      required: false,
     },
   },
 };

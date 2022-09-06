@@ -2,21 +2,18 @@
   <nav class="bg-primary-900 rounded-b-[28px]">
     <div class="md:hidden h-fit justify-between p-4 items-center space-y-4">
       <div class="w-full flex justify-between">
-        <div class="flex items-center" v-if="exceptPage">
+        <div class="flex items-center">
           <a @click="$router.go(-1)">
             <BackIcon />
           </a>
         </div>
-        <div class="flex items-center w-6" v-if="!exceptPage"></div>
-        <div class="flex items-center">
+        <div class="flex items-center justify-center w-full">
+          <div class="rounded-full mr-2">
+            <img class="w-12 h-12 rounded-full" :src="image" alt="shop" />
+          </div>
           <p class="text-base font-semibold text-white">
             {{ title }}
           </p>
-        </div>
-        <div class="flex items-center relative">
-          <div class="rounded-full">
-            <img class="w-8 h-8 rounded-full" :src="image" alt="user profile" />
-          </div>
         </div>
       </div>
       <div
@@ -25,21 +22,11 @@
       >
         <Form @submit="handleProductSearch" class="w-full">
           <IconTextField
-            v-if="$route.name == 'HomePage'"
             type="text"
             name="productName"
             placeholder="What are you looking for?"
             :showError="false"
-          />
-          <IconTextField
-            v-if="$route.name == 'SearchResultPage'"
-            type="text"
-            :valueField="$route.params.keyWord"
-            name="productName"
-            placeholder="What are you looking for?"
-            :showError="false"
-          />
-        </Form>
+        /></Form>
       </div>
     </div>
   </nav>
@@ -51,7 +38,7 @@ import IconTextField from "@/components/field/icon-text-field/icon-text-field.vu
 import BackIcon from "@/assets/icons/chevron-left.svg?inline";
 
 export default {
-  name: "MobileNavbar",
+  name: "ShopNavbar",
   components: {
     IconTextField,
     BackIcon,
@@ -70,25 +57,8 @@ export default {
   },
   data() {
     return {
-      page: ["HomePage", "MyShopPage"],
+      page: ["ShopPage"],
     };
-  },
-  computed: {
-    exceptPage() {
-      if (this.page.includes(this.$route.name)) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-  },
-  methods: {
-    handleProductSearch(product) {
-      this.$router.push({
-        name: "SearchResultPage",
-        params: { keyWord: product.productName },
-      });
-    },
   },
 };
 </script>
