@@ -232,6 +232,7 @@ export default {
       /* schema, */
       variationCount: 0,
       variationArray: [],
+      variation: [],
       optionOneCount: 0,
       optionTwoCount: 0,
     };
@@ -243,30 +244,30 @@ export default {
           variationName: product.variation_one_name,
           options: [],
         };
-        for (let index = 1; index <= this.optionOneCount; index++) {
+        for (let index = 0; index <= this.optionOneCount; index++) {
           variationOne.options.push({
-            optionName: "product.variation_one_option_ + index",
+            optionName: "White",
             price: 20,
             stock: 20,
-            image: null,
+            image: "null",
           });
         }
-        this.variationArray.push(variationOne);
+        this.variation.push(variationOne);
       }
       if (product.variation_two_name) {
         var variationTwo = {
           variationName: product.variation_two_name,
           options: [],
         };
-        for (let index = 1; index <= this.optionTwoCount; index++) {
+        for (let index = 0; index <= this.optionTwoCount; index++) {
           variationTwo.options.push({
-            optionName: "product.variation_two_option_ + index",
+            optionName: "Black",
             price: 20,
             stock: 20,
-            image: null,
+            image: "null",
           });
         }
-        this.variationArray.push(variationTwo);
+        this.variation.push(variationTwo);
       }
       let pageThree = {
         productName: this.$store.getters.getProduct.p1.productName,
@@ -276,9 +277,9 @@ export default {
         saleTypeName: this.$store.getters.getProduct.p1.saleTypeName,
         salePrice: this.$store.getters.getProduct.p2.salePrice,
         storage: this.$store.getters.getProduct.p2.storage,
-        /* auction: this.$store.getters.getProduct.p2.auction, */
+        auction: this.$store.getters.getProduct.p2.auction,
         productAttribute: this.$store.getters.getProduct.p2.productAttribute,
-        variations: this.variationArray,
+        variations: this.variation,
       };
       console.log(pageThree);
       this.$store

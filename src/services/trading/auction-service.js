@@ -85,7 +85,6 @@ export default {
                 user {
                     firstname
                     lastname
-        
                 }
                 shop {
                     id
@@ -94,10 +93,13 @@ export default {
                 }
                 auction{
                     id
+                    timeUnitForNextAuction
+                    timeUnitForAuctionPeriod
                     product{
                         productName
                         saleTypeName
                         salePrice
+                        imagesPath
                     }
                 }
             }

@@ -11,8 +11,9 @@
     class="
       md:hidden
       w-full
-      h-12
+      h-14
       px-4
+      py-2
       flex
       items-center
       fixed
@@ -55,6 +56,7 @@ export default {
     return {
       cartObject: [],
       totalPrice: 0,
+      amount: 0,
     };
   },
   created() {
@@ -63,15 +65,16 @@ export default {
     TradingService.getAddToCartProduct(this.$store.getters.getUser.id).then(
       (response) => {
         let data = response.data.data.getAddToCartProduct;
+        console.log(data);
         for (let index = 0; index < data.length; index++) {
-          this.totalPrice = this.totalPrice + (data[index].totalPrice * data[index].quantity)
+          this.totalPrice =
+            this.totalPrice + data[index].totalPrice;
           let shopId = data[index].shop.id;
           products.push(shopId);
           if (!shops.includes(shopId)) {
             shops.push(shopId);
           }
         }
-        console.log(shops);
         for (let index = 0; index < shops.length; index++) {
           let inCart = [];
           for (let index2 = 0; index2 < data.length; index2++) {

@@ -191,12 +191,15 @@ export default {
         variations: JSON.parse(
           JSON.stringify(this.$store.getters.getProduct.p3.variations)
         ),
-        /* auction: this.$store.getters.getProduct.p2.auction, */
         shipments: JSON.parse(JSON.stringify(this.checkShipment)),
         productAttribute: JSON.parse(
           JSON.stringify(this.$store.getters.getProduct.p2.productAttribute)
         ),
+        auction: JSON.parse(
+          JSON.stringify(this.$store.getters.getProduct.p2.auction)
+        ),
       };
+      console.log(pageFour);
       ProductService.saveProduct(
         this.$store.getters.getMyShop.id,
         pageFour

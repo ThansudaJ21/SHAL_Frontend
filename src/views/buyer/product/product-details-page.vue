@@ -79,13 +79,23 @@
       <FormWrapper variant="details">
         <template #body>
           <p class="text-base leading-[19px] text-black">
-            {{ product.productName }}
+            {{ product.productName }} ({{
+              product.variations[0].options[0].optionName
+            }})
           </p>
           <p class="text-lg leading-[19px] font-semibold text-primary-900">
             Price for Buy Now ฿{{ Number(product.salePrice).toLocaleString() }}
           </p>
           <div class="grid grid-cols-3 gap-2 items-center">
-            <div class="text-center">
+            <div class="text-center col-span-3" v-if="auctioning == 'wait'">
+              <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
+                Next Auction In
+              </p>
+              <p class="text-sm leading-[17px] text-error-500 font-semibold">
+                {{ toHHMMSS(nextAuctionInSec) }}
+              </p>
+            </div>
+            <div class="text-center" v-if="auctioning == 'auction'">
               <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
                 Time Left
               </p>
@@ -93,7 +103,7 @@
                 {{ toHHMMSS(timerCount) }}
               </p>
             </div>
-            <div class="text-center">
+            <div class="text-center" v-if="auctioning == 'auction'">
               <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
                 Current Bid
               </p>
@@ -110,7 +120,7 @@
                 ฿{{ Number(product.auction.startingBid).toLocaleString() }}
               </p>
             </div>
-            <div class="text-center">
+            <div class="text-center" v-if="auctioning == 'auction'">
               <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
                 Current Winner
               </p>
@@ -242,10 +252,20 @@
       <FormWrapper variant="details">
         <template #body>
           <p class="text-base leading-[19px] text-black">
-            {{ product.productName }}
+            {{ product.productName }} ({{
+              product.variations[0].options[0].optionName
+            }})
           </p>
           <div class="grid grid-cols-3 gap-2 items-center">
-            <div class="text-center">
+            <div class="text-center col-span-3" v-if="auctioning == 'wait'">
+              <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
+                Next Auction In
+              </p>
+              <p class="text-sm leading-[17px] text-error-500 font-semibold">
+                {{ toHHMMSS(nextAuctionInSec) }}
+              </p>
+            </div>
+            <div class="text-center" v-if="auctioning == 'auction'">
               <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
                 Time Left
               </p>
@@ -253,7 +273,7 @@
                 {{ toHHMMSS(timerCount) }}
               </p>
             </div>
-            <div class="text-center">
+            <div class="text-center" v-if="auctioning == 'auction'">
               <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
                 Current Bid
               </p>
@@ -270,7 +290,7 @@
                 ฿{{ Number(product.auction.startingBid).toLocaleString() }}
               </p>
             </div>
-            <div class="text-center">
+            <div class="text-center" v-if="auctioning == 'auction'">
               <p class="text-xs leading-[14px] text-neutral-900 font-semibold">
                 Current Winner
               </p>
@@ -302,7 +322,9 @@
             "
           >
             <img :src="shops.shopLogoImagePath" class="w-8 h-8 rounded-full" />
-            <p class="text-xs font-semibold">{{ shops.shopName }}</p>
+            <p class="text-xs font-semibold">
+              {{ shops.shopName }}
+            </p>
           </div>
           <div class="w-1/4 flex justify-end mr-4">
             <ChevronRightIcon />
@@ -536,13 +558,13 @@
         </template>
       </FormWrapper>
     </div>
-    <div class="flex gap-x-1 fixed bottom-0 left-0 right-0 bg-white">
+    <div class="flex gap-x-0.5 fixed bottom-0 left-0 right-0 bg-white">
       <PrimaryButton
         v-if="
           product.saleTypeName == 'Auction and Sale' ||
           product.saleTypeName == 'Sale only'
         "
-        class="w-1/4 rounded-lg bg-primary-500"
+        class="w-1/4 rounded-[5px] bg-primary-500"
         :click="openAddToCart"
       >
         <div class="grid justify-center w-full">
@@ -558,13 +580,15 @@
           "
           class="
             w-full
-            rounded-lg
+            rounded-[5px]
             bg-error-500
             active:bg-error-700
             focus:bg-error-600
             hover:bg-error-600
+            disabled:bg-error-500 disabled:opacity-50
           "
           :click="openPlaceBid"
+          :disabled="auctioning == 'wait'"
           >PLACE BID</PrimaryButton
         >
         <PrimaryButton
@@ -574,7 +598,7 @@
           "
           class="
             w-full
-            rounded-lg
+            rounded-[5px]
             bg-warning-500
             active:bg-warning-700
             focus:bg-warning-600
@@ -586,7 +610,7 @@
     </div>
   </div>
   <div>
-    <SwipeableBottomSheet
+    <VueBottomSheet
       ref="BuyNow"
       v-if="
         product.saleTypeName == 'Sale only' ||
@@ -604,7 +628,7 @@
         </div>
         <div class="flex justify-between">
           <div class="flex">
-            <div><!-- Shopping Bag Icon --></div>
+            <div><ShoppingBagIcon /></div>
             <div>
               <div class="text-[14px]">Quantity</div>
               <div class="text-neutral-900 text-[10px]">
@@ -675,15 +699,18 @@
               v-for="(variation, index) in product.variations"
               :key="variation"
             >
-              <div class="text-[14px]">{{ variation.variationName }}</div>
+              <div class="text-[14px]">
+                {{ variation.variationName }}
+              </div>
               <div class="flex gap-x-4">
                 <div v-for="option in variation.options" :key="option">
                   <Field :name="'options' + index" v-slot="{ field }">
                     <input
+                      v-model="optionValueBuyNow"
                       v-bind="field"
                       class="sr-only peer"
                       type="radio"
-                      :value="option.id"
+                      :value="option"
                       :id="option.optionName"
                     />
                     <label
@@ -710,13 +737,13 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-between">
+          <div class="flex justify-between" v-if="optionValueBuyNow != ''">
             <div class="flex">
-              <div><!-- Shopping Bag Icon --></div>
+              <div><ShoppingBagIcon /></div>
               <div>
                 <div class="text-[14px]">Quantity</div>
                 <div class="text-neutral-900 text-[10px]">
-                  {{ product.storage }} items available
+                  {{ optionValueBuyNow.stock }} items available
                 </div>
               </div>
             </div>
@@ -734,16 +761,19 @@
               <div
                 class="w-2/5"
                 @click="
-                  () => (product.storage > amount ? increaseAmount() : null)
+                  () =>
+                    optionValueBuyNow.stock > amount ? increaseAmount() : null
                 "
               >
                 <PlusIcon
-                  :class="[product.storage > this.amount ? '' : 'opacity-10']"
+                  :class="[
+                    optionValueBuyNow.stock > this.amount ? '' : 'opacity-10',
+                  ]"
                 />
               </div>
             </div>
           </div>
-          <div class="flex justify-between">
+          <div class="flex justify-between" v-if="optionValueBuyNow != ''">
             <div>Price</div>
             <div class="font-semibold text-[14px] text-primary-900">
               ฿{{ Number(product.salePrice * amount).toLocaleString() }}
@@ -751,7 +781,7 @@
           </div>
           <div
             class="text-error-500 text-[12px]"
-            v-if="product.storage == this.amount"
+            v-if="optionValueBuyNow.stock == this.amount"
           >
             You have reached the maximum quantity available for this item
           </div>
@@ -764,12 +794,13 @@
               focus:bg-warning-600
             "
             type="submit"
+            :disabled="optionValueBuyNow == ''"
             >BUY NOW</PrimaryButton
           >
         </div>
       </Form>
-    </SwipeableBottomSheet>
-    <SwipeableBottomSheet
+    </VueBottomSheet>
+    <VueBottomSheet
       ref="AddToCart"
       v-if="
         product.saleTypeName == 'Sale only' ||
@@ -859,15 +890,18 @@
               v-for="(variation, index) in product.variations"
               :key="variation"
             >
-              <div class="text-[14px]">{{ variation.variationName }}</div>
+              <div class="text-[14px]">
+                {{ variation.variationName }}
+              </div>
               <div class="flex gap-x-4">
                 <div v-for="option in variation.options" :key="option">
                   <Field :name="'optionsAddToCart' + index" v-slot="{ field }">
                     <input
+                      v-model="optionValueAddToCart"
                       v-bind="field"
                       class="sr-only peer"
                       type="radio"
-                      :value="option.id"
+                      :value="option"
                       :id="option.optionName + '1'"
                     />
                     <label
@@ -895,13 +929,16 @@
             </div>
           </div>
 
-          <div class="flex justify-between items-center">
+          <div
+            class="flex justify-between items-center"
+            v-if="optionValueAddToCart != ''"
+          >
             <div class="flex items-center">
               <div><ShoppingBagIcon /></div>
               <div>
                 <div class="text-[14px]">Quantity</div>
                 <div class="text-neutral-900 text-[10px]">
-                  {{ product.storage }} items available
+                  {{ optionValueAddToCart.stock }} items available
                 </div>
               </div>
             </div>
@@ -919,16 +956,23 @@
               <div
                 class="w-2/5"
                 @click="
-                  () => (product.storage > amount ? increaseAmount() : null)
+                  () =>
+                    optionValueAddToCart.stock > amount
+                      ? increaseAmount()
+                      : null
                 "
               >
                 <PlusIcon
-                  :class="[product.storage > this.amount ? '' : 'opacity-10']"
+                  :class="[
+                    optionValueAddToCart.stock > this.amount
+                      ? ''
+                      : 'opacity-10',
+                  ]"
                 />
               </div>
             </div>
           </div>
-          <div class="flex justify-between">
+          <div class="flex justify-between" v-if="optionValueAddToCart != ''">
             <div>Price</div>
             <div class="font-semibold text-[14px] text-primary-900">
               ฿{{ Number(product.salePrice * amount).toLocaleString() }}
@@ -936,7 +980,7 @@
           </div>
           <div
             class="text-error-500 text-[12px]"
-            v-if="product.storage == this.amount"
+            v-if="optionValueAddToCart.stock == this.amount"
           >
             You have reached the maximum quantity available for this item
           </div>
@@ -949,12 +993,13 @@
               focus:bg-primary-600
             "
             type="submit"
+            :disabled="optionValueAddToCart == ''"
             >ADD TO CART
           </PrimaryButton>
         </div>
       </Form>
-    </SwipeableBottomSheet>
-    <SwipeableBottomSheet
+    </VueBottomSheet>
+    <VueBottomSheet
       ref="PlaceBid"
       v-if="
         product.saleTypeName == 'Auction only' ||
@@ -1008,12 +1053,11 @@
           </PrimaryButton>
         </Form>
       </div>
-    </SwipeableBottomSheet>
+    </VueBottomSheet>
   </div>
 </template>
 
 <script>
-import liff from "@line/liff";
 import slide from "@wyhaya/vue-slide";
 import { Form, Field } from "vee-validate";
 import ProductService from "@/services/product/product-service";
@@ -1032,13 +1076,15 @@ import TextButton from "@/components/button/text-button.vue";
 import { showAlert } from "@/hooks/sweet-alert/sweet-alert.js";
 import shopService from "@/services/shop/shop-service";
 import { ref } from "vue";
-import { SwipeableBottomSheet } from "vue-swipeable-bottom-sheet";
 import tradingService from "@/services/trading/trading-service";
 import TextField from "@/components/field/text-field/text-field.vue";
 import auctionService from "@/services/trading/auction-service";
+import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
+
 export default {
   name: "ProductDetailsPageForBuyer",
   components: {
+    VueBottomSheet,
     slide,
     Form,
     FormWrapper,
@@ -1050,7 +1096,6 @@ export default {
     CartIcon,
     AddToCartIcon,
     TextButton,
-    SwipeableBottomSheet,
     ChevronRightIcon,
     MinusIcon,
     PlusIcon,
@@ -1059,101 +1104,43 @@ export default {
   },
   data() {
     return {
+      currentdate: new Date(),
+      productEndAuctionTime: null,
+      productNextAuctionTime: null,
+      endAuctionInSec: null,
+      nextAuctionInSec: null,
+      auctioning: "",
       slide: [],
       product: null,
       shops: "",
       amount: 1,
-      timerCount: 0,
+      timerCount: null,
       timeUnit: 0,
       auctionWinner: "",
       auctionWinnerName: "",
       inCartItemCount: 0,
+      optionValueAddToCart: "",
+      optionValueBuyNow: "",
     };
-  },
-  watch: {
-    timerCount: {
-      handler(value) {
-        if (value > 0) {
-          setTimeout(() => {
-            this.toHHMMSS(this.timerCount--);
-            auctionService
-              .getAuctionWinner(this.product.auction.id)
-              .then((res) => {
-                if (res.data.data.getAuctionWinner != null) {
-                  this.auctionWinner = res.data.data.getAuctionWinner;
-                  if (res.data.data.getAuctionWinner.user.lastname.length > 3) {
-                    this.auctionWinnerName =
-                      res.data.data.getAuctionWinner.user.firstname +
-                      " " +
-                      res.data.data.getAuctionWinner.user.lastname.substring(
-                        0,
-                        3
-                      ) +
-                      "...";
-                  } else {
-                    this.auctionWinnerName =
-                      res.data.data.getAuctionWinner.user.firstname +
-                      " " +
-                      res.data.data.getAuctionWinner.user.lastname;
-                  }
-                }
-              });
-          }, 1000);
-        } else {
-          try {
-            auctionService
-              .getAuctionWinner(this.product.auction.id)
-              .then((res) => {
-                if (res.data.data.getAuctionWinner != null) {
-                  let object = {
-                    users: res.data.data.getAuctionWinner.user.id,
-                    products: this.$route.params.id,
-                    shop: this.shops.id,
-                    quantity: 1,
-                    optionsList: [],
-                  };
-                  tradingService.addToCart(object);
-                  showAlert(
-                    "error",
-                    "The time is up",
-                    "This auction is already end"
-                  ).then((response) => {
-                    if (response.isConfirmed) {
-                      this.$router.go();
-                    }
-                  });
-                }
-              });
-          } catch (error) {}
-        }
-      },
-      immediate: true,
-    },
   },
   created() {
     ProductService.getProduct(this.$route.params.id).then((res) => {
       this.product = res.data.data.getProduct;
       try {
-        if (
-          res.data.data.getProduct.auction.timeUnitForAuctionPeriod == "minute"
-        ) {
-          this.timeUnit = 60;
-        } else if (
-          res.data.data.getProduct.auction.timeUnitForAuctionPeriod == "second"
-        ) {
-          this.timeUnit = 1;
-        } else if (
-          res.data.data.getProduct.auction.timeUnitForAuctionPeriod == "hour"
-        ) {
-          this.timeUnit = 3600;
-        }
+        var endBiddingTime = this.product.auction.endBiddingTime;
+        var nextBiddingTime = this.product.auction.nextBiddingTime;
+        var pattern = /(\d{4})\-(\d{2})\-(\d{2})T(\t{2}):(\t{2})/;
+        this.productEndAuctionTime = new Date(
+          endBiddingTime.replace(pattern, "$3-$2-$1")
+        );
+        this.productNextAuctionTime = new Date(
+          nextBiddingTime.replace(pattern, "$3-$2-$1")
+        );
         this.timerCount =
-          parseInt(res.data.data.getProduct.auction.auctionPeriod) *
-          this.timeUnit;
+          parseInt(this.productEndAuctionTime - this.currentdate) / 1000;
       } catch (error) {
         this.timerCount = 0;
       }
-
       if (res.data.data.getProduct.storage <= 0) {
         showAlert(
           "error",
@@ -1202,6 +1189,100 @@ export default {
         });
     });
   },
+  watch: {
+    timerCount: {
+      handler(value) {
+        try {
+          if (
+            this.product.saleTypeName == "Auction only" ||
+            this.product.saleTypeName == "Auction and Sale"
+          ) {
+            if (parseInt(value) > 0) {
+              setTimeout(() => {
+                this.currentdate = new Date();
+                this.endAuctionInSec =
+                  parseInt(
+                    new Date(this.productEndAuctionTime) - this.currentdate
+                  ) / 1000;
+                this.nextAuctionInSec =
+                  parseInt(
+                    new Date(this.productNextAuctionTime) - this.currentdate
+                  ) / 1000;
+                this.toHHMMSS(this.timerCount--);
+                if (this.nextAuctionInSec > 0) {
+                  this.auctioning = "wait";
+                } else {
+                  this.auctioning = "auction";
+                  auctionService
+                    .getAuctionWinner(this.product.auction.id)
+                    .then((res) => {
+                      if (res.data.data.getAuctionWinner != null) {
+                        this.auctionWinner = res.data.data.getAuctionWinner;
+                        if (
+                          res.data.data.getAuctionWinner.user.lastname.length >
+                          3
+                        ) {
+                          this.auctionWinnerName =
+                            res.data.data.getAuctionWinner.user.firstname +
+                            " " +
+                            res.data.data.getAuctionWinner.user.lastname.substring(
+                              0,
+                              3
+                            ) +
+                            "...";
+                        } else {
+                          this.auctionWinnerName =
+                            res.data.data.getAuctionWinner.user.firstname +
+                            " " +
+                            res.data.data.getAuctionWinner.user.lastname;
+                        }
+                      }
+                    });
+                }
+              }, 1000);
+            } else if (parseInt(value) == 0) {
+              try {
+                auctionService
+                  .getAuctionWinner(this.product.auction.id)
+                  .then((res) => {
+                    if (res.data.data.getAuctionWinner != null) {
+                      let object = {
+                        users: res.data.data.getAuctionWinner.user.id,
+                        products: this.$route.params.id,
+                        shop: this.shops.id,
+                        quantity: 1,
+                        option: this.product.variations[0].options[0].id,
+                      };
+                      tradingService.addToCart(object);
+                    }
+                    showAlert(
+                      "error",
+                      "The time is up",
+                      "This auction is already end"
+                    ).then((response) => {
+                      if (response.isConfirmed) {
+                        this.$router.go();
+                      }
+                    });
+                  });
+              } catch (error) {
+                showAlert(
+                  "error",
+                  "The time is up",
+                  "This auction is already end"
+                ).then((response) => {
+                  if (response.isConfirmed) {
+                    this.$router.go();
+                  }
+                });
+              }
+            }
+          }
+        } catch (error) {}
+      },
+      immediate: true,
+    },
+  },
   methods: {
     toHHMMSS(secs) {
       var sec_num = parseInt(secs, 10);
@@ -1243,13 +1324,13 @@ export default {
       }
     },
     openPlaceBid() {
-      this.$refs.PlaceBid.setState("open");
+      this.$refs.PlaceBid.open();
     },
     openAddToCart() {
-      this.$refs.AddToCart.setState("open");
+      this.$refs.AddToCart.open();
     },
     openBuyNow() {
-      this.$refs.BuyNow.setState("open");
+      this.$refs.BuyNow.open();
     },
     increaseAmount() {
       this.amount = this.amount + 1;
@@ -1258,36 +1339,36 @@ export default {
       this.amount = this.amount - 1;
     },
     addToCartForSaleOnly(options) {
-      let optionArr = [];
-      if (options.optionsAddToCart0) {
-        optionArr.push(options.optionsAddToCart0);
-      }
-      if (options.optionsAddToCart1) {
-        optionArr.push(options.optionsAddToCart1);
-      }
       let object = {
         users: this.$store.getters.getUser.id,
         products: this.$route.params.id,
         shop: this.shops.id,
         quantity: this.amount,
-        optionsList: optionArr,
+        option: options.optionsAddToCart0.id,
       };
-      tradingService.addToCart(object).then(() => {
-        showAlert(
-          "Success",
-          "Successfully",
-          "You have been adding items successfully"
-        ).then((response) => {
-          tradingService
-            .getAddToCartProduct(this.$store.getters.getUser.id)
-            .then((response) => {
-              this.inCartItemCount =
-                response.data.data.getAddToCartProduct.length;
-            });
-          if (response.isConfirmed) {
-            this.$refs.AddToCart.setState("close");
-          }
-        });
+      tradingService.addToCart(object).then((res) => {
+        if (res.data.data.addToCart == null) {
+          this.$refs.AddToCart.close();
+          showAlert(
+            "Error",
+            "Cannot add product to cart",
+            "You cannot add the product to cart anymore"
+          );
+        } else {
+          this.$refs.AddToCart.close();
+          showAlert(
+            "Success",
+            "Successfully",
+            "You have been adding items successfully"
+          ).then((response) => {
+            tradingService
+              .getAddToCartProduct(this.$store.getters.getUser.id)
+              .then((response) => {
+                this.inCartItemCount =
+                  response.data.data.getAddToCartProduct.length;
+              });
+          });
+        }
       });
     },
     addToCartForSaleAndAuction() {
@@ -1296,51 +1377,48 @@ export default {
         products: this.$route.params.id,
         shop: this.shops.id,
         quantity: this.amount,
-        optionsList: [],
+        option: this.product.variations[0].options[0].id,
       };
-      tradingService.addToCart(object).then(() => {
-        showAlert(
-          "Success",
-          "Successfully",
-          "You have been adding items successfully"
-        ).then((response) => {
-          tradingService
-            .getAddToCartProduct(this.$store.getters.getUser.id)
-            .then((response) => {
-              this.inCartItemCount =
-                response.data.data.getAddToCartProduct.length;
-            });
-          if (response.isConfirmed) {
-            this.$refs.AddToCart.setState("close");
-          }
-        });
+      tradingService.addToCart(object).then((res) => {
+        if (res.data.data.addToCart == null) {
+          this.$refs.AddToCart.close();
+          showAlert(
+            "Error",
+            "Cannot add product to cart",
+            "You cannot add the product to cart anymore"
+          );
+        } else {
+          this.$refs.AddToCart.close();
+          showAlert(
+            "Success",
+            "Successfully",
+            "You have been adding items successfully"
+          ).then((response) => {
+            tradingService
+              .getAddToCartProduct(this.$store.getters.getUser.id)
+              .then((response) => {
+                this.inCartItemCount =
+                  response.data.data.getAddToCartProduct.length;
+              });
+          });
+        }
       });
     },
     buyNowForSaleOnly(options) {
-      let optionArr = [];
-      if (options.options0) {
-        optionArr.push(options.options0);
-      }
-      if (options.options1) {
-        optionArr.push(options.options1);
-      }
       let object = {
         users: this.$store.getters.getUser.id,
         products: this.$route.params.id,
         shop: this.shops.id,
         quantity: this.amount,
-        optionsList: optionArr,
+        option: options.options0.id,
       };
       tradingService.buyProduct(object).then(() => {
+        this.$refs.BuyNow.close();
         showAlert(
           "Success",
           "Successfully",
           "You have been bought this items successfully"
-        ).then((response) => {
-          if (response.isConfirmed) {
-            this.$refs.BuyNow.setState("close");
-          }
-        });
+        );
       });
     },
     buyNowForSaleAndAuction() {
@@ -1349,25 +1427,26 @@ export default {
         products: this.$route.params.id,
         shop: this.shops.id,
         quantity: this.amount,
-        optionsList: [],
+        option: this.product.variations[0].options[0].id,
       };
       tradingService.buyProduct(object).then(() => {
+        this.$refs.BuyNow.close();
         showAlert(
           "Success",
           "Successfully",
           "You have been bought this items successfully"
-        ).then((response) => {
-          if (response.isConfirmed) {
-            this.$refs.BuyNow.setState("close");
-          }
-        });
+        );
       });
     },
     placeBid(bid) {
+      this.$refs.PlaceBid.close();
       if (bid.bid == undefined) {
         showAlert("error", "Error", "Please enter bid price");
-      } else if (bid.bid < this.auctionWinner.bidAmount) {
-        if (bid.bid == this.product.auction.startingBid) {
+      } else if (
+        parseInt(bid.bid) <= this.auctionWinner.bidAmount ||
+        parseInt(bid.bid) <= this.product.auction.startingBid
+      ) {
+        if (parseInt(bid.bid) <= this.product.auction.startingBid) {
           showAlert(
             "error",
             "Error",
@@ -1386,7 +1465,7 @@ export default {
         }
       } else {
         let object = {
-          bidAmount: bid.bid,
+          bidAmount: parseInt(bid.bid),
           userId: this.$store.getters.getUser.id,
           productId: this.$route.params.id,
           shopId: this.shops.id,
@@ -1421,35 +1500,15 @@ export default {
       this.product.saleTypeName == "Auction and Sale" ||
       this.product.saleTypeName == "Auction only"
     ) {
-      this.$refs.PlaceBid.setState("close");
+      this.$refs.PlaceBid.close();
     }
     if (
       this.product.saleTypeName == "Auction and Sale" ||
       this.product.saleTypeName == "Sale only"
     ) {
-      this.$refs.AddToCart.setState("close");
-      this.$refs.BuyNow.setState("close");
+      this.$refs.AddToCart.close();
+      this.$refs.BuyNow.close();
     }
   },
-  /*   mounted() {
-    liff
-      .init({
-        liffId: process.env.VUE_APP_LINELIFF_BUEYR_PRODUCT_DETAILS,
-      })
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          liff
-            .getProfile()
-            .then(() => {
-              this.name = liff.getDecodedIDToken().name;
-              this.userId = liff.getDecodedIDToken().sub;
-              this.picture = liff.getDecodedIDToken().picture;
-            })
-            .catch((err) => console.error(err));
-        }
-      });
-  }, */
 };
 </script>

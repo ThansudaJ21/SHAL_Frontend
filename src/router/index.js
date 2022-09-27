@@ -30,6 +30,8 @@ import EditProductPageTwo from "@/views/seller/edit-product-page/children/edit-p
 import EditProductPageThree from "@/views/seller/edit-product-page/children/edit-product-page-three.vue";
 import EditProductPageFour from "@/views/seller/edit-product-page/children/edit-product-page-four.vue";
 import ProductDetailsPageForSeller from "@/views/seller/product-details-page/product-details-page.vue";
+import AuctionHistoryPage from "@/views/seller/history/auction-history-page.vue";
+import SalesHistoryPage from "@/views/seller/history/sales-history-page.vue";
 
 import DashboardPage from "@/views/admin/dashboard-page.vue";
 import ShopManagementPage from "@/views/admin/shop-management-page.vue";
@@ -201,16 +203,28 @@ const routes = [
     meta: { requiresAuth: true, requiresSeller: true },
   },
   {
+    path: "/myshop/auction-history",
+    name: "AuctionHistoryPage",
+    component: AuctionHistoryPage,
+    meta: { requiresAuth: true, requiresSeller: true },
+  },
+  {
+    path: "/myshop/sales-history",
+    name: "SalesHistoryPage",
+    component: SalesHistoryPage,
+    meta: { requiresAuth: true, requiresSeller: true },
+  },
+  {
     path: "/admin/dashboard",
     name: "DashboardPage",
     component: DashboardPage,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: "/admin/shop-management",
     name: "ShopManagementPage",
     component: ShopManagementPage,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
     beforeEnter: async () => {
       let queryText = {
         shopName: "",
@@ -225,7 +239,7 @@ const routes = [
     path: "/admin/shop-approval/:id",
     name: "ShopApprovalPage",
     component: ShopApprovalPage,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   }
 ];
 

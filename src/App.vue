@@ -1,5 +1,5 @@
 <template>
-  <div class="font-kanit">
+  <div class="font-kanit mb-4">
     <router-view />
     <BottomNavbar v-if="showPage" />
   </div>

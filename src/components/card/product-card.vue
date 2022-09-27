@@ -1,32 +1,67 @@
 <template>
   <div
     class="
-      h-[216px]
-      w-[164px]
+      h-[246px]
+      w-40
       rounded-[20px]
       bg-white
-      outline outline-1 outline-[#dbeafe] outline-offset-0
-      hover:outline-[#94c5fc]
-      active:outline-[#3b82f5]
+      hover:border-[#94c5fc] hover:rounded-[20px]
+      active:border-[#3b82f5] active:rounded-[20px]
     "
     @click="click"
   >
     <img
       :src="product.imagesPath[0]"
       :alt="name"
-      class="h-[148px] w-full rounded-t-[20px] object-cover"
+      class="h-40 w-40 rounded-t-[20px] object-cover"
     />
 
-    <div class="flex flex-col h-[68px] px-4 py-2 space-y-1.5">
+    <div class="flex flex-col h-[86px] px-4 py-2 space-y-1.5">
       <p class="text-xs text-black leading-[14px] truncate">
         {{ product.productName }}
       </p>
       <p class="text-[10px] text-neutral-700 leading-3">
         {{ product.saleTypeName }}
       </p>
-      <div class="flex justify-between">
-        <p class="text-xs font-semibold text-primary-900 leading-[14px]">
-          ฿{{ product.salePrice }}
+      <div class="flex" v-if="product.saleTypeName == 'Sale only'">
+        <p class="text-sm font-semibold text-primary-900 leading-[14px]">
+          ฿{{ Number(product.salePrice).toLocaleString() }}
+        </p>
+      </div>
+      <div
+        class="flex justify-between"
+        v-if="product.saleTypeName == 'Auction only'"
+      >
+        <p class="text-sm font-semibold text-primary-900 leading-[14px]">
+          ฿{{ Number(product.auction.startingBid).toLocaleString() }}
+        </p>
+        <!--  <p
+          class="text-[10px] text-neutral-500"
+          v-if="
+            product.saleTypeName == 'Auction only' ||
+            product.saleTypeName == 'Auction and Sale'
+          "
+        >
+          {{ toHHMMSS(timerCount) }}
+        </p> -->
+      </div>
+      <div v-if="product.saleTypeName == 'Auction and Sale'">
+        <p
+          class="
+            text-xs
+            font-normal
+            text-white
+            leading-[14px]
+            bg-primary-900
+            rounded-sm
+            px-1
+            py-0.5
+          "
+        >
+          Buy Now ฿{{ Number(product.salePrice).toLocaleString() }}
+        </p>
+        <p class="text-sm font-semibold text-primary-900 leading-[14px]">
+          ฿{{ Number(product.auction.startingBid).toLocaleString() }}
         </p>
         <!--  <p
           class="text-[10px] text-neutral-500"
@@ -44,9 +79,15 @@
 
 <script>
 import { defineComponent } from "vue";
+import MoneyIcon from "@/assets/icons/money.svg?inline";
+import GavelIcon from "@/assets/icons/money.svg?inline";
 
 export default defineComponent({
   name: "ProductCard",
+  components: {
+    MoneyIcon,
+    GavelIcon,
+  },
   props: {
     product: {
       type: String,
@@ -76,7 +117,6 @@ export default defineComponent({
     },
   },
   created() {
-    console.log(this.product);
     try {
       if (this.product.auction.timeUnitForAuctionPeriod == "minute") {
         this.timeUnit = 60;
