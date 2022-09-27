@@ -9,17 +9,19 @@
         class="!bg-white !text-black !items-start !justify-start"
         :click="
           () => {
-            this.$router.push({ name: 'PurchaseHistoryPage' });
+            this.$router.push({ name: 'AuctionHistoryPage' });
           }
         "
       >
         <HistoryIcon /> Auction History
       </PrimaryButton>
+    </div>
+    <div>
       <PrimaryButton
         class="!bg-white !text-black !items-start !justify-start"
         :click="
           () => {
-            this.$router.push({ name: 'PurchaseHistoryPage' });
+            this.$router.push({ name: 'SalesHistoryPage' });
           }
         "
       >
@@ -31,15 +33,17 @@
 
 <script>
 import MobileLayout from "@/components/layout/mobile-app-layout.vue";
-import Category from "@/components/category/category.vue";
 import ShoppingBagIcon from "@/assets/icons/shopping-bag.svg?inline";
+import PrimaryButton from "@/components/button/primary-button.vue";
+import HistoryIcon from "@/assets/icons/history.svg?inline";
 
 export default {
   name: "MyShopProfilePage",
   components: {
     MobileLayout,
-    Category,
+    HistoryIcon,
     ShoppingBagIcon,
+    PrimaryButton,
   },
 };
 </script>

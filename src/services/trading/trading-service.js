@@ -13,7 +13,7 @@ export default {
                 orderStatus
                 paymentStatus
                 shop
-                optionsList
+                option
             }
         }`
 
@@ -40,7 +40,7 @@ export default {
                 orderStatus
                 paymentStatus
                 products
-                optionsList
+                option
             }
         }`
 
@@ -92,7 +92,7 @@ export default {
                         province
                     }
                 }
-                optionsList {
+                option {
                     id
                     optionName
                     price
@@ -185,39 +185,22 @@ export default {
                 products {
                     id
                     productName
-        
+                    imagesPath
+                    salePrice
+                    saleTypeName
                 }
                 users {
                     id
                     firstname
                     lastname
                 }
-                shop {
-                    id
-                    shopName
-                    idCard
-                    shopLogoImagePath
-                    selfiePhotoWithIdCardPath
-                    promptPay
-                    email
-                    shopStatus
-                    shopAddress {
-                        houseNumber
-                        moo
-                        postalCode
-                        district
-                        subDistrict
-                        province
-                    }
-                }
-                optionsList{
+                option{
                     id
                     optionName
                     price
                     stock
                     image
                 }
-                
             }
         }`
 

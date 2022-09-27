@@ -46,8 +46,17 @@ export default {
   created() {
     ProductService.getAllProduct(this.$store.getters.getRegisterShop.id).then(
       (response) => {
-        console.log(response.data.data.getAllProduct);
-        this.products = response.data.data.getAllProduct;
+        for (
+          let index = 0;
+          index < response.data.data.getAllProduct.length;
+          index++
+        ) {
+          if (
+            response.data.data.getAllProduct[index].productStatus == "ACTIVE"
+          ) {
+            this.products.push(response.data.data.getAllProduct[index]);
+          }
+        }
       }
     );
   },

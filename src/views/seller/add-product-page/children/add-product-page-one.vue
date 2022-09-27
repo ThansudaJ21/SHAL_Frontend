@@ -28,25 +28,28 @@
           :maxLength="2500"
           required
         />
-        <TextLabel label="Sale Type" required />
-        <Field v-slot="{ field }" name="saleTypeName" v-model="defaultCategory">
+        <!-- <TextLabel label="Sale Type" required /> -->
+        <!-- <Field v-slot="{ field }" name="saleTypeName" v-model="defaultSaleType">
           <select
             v-bind="field"
             class="custom-select w-full h-[42px]"
             v-model="defaultSaleType"
           >
             <option class="select-selected" value="SALE">Sale Only</option>
-            <option class="select-selected" value="AUCTION">
-              Auction Only
-            </option>
-            <option class="select-selected" value="AUCTIONANDSALE">
-              Sale and Auction
-            </option>
+            <option class="select-selected" value="AUCTION">Auction Only</option>
+            <option class="select-selected" value="AUCTIONANDSALE">Sale and Auction</option>
           </select>
-        </Field>
+        </Field> -->
+        <Dropdown
+          label="Sale Type"
+          name="saleTypeName"
+          placeholder="Sale Type"
+          :options="saleType"
+          class="min-w-0"
+        />
         <div>
-          <TextLabel label="Category" required class="mt-4" />
-          <Field
+          <!-- <TextLabel label="Category" required class="mt-4" /> -->
+          <!-- <Field
             v-slot="{ field }"
             name="categoryName"
             v-model="defaultCategory"
@@ -60,11 +63,20 @@
                 :value="category.order"
                 v-for="category in categories"
                 :key="category.order"
+                class="select-selected"
               >
                 {{ category.categoryName }}
               </option>
             </select>
-          </Field>
+          </Field> -->
+          <Dropdown
+            label="Category"
+            name="categoryName"
+            placeholder="Category"
+            :options="order"
+            class="min-w-0"
+            v-model="defaultCategory"
+          />
         </div>
       </template>
       <template #footer>
@@ -119,8 +131,14 @@ export default {
       schema,
       categories: [],
       categoryName: [],
+      order: [],
       defaultCategory: 1,
       defaultSaleType: "SALE",
+      saleType: [
+        { label: "Sale Only", code: "SALE" },
+        { label: "Auction Only", code: "AUCTION" },
+        { label: "Sale and Auction", code: "AUCTIONANDSALE" },
+      ],
     };
   },
   methods: {
@@ -136,10 +154,10 @@ export default {
       let pageOne = {
         productName: product.productName,
         details: product.productDetails,
-        category: product.categoryName,
-        categoryName: this.categoryName[product.categoryName - 1],
+        category: product.categoryName.code,
+        categoryName: product.categoryName.label,
         imagesPath: imageArray,
-        saleTypeName: product.saleTypeName,
+        saleTypeName: product.saleTypeName.code,
       };
       console.log(pageOne);
       this.$store
@@ -162,6 +180,10 @@ export default {
         index++
       ) {
         this.categoryName.push(res.data.data.getAllCategory[index].name);
+        this.order.push({
+          label: res.data.data.getAllCategory[index].name,
+          code: res.data.data.getAllCategory[index].order,
+        });
       }
       try {
         this.defaultCategory = this.$store.getters.getProduct.p1.category;

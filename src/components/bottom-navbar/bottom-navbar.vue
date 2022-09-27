@@ -3,8 +3,9 @@
     class="
       md:hidden
       w-full
-      h-12
+      h-14
       px-4
+      py-2
       flex
       items-center
       fixed
@@ -58,7 +59,7 @@
           <span class="block">Orders</span>
         </div>
       </BottomNavbarItems> -->
-      <BottomNavbarItems :click="maintain">
+      <BottomNavbarItems :click="() => maintain()">
         <TruckInactiveIcon class="!opacity-60" />
         <!--         <CartInactiveIcon v-if="$route.name != ''" />
         <div v-else>
@@ -125,6 +126,8 @@ export default {
         return false;
       }
     },
+  },
+  methods: {
     maintain() {
       showAlert("error", "Maintenance", "");
     },

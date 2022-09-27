@@ -1,5 +1,8 @@
 <template>
-  <MobileLayout title="Edit New Product">
+  <MobileLayout
+    title="Edit New Product"
+    :image="this.$store.getters.getMyShop.shopLogoImagePath"
+  >
     <router-view />
   </MobileLayout>
 </template>

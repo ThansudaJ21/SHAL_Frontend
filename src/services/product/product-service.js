@@ -88,6 +88,13 @@ export default {
                 salePrice
                 saleTypeName
                 storage
+                auction {
+                    startingBid
+                    auctionPeriod
+                    nextAuction
+                    timeUnitForAuctionPeriod
+                    timeUnitForNextAuction
+                }
                 shipments
                 variations {
                     id
@@ -106,13 +113,6 @@ export default {
                         id
                         attribute
                     }
-                }
-                auction {
-                    startingBid
-                    auctionPeriod
-                    nextAuction
-                    timeUnitForAuctionPeriod
-                    timeUnitForNextAuction
                 }
             }
         }`
@@ -251,11 +251,12 @@ export default {
                     }
                 }
                 auction {
-                    id
                     timeUnitForAuctionPeriod
                     timeUnitForNextAuction
                     auctionPeriod
+                    nextBiddingTime
                     nextAuction
+                    endBiddingTime
                     startingBid
                 }
             }
@@ -365,6 +366,13 @@ export default {
                     salePrice
                     storage
                     saleTypeName
+                    auction {
+                        startingBid
+                        auctionPeriod
+                        nextAuction
+                        timeUnitForAuctionPeriod
+                        timeUnitForNextAuction
+                    }
                     variations {
                         id
                         variationName

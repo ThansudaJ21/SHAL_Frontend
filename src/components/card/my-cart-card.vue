@@ -49,7 +49,7 @@
                   {{ product.productName }}
                 </p>
                 <div class="w-4 mr-4">
-                  <TrashIcon />
+                  <!-- <TrashIcon /> -->
                 </div>
               </div>
               <div class="text-[10px] h-4 text-primary-900">
@@ -70,18 +70,18 @@
                 ฿{{ Number(product.salePrice).toLocaleString() }}
               </p>
               <div class="flex items-center mr-4 h-2 w-2/5">
-                <div
+                <!-- <div
                   class="w-2/5"
                   @click="
                     () => (amount[index] > 1 ? decreaseAmount(index) : null)
                   "
                 >
                   <MinusIcon :class="[amount[index] > 1 ? '' : 'opacity-10']" />
-                </div>
+                </div> -->
                 <p class="text-sm w-full flex justify-center">
-                  {{ amount[index] }}
+                  Quantity {{ amount[index] }}
                 </p>
-                <div
+                <!-- <div
                   class="w-2/5"
                   @click="
                     () =>
@@ -97,7 +97,7 @@
                         : 'opacity-10',
                     ]"
                   />
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -163,9 +163,7 @@ export default defineComponent({
           this.products.push(response.data.data.getProduct);
           this.amount.push(this.productProps[index].quantity);
           try {
-            this.options.push(
-              this.productProps[index].optionsList[0].optionName
-            );
+            this.options.push(this.productProps[index].option.optionName);
           } catch (error) {
             this.options.push("");
           }

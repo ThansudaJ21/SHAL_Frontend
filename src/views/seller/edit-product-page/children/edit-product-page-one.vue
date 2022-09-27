@@ -8,7 +8,6 @@
   >
     <FormWrapper label="Basic Information">
       <template #body>
-        {{ productEditName }}
         <TextLabel label="Product Images" required />
         <UploadImage name="productImages" :fixbox="true" :max="8" />
         <TextField

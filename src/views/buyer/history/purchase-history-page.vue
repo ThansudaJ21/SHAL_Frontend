@@ -42,10 +42,12 @@ export default {
     ).then((response) => {
       let data = response.data.data.findProductOrderByUserIdOrProductIdOrShopId;
       for (let index = 0; index < data.length; index++) {
-        let shopId = data[index].shop.id;
-        products.push(shopId);
-        if (!shops.includes(shopId)) {
-          shops.push(shopId);
+        if (data[index].orderStatus == "BUY") {
+          let shopId = data[index].shop.id;
+          products.push(shopId);
+          if (!shops.includes(shopId)) {
+            shops.push(shopId);
+          }
         }
       }
       for (let index = 0; index < shops.length; index++) {

@@ -275,6 +275,7 @@ import Checkbox from "@/components/checkbox/checkbox.vue";
 import TextLabel from "@/components/field/text-label.vue";
 import CheckboxField from "@/components/checkbox/checkbox-field.vue";
 import TextField from "@/components/field/text-field/text-field.vue";
+import authService from "@/services/auth/auth-service";
 
 export default {
   name: "ShopApprovalPage",
@@ -302,7 +303,7 @@ export default {
       }
     },
     getStatus(status) {
-      if (status == "Enable") {
+      if (status == "ENABLE") {
         this.currentStatus = "ENABLE";
         return "ENABLE";
       } else {
@@ -408,18 +409,19 @@ export default {
                 });
               }
             }
-
             let shopStatusObject = {
               id: this.$route.params.id,
               shopStatus: this.currentStatus,
             };
-            ShopService.updateShopStatus(shopStatusObject, 1).then(() => {
-              ShopService.shopFailureReason(this.$route.params.id, arr).then(
-                () => {
-                  this.$router.push({ name: "ShopManagementPage" });
-                }
-              );
-            });
+            ShopService.updateShopStatus(shopStatusObject, this.userId).then(
+              () => {
+                ShopService.shopFailureReason(this.$route.params.id, arr).then(
+                  () => {
+                    this.$router.push({ name: "ShopManagementPage" });
+                  }
+                );
+              }
+            );
           }
         });
       }
@@ -438,14 +440,17 @@ export default {
       checkFailure: [],
       checkFailure2: "",
       textForOther: "",
+      userId: "",
     };
   },
   async created() {
     await ShopService.getRegisterShop(this.$route.params.id).then(
       async (res) => {
         this.shop = await res.data.data.getRegisterShop;
+        authService.findByUserId(this.shop.user.userId).then((res) => {
+          this.userId = res.data.data.findByUserId.id;
+        });
         console.log(res.data.data.getRegisterShop);
-        console.log(res.data.data.getRegisterShop.failureReasonLists);
         this.currentStatus = this.getStatus(
           res.data.data.getRegisterShop.shopStatus
         );

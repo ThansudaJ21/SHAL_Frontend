@@ -5,26 +5,20 @@
   >
     <template #button>
       <div
-        v-if="
-          !this.$store.getters.getRole.includes('SELLER') &&
-          this.$store.getters.getMyShop == null
-        "
+        v-if="shopStatus == ''"
         class="flex gap-1 flex items-center"
         @click="() => this.$router.push({ name: 'ShopRegistrationPageOne' })"
       >
         <ShopIcon /> Start Selling
       </div>
       <div
-        v-if="
-          !this.$store.getters.getRole.includes('SELLER') &&
-          checkShopFailureReason() == 0
-        "
+        v-if="shopStatus == 'DISABLE'"
         class="flex gap-1 flex items-center opacity-50 cursor-not-allowed"
       >
         <ShopIcon /> Start Selling
       </div>
       <div
-        v-if="this.$store.getters.getRole.includes('SELLER')"
+        v-if="shopStatus == 'ENABLE'"
         class="flex gap-1 flex items-center"
         @click="
           () => {
@@ -56,7 +50,6 @@
 <script>
 import ShopService from "@/services/shop/shop-service";
 import MobileLayout from "@/components/layout/mobile-app-layout.vue";
-import Category from "@/components/category/category.vue";
 import ShopIcon from "@/assets/icons/shop-outlined.svg?inline";
 import PrimaryButton from "@/components/button/primary-button.vue";
 import HistoryIcon from "@/assets/icons/history.svg?inline";
@@ -65,7 +58,6 @@ export default {
   name: "BuyerProfilePage",
   components: {
     MobileLayout,
-    Category,
     ShopIcon,
     PrimaryButton,
     HistoryIcon,
@@ -75,20 +67,19 @@ export default {
       userId: "",
       picture: "",
       name: "",
+      shopStatus: "",
     };
   },
-  methods: {
-    checkShopFailureReason() {
-      try {
-        if (this.$store.getters.getMyShop.failureReasonLists.length == 0) {
-          return 0;
-        } else {
-          return this.$store.getters.getMyShop.failureReasonLists.length;
+  created() {
+    try {
+      ShopService.getShopByUserId(this.$store.getters.getUser.id).then(
+        (res) => {
+          this.shopStatus = res.data.data.getShopByUserId.shopStatus;
         }
-      } catch (error) {
-        return 1;
-      }
-    },
+      );
+    } catch (error) {
+      this.shopStatus = "";
+    }
   },
 };
 </script>

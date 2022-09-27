@@ -94,20 +94,20 @@
             >
               <div class="py-2">Logout</div>
             </div>
-            <!--         <button
-          class="
-            w-full
-            justify-center
-            py-2
-            text-sm
-            font-bold
-            text-shade-black
-            hover:bg-neutral-100
-          "
-          @click="logout"
-        >
-          Logout
-        </button> -->
+            <button
+              class="
+                w-full
+                justify-center
+                py-2
+                text-sm
+                font-bold
+                text-shade-black
+                hover:bg-neutral-100
+              "
+              @click="logout"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>

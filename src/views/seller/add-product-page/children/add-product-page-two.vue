@@ -320,9 +320,8 @@
               class="custom-select w-full h-[42px]"
               v-model="periodUnit"
             >
-              <option class="select-selected" value="Hour">Hour</option>
-              <option class="select-selected" value="Minute">Minute</option>
-              <option class="select-selected" value="Second">Second</option>
+              <option class="select-selected" value="HOURS">Hour</option>
+              <option class="select-selected" value="MINUTES">Minute</option>
             </select>
           </Field>
         </div>
@@ -345,9 +344,8 @@
               class="custom-select w-full h-[42px]"
               v-model="nextUnit"
             >
-              <option class="select-selected" value="Hour">Hour</option>
-              <option class="select-selected" value="Minute">Minute</option>
-              <option class="select-selected" value="Second">Second</option>
+              <option class="select-selected" value="HOURS">Hour</option>
+              <option class="select-selected" value="MINUTES">Minute</option>
             </select>
           </Field>
         </div>
@@ -439,9 +437,9 @@ export default {
           salePrice: 0,
           storage: product.storage,
           auction: {
-            startingBid: product.startingBid,
-            auctionPeriod: product.auctionPeriod,
-            nextAuction: product.nextAuction,
+            startingBid: parseInt(product.startingBid),
+            auctionPeriod: parseInt(product.auctionPeriod),
+            nextAuction: parseInt(product.nextAuction),
             timeUnitForAuctionPeriod: product.periodUnit,
             timeUnitForNextAuction: product.nextUnit,
           },
@@ -456,12 +454,12 @@ export default {
           category: this.$store.getters.getProduct.p1.categoryName,
           imagesPath: this.$store.getters.getProduct.p1.imagesPath,
           saleTypeName: this.$store.getters.getProduct.p1.saleTypeName,
-          salePrice: product.salePrice,
-          storage: product.storage,
+          salePrice: parseInt(product.salePrice),
+          storage: parseInt(product.storage),
           auction: {
-            startingBid: product.startingBid,
-            auctionPeriod: product.auctionPeriod,
-            nextAuction: product.nextAuction,
+            startingBid: parseInt(product.startingBid),
+            auctionPeriod: parseInt(product.auctionPeriod),
+            nextAuction: parseInt(product.nextAuction),
             timeUnitForAuctionPeriod: product.periodUnit,
             timeUnitForNextAuction: product.nextUnit,
           },
@@ -484,7 +482,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -526,7 +523,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -568,7 +564,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -604,7 +599,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -646,7 +640,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -676,7 +669,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -718,7 +710,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -761,7 +752,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -803,7 +793,6 @@ export default {
         },
       });
       let pageTwo = this.getPageTwoObject(product);
-      console.log(pageTwo);
       this.$store
         .dispatch("setProduct", {
           ...this.$store.getters.getProduct,
@@ -819,13 +808,12 @@ export default {
       JSON.stringify(await this.$store.getters.getProduct)
     );
     ProductService.getCategory(this.pageOneData.p1.category).then((res) => {
-      console.log(res.data.data.getCategory);
       this.category = res.data.data.getCategory.categoryName;
       this.attributeCount = res.data.data.getCategory.attributes.length;
     });
     this.saleTypeName = this.pageOneData.p1.saleTypeName;
-    this.periodUnit = "Minute";
-    this.nextUnit = "Minute";
+    this.periodUnit = "MINUTES";
+    this.nextUnit = "MINUTES";
   },
 };
 </script>

@@ -57,7 +57,7 @@
                 </p>
               </div>
               <div class="text-[10px] h-4 text-primary-900">
-                {{ options[index] }}
+                {{ option }}
               </div>
             </div>
             <div class="flex justify-between w-full items-center">
@@ -74,14 +74,17 @@
                 ฿{{ Number(product.salePrice).toLocaleString() }}
               </p>
               <div class="flex items-center mr-2 h-2 w-2/5">
-                <p class="text-sm w-full flex justify-center">
-                  {{ amount[index] }}
-                </p>
+                <div class="text-sm w-full text-center">
+                  <div class="text-neutral-900">Quantity</div>
+                  <div>
+                    {{ amount[index] }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="flex justify-between">
+        <div class="flex justify-between mt-4">
           <p class="text-base font-semibold text-neutral-900">Total</p>
           <p class="text-sm font-semibold text-primary-900">
             ฿ {{ Number(product.salePrice * amount[index]).toLocaleString() }}
@@ -127,7 +130,7 @@ export default defineComponent({
       amount: [],
       products: [],
       totalPrice: [],
-      options: [],
+      option: "",
       date: [],
     };
   },
@@ -142,12 +145,8 @@ export default defineComponent({
           this.amount.push(this.productProps[index].quantity);
           this.date.push(this.productProps[index].dateTime.substring(0, 10));
           try {
-            this.options.push(
-              this.productProps[index].optionsList[0].optionName
-            );
-          } catch (error) {
-            this.options.push("");
-          }
+            this.option = this.productProps[index].option.optionName;
+          } catch (error) {}
         }
       );
     }
